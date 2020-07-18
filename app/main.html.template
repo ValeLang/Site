@@ -31,7 +31,7 @@ body {
 <script>
   // Your web app's Firebase configuration
   var firebaseConfig = {
-    apiKey: "AIzaSyANCT3tmNKCB92ch5y3Ikqn_BmMcXI1G4Y",
+    apiKey: "", // Get key from Verdagon
     authDomain: "valesite.firebaseapp.com",
     databaseURL: "https://valesite.firebaseio.com",
     projectId: "valesite",
