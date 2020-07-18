@@ -1,19 +1,19 @@
 import React from 'react';
-import Header from '../Header.jsx';
-import Footer from '../Footer.jsx';
-import {NoteManager, Note, NoteAnchor, NotesHeader} from '../Note.jsx';
-import {Link} from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import Header from '../components/Header.jsx';
+import Footer from '../components/Footer.jsx';
+import {NoteManager, Note, NoteAnchor, NotesHeader} from '../components/Note.jsx';
 import ss1svg from './superstructures1.svg';
 import ss2svg from './superstructures2.svg';
-import '../Tripage.css';
-import '../Tripage.css';
+import '../common.css';
+import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
 
 const ns = (classes) => "c-ssreferences m-tripage m-superstructures " + (classes || "");
 
 const incode = (code) => <span className={ns("inline-code")}>{code}</span>
 
-class SuperstructuresReferences extends React.Component {
+class Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -408,4 +408,7 @@ mySS.root.astronauts.add(
   }
 }
 
-export default SuperstructuresReferences;
+ReactDOM.render(
+  <Page />,
+  document.getElementById('main')
+);

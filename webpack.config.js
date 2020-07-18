@@ -16,6 +16,15 @@ module.exports = {
     refGenerics: './app/reference/Generics.jsx',
     refPatterns: './app/reference/Patterns.jsx',
     refRegions: './app/reference/Regions.jsx',
+    superstructuresIntro: './app/superstructures/Intro.jsx',
+    superstructuresComparing: './app/superstructures/Comparing.jsx',
+    superstructuresConstraints: './app/superstructures/Constraints.jsx',
+    superstructuresEffects: './app/superstructures/Effects.jsx',
+    superstructuresFunctions: './app/superstructures/Functions.jsx',
+    superstructuresModifying: './app/superstructures/Modifying.jsx',
+    superstructuresReferences: './app/superstructures/References.jsx',
+    superstructuresReverting: './app/superstructures/Reverting.jsx',
+    superstructuresSnapshots: './app/superstructures/Snapshots.jsx',
   },
 
   // https://webpack.js.org/configuration/dev-server/
@@ -56,7 +65,6 @@ module.exports = {
 
   // https://webpack.js.org/concepts/plugins/
   plugins: [
-    new webpack.HashedModuleIdsPlugin(), // so that file hashes don't change unexpectedly
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['home'], filename: 'index.html', title: "Home - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['roadmap'], filename: 'roadmap', title: "Roadmap - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['raiiNextSteps'], filename: 'blog/next-steps-raii', title: "The Next Steps for Single Ownership and RAII", inject: true }),
@@ -69,6 +77,15 @@ module.exports = {
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['refGenerics'], filename: 'ref/generics', title: "Generics - Vale Reference", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['refPatterns'], filename: 'ref/patterns', title: "Patterns - Vale Reference", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['refRegions'], filename: 'ref/regions', title: "Regions - Vale Reference", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresIntro'], filename: 'superstructures/intro', title: "Intro - Vale Superstructures", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresComparing'], filename: 'superstructures/comparing', title: "Comparing - Vale Superstructures", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresConstraints'], filename: 'superstructures/constraints', title: "Constraints - Vale Superstructures", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresEffects'], filename: 'superstructures/effects', title: "Effects - Vale Superstructures", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresFunctions'], filename: 'superstructures/functions', title: "Functions - Vale Superstructures", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresModifying'], filename: 'superstructures/modifying', title: "Modifying - Vale Superstructures", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresReferences'], filename: 'superstructures/references', title: "References - Vale Superstructures", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresReverting'], filename: 'superstructures/reverting', title: "Reverting - Vale Superstructures", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['superstructuresSnapshots'], filename: 'superstructures/snapshots', title: "Snapshots - Vale Superstructures", inject: true }),
   ],
 
   optimization: {
