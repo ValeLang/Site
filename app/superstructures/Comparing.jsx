@@ -8,6 +8,7 @@ import ss2svg from './superstructures2.svg';
 import '../common.css';
 import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
+import Snippet from '../components/Snippet.jsx';
 
 const ns = (classes) => "c-sscomparing m-superstructures m-tripage " + (classes || "");
 
@@ -45,8 +46,11 @@ class Page extends React.Component {
               <div className={ns("main")}>
 
                 <h1 className={ns("noline")}>Superstructures Guide: Comparing</h1>
+                <div style={{color: "purple"}} className={ns("content")}>
+                  (This is historical documentation for a feature that didn't make it into Vale, but later evolved into regions)
+                </div>
                 <div className={ns("content")}>
-                  As we saw in <a to="/superstructures/snapshots">Snapshots</a>, we can keep superstructures' old versions' data around in memory.
+                  As we saw in <a href="/superstructures/snapshots">Snapshots</a>, we can keep superstructures' old versions' data around in memory.
                 </div>
                 <div className={ns("content")}>
                   Valence gives us a way to easily compare two versions, to get the difference.
@@ -62,12 +66,12 @@ class Page extends React.Component {
                 <h3>Comparing in Action</h3>
 
                 <div className={ns("content")}>
-                  In the <a to="/superstructures/intro">intro</a>, we made a superstructure that contained some planets, some moons, and an astronaut, shown below. Here, we'll take a snapshot, do some modifications, and print the difference.
+                  In the <a href="/superstructures/intro">intro</a>, we made a superstructure that contained some planets, some moons, and an astronaut, shown below. Here, we'll take a snapshot, do some modifications, and print the difference.
                 </div>
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -88,10 +92,10 @@ class Page extends React.Component {
 }
 
 `}
-  </div>
+  </Snippet>
                   </div>
                   <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -112,7 +116,7 @@ mySS.root.astronauts.add(
 mySS.root.planets.0.moons.0.name = "Jim";
 
 doutln diff(snapshot1, mySS);`}
-  </div>
+  </Snippet>
                   </div>
                 </div>
 
@@ -121,14 +125,14 @@ doutln diff(snapshot1, mySS);`}
                 </div>
 
                 <div className={ns("content")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`Diff:MySuperstructure(
   List(),
   List(&Astronaut#13),
   Map(
     [2, List(ListAddEffect:Astronaut(2, 13))],
     [1, List(ReplaceEffect:(Moon, String, 0)(1, "Jim"))))]`}
-  </div>
+  </Snippet>
                 </div>
 
                 <div className={ns("content")}>
@@ -142,13 +146,13 @@ doutln diff(snapshot1, mySS);`}
                 </div>
 
                 <div className={ns("content")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`struct Diff:MySuperstructure {
   onlyInLeft: List:&IMember:MySuperstructure;`} {this.noteAnchor("noteIMember")}{`
   onlyInRight: List:&IMember:MySuperstructure;
   changes: Map:(Int, IEffect:MySuperstructure);
 }`}
-  </div>
+  </Snippet>
                 </div>
 
                 <div className={ns("content")}>

@@ -550,7 +550,7 @@ Fire
                   Rust's {incode("let x")} and {incode("let mut x")}.
                 </div>
                 {/*<div style={{marginTop: "8px"}}>
-                  See <a to="/blog/bangsyntax">Syntax Design for Varying</a> for why Vale chose {incode("!")} and {incode("mut")}.
+                  See <a href="/blog/bangsyntax">Syntax Design for Varying</a> for why Vale chose {incode("!")} and {incode("mut")}.
                 </div>*/}
               </Note>
 
@@ -578,7 +578,7 @@ Fire
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="genericlambda">
-                Taking out the parameter's type makes this a "generic" lambda. See <a to="/ref/generics">generics</a> for more.
+                Taking out the parameter's type makes this a "generic" lambda. See <a href="/ref/generics">generics</a> for more.
               </Note>
             </div>
           </div>

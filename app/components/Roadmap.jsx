@@ -1,7 +1,6 @@
 import React from 'react'
 import './Roadmap.css'
 import Header from './Header.jsx'
-import Valefire from './Valefire.jsx'
 import Playground from './Playground.jsx'
 import Footer from './Footer.jsx';
 import {Link} from 'react-router-dom';

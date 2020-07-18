@@ -8,6 +8,7 @@ import ss2svg from './superstructures2.svg';
 import '../common.css';
 import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
+import Snippet from '../components/Snippet.jsx';
 
 const ns = (classes) => "c-ssmodifying m-tripage m-superstructures " + (classes || "");
 
@@ -45,9 +46,12 @@ class Page extends React.Component {
               <div className={ns("main")}>
 
                 <h1 className={ns("noline")}>Superstructures Guide: Modifying</h1>
+                <div style={{color: "purple"}} className={ns("content")}>
+                  (This is historical documentation for a feature that didn't make it into Vale, but later evolved into regions)
+                </div>
 
                 <div className={ns("content")}>
-                  In the <a to="/superstructures/intro">intro</a>, we made a superstructure that contained some planets and some moons, shown below. This page will explain how to modify the superstructure.
+                  In the <a href="/superstructures/intro">intro</a>, we made a superstructure that contained some planets and some moons, shown below. This page will explain how to modify the superstructure.
                 </div>
 
                 <div className={ns("content splitter")}>
@@ -158,8 +162,8 @@ mut saturn.name! = "Flamscrankle";`}
                 <div className={ns("content")}>
                   Valence can take these simple modifications and do amazing things:
                   <ul className={ns()}>
-                    <li className={ns()}>Notify observers of these modifications (see <a to="/superstructures/effects">Effects</a>).</li>
-                    <li className={ns()}>Remember these modifications for later reverting (see <a to="/superstructures/reverting">Reverting</a>).</li>
+                    <li className={ns()}>Notify observers of these modifications (see <a href="/superstructures/effects">Effects</a>).</li>
+                    <li className={ns()}>Remember these modifications for later reverting (see <a href="/superstructures/reverting">Reverting</a>).</li>
                     <li className={ns()}>Send these modifications over the network (see below).</li>
                   </ul>
                 </div>
@@ -194,7 +198,7 @@ mut saturn.name! = "Flamscrankle";`}
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="noteCollections">
-                We can also use other collections like {incode("Map")}, {incode("Set")}, etc. See <a to="/reference/colelctions">Collections</a> for more.
+                We can also use other collections like {incode("Map")}, {incode("Set")}, etc. See <a href="/reference/colelctions">Collections</a> for more.
               </Note>
 
             </div>

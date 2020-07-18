@@ -8,6 +8,7 @@ import ss2svg from './superstructures2.svg';
 import '../common.css';
 import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
+import Snippet from '../components/Snippet.jsx';
 
 const ns = (classes) => "c-ssintro m-tripage m-superstructures " + (classes || "");
 
@@ -45,6 +46,9 @@ class Page extends React.Component {
               <div className={ns("main")}>
 
                 <h1 className={ns("noline")}>Superstructures Guide: Introduction</h1>
+                <div style={{color: "purple"}} className={ns("content")}>
+                  (This is historical documentation for a feature that didn't make it into Vale, but later evolved into regions)
+                </div>
                 <div className={ns("content cozy")}>
                   A <strong>"superstructure"</strong> is a set of structs, interfaces, and functions, which follow certain patterns.
                 </div>
@@ -55,7 +59,7 @@ class Page extends React.Component {
                   The Superstructures Guide will walk you through the various capabilities of superstructures (modifying, snapshots, constraints, etc) and, at the end of every page, show how it can be used with networking.
                 </div>
                 <div className={ns("content")}>
-                  If you haven't seen <a to="/basics">Valence Basics</a>, go take a look! Everything in this page builds on the basics.
+                  If you haven't seen <a href="/basics">Valence Basics</a>, go take a look! Everything in this page builds on the basics.
                 </div>
 
                 <a name="whatisasuperstructure"></a>
@@ -320,7 +324,7 @@ fn main() {
                 </div>
 
                 <div className={ns("content")}>
-                  The above code shows the server sending modifications to the client. The client can also send modification requests to the server, see <a to="/superstructures/functions">Functions</a>.
+                  The above code shows the server sending modifications to the client. The client can also send modification requests to the server, see <a href="/superstructures/functions">Functions</a>.
                 </div>
 
               </div>
@@ -352,11 +356,11 @@ fn main() {
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="note2">
-                These are <strong>owning</strong> references. There can also be <strong>strong</strong> and <strong>weak</strong> references, see <a to="/superstructures/references">References</a>.
+                These are <strong>owning</strong> references. There can also be <strong>strong</strong> and <strong>weak</strong> references, see <a href="/superstructures/references">References</a>.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="noteID">
-                Superstructures also support UUIDs, see <a to="/reference/superstructure">Superstructure Settings</a>.
+                Superstructures also support UUIDs, see <a href="/reference/superstructure">Superstructure Settings</a>.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="note4">

@@ -8,6 +8,7 @@ import ss2svg from './superstructures2.svg';
 import '../common.css';
 import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
+import Snippet from '../components/Snippet.jsx';
 
 const ns = (classes) => "c-sseffects m-tripage m-superstructures " + (classes || "");
 
@@ -45,6 +46,9 @@ class Page extends React.Component {
               <div className={ns("main")}>
 
                 <h1 className={ns("noline")}>Superstructures Guide: Effects</h1>
+                <div style={{color: "purple"}} className={ns("content")}>
+                  (This is historical documentation for a feature that didn't make it into Vale, but later evolved into regions)
+                </div>
                 <div className={ns("content")}>
                   Valence gives us an easy way to observe arbitrary changes to superstructures.
                 </div>
@@ -63,12 +67,12 @@ class Page extends React.Component {
                 <h3>Listening for Effects</h3>
 
                 <div className={ns("content")}>
-                  In the <a to="/superstructures/intro">intro</a>, we made a superstructure that contained some planets and moons. This page will show how to listen for effects, and what they look like.
+                  In the <a href="/superstructures/intro">intro</a>, we made a superstructure that contained some planets and moons. This page will show how to listen for effects, and what they look like.
                 </div>
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -84,10 +88,10 @@ class Page extends React.Component {
 }
 
 `}
-  </div>
+  </Snippet>
                   </div>
                   <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -107,7 +111,7 @@ mySS.addAfterEffectObserver(
 
 mySS.root.planets.append(
   Planet("Char", List()));`}
-  </div>
+  </Snippet>
                   </div>
                 </div>
 
@@ -128,11 +132,11 @@ mySS.root.planets.append(
                 </div>
 
                 <div className={ns("content")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`CreateEffect:List:Moon(11, Flat:List:Moon(List()))`}{this.noteAnchor("Flat")}{`
 CreateEffect:Planet(12, Flat:Planet("Char", 11))
 ListAppendEffect:Planet(2, 12)`}
-  </div>
+  </Snippet>
                 </div>
 
                 <div className={ns("content")}>
@@ -151,20 +155,20 @@ ListAppendEffect:Planet(2, 12)`}
 
                 <div className={ns("content cozy splitter")}>
                   <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`struct Moon {
   name: Str;
   planet: &Planet;
 }`}
-  </div>
+  </Snippet>
                   </div>
                   <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`struct Flat:Moon {
   name: Str;
   planet: Int;
 }`}
-  </div>
+  </Snippet>
                   </div>
                 </div>
                 <div className={ns("content")}>
@@ -178,12 +182,12 @@ ListAppendEffect:Planet(2, 12)`}
                     {incode("CreateEffect")} is an effect that makes a new object inside the superstructure. See right for a rough idea of what it looks like.
                   </div>
                   <div className={ns()}>
-  <div className={ns("code")}>
+  <Snippet>
 {`struct CreateEffect:T isa`}{this.noteAnchor("Isa")}{` IEffect`}{this.noteAnchor("IEffect")}{` {
   objectId: Int;
   data: Flat:T;
 }`}
-  </div>
+  </Snippet>
                   </div>
                 </div>
 
@@ -202,12 +206,12 @@ ListAppendEffect:Planet(2, 12)`}
                     {incode("ListAppendEffect")} is an effect that moves an object to the end of a List. See right for a rough idea of what it looks like.
                   </div>
                   <div className={ns()}>
-  <div className={ns("code")}>
+  <Snippet>
 {`struct ListAppendEffect isa IEffect {
   listId: Int;
   memberId: Int;
 }`}
-  </div>
+  </Snippet>
                   </div>
                 </div>
 
@@ -241,7 +245,7 @@ ListAppendEffect:Planet(2, 12)`}
                 <h3 className={ns("noline")}>Networking with Effects</h3>
 
                 <div className={ns("content")}>
-                  In the <a to="/superstructures/intro">Intro</a>, we introduced <strong>SimpleSuperstructureServer</strong> and <strong>SimpleSuperstructureClient</strong>, two classes in the standard library. They use {incode("Flat")} and {incode("Effect")} under the hood.
+                  In the <a href="/superstructures/intro">Intro</a>, we introduced <strong>SimpleSuperstructureServer</strong> and <strong>SimpleSuperstructureClient</strong>, two classes in the standard library. They use {incode("Flat")} and {incode("Effect")} under the hood.
                 </div>
 
                 <div className={ns("content")}>
@@ -277,7 +281,7 @@ ListAppendEffect:Planet(2, 12)`}
               </div>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="0">
-                See <a to="/basics/lambdas">Lambdas</a> for more.
+                See <a href="/basics/lambdas">Lambdas</a> for more.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="1">
@@ -285,7 +289,7 @@ ListAppendEffect:Planet(2, 12)`}
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="IEffect">
-                {incode("IEffect")} has another template argument, left out in this page for brevity. See the <a to="/reference/IEffect">IEffect</a> for more.
+                {incode("IEffect")} has another template argument, left out in this page for brevity. See the <a href="/reference/IEffect">IEffect</a> for more.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="Isa">
@@ -311,7 +315,7 @@ ListAppendEffect:Planet(2, 12)`}
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="3">
-                {incode("{ doutln _; }")} is the same as {incode("{(x) doutln x; }")} or even just {incode("doutln")} in this case, see <a to="/basics/calling">Calling</a> for more.
+                {incode("{ doutln _; }")} is the same as {incode("{(x) doutln x; }")} or even just {incode("doutln")} in this case, see <a href="/basics/calling">Calling</a> for more.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="4">

@@ -8,6 +8,7 @@ import ss2svg from './superstructures2.svg';
 import '../common.css';
 import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
+import Snippet from '../components/Snippet.jsx';
 
 const ns = (classes) => "c-ssconstraints m-superstructures m-tripage " + (classes || "");
 
@@ -45,6 +46,9 @@ class Page extends React.Component {
               <div className={ns("main")}>
 
                 <h1 className={ns("noline")}>Superstructures Guide: Constraints</h1>
+                <div style={{color: "purple"}} className={ns("content")}>
+                  (This is historical documentation for a feature that didn't make it into Vale, but later evolved into regions)
+                </div>
 
                 <div className={ns("content")}>
                   To make sure a Valence superstructure always stays "sane", we can add <strong>constraints</strong> to it.
@@ -65,14 +69,14 @@ class Page extends React.Component {
                 <h3>Adding a Constraint</h3>
 
                 <div className={ns("content")}>
-                  In the <a to="/superstructures/intro">intro</a>, we made a superstructure that contained some planets and some moons.
+                  In the <a href="/superstructures/intro">intro</a>, we made a superstructure that contained some planets and some moons.
                 </div>
                 <div className={ns("content")}>
                   We'll add a "mass" property to both, and a constraint that checks that planets are always heavier than their moons.
                 </div>
 
                 <div className={ns("content")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -93,7 +97,7 @@ class Page extends React.Component {
     {(m: &Moon) m.mass < m.planet.mass}
   }
 }`}
-  </div>
+  </Snippet>
                 </div>
 
                 <div className={ns("content")}>
@@ -115,12 +119,12 @@ class Page extends React.Component {
                 </div>
 
                 <div className={ns("content cozy")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
       List(Planet("Saturn", 1234, List(Moon("Titan", 9999999))))));`}
-  </div>
+  </Snippet>
                 </div>
 
                 <div className={ns("content cozy")}>
@@ -128,10 +132,10 @@ class Page extends React.Component {
                 </div>
 
                 <div className={ns("content")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`Violated constraint function checkMass(:&Planet):Bool!
 (stack trace)`}
-  </div>
+  </Snippet>
                 </div>
 
                 <div className={ns("content cozy")}>
@@ -139,14 +143,14 @@ class Page extends React.Component {
                 </div>
 
                 <div className={ns("content cozy")}>
-                  <div className={ns("code")}>
+                  <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
       List(Planet("Saturn", 600, List(Moon("Titan", 400))))));
 
 mySS.root.planets.0.mass = 100;`}
-                  </div>
+                  </Snippet>
                 </div>
 
                 <div className={ns("content")}>
@@ -160,7 +164,7 @@ mySS.root.planets.0.mass = 100;`}
                 </div>
 
                 <div className={ns("content cozy")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -172,7 +176,7 @@ let succeeded =
   });
 
 doutln succeeded;`}
-  </div>
+  </Snippet>
                 </div>
 
                 <div className={ns("content")}>
@@ -195,7 +199,7 @@ doutln succeeded;`}
                 <div className={ns("content cozy")}>
                   <ul className={ns()}>
                     <li className={ns()}>
-                      {this.noteAnchor("note3")}We can speed up reverting to <strong>constant time</strong> by changing the superstructure's history setting to <a to="/superstructures/formats">chronotree</a> or <a to="/superstructures/formats">chronobase</a>.
+                      {this.noteAnchor("note3")}We can speed up reverting to <strong>constant time</strong> by changing the superstructure's history setting to <a href="/superstructures/formats">chronotree</a> or <a href="/superstructures/formats">chronobase</a>.
                     </li>
                     <li className={ns()}>
                       {this.noteAnchor("note4")}The strong reference rules apply, just like anywhere in Valence. Anything pointed at by a strong reference cannot be deleted in a revert.
@@ -223,7 +227,7 @@ doutln succeeded;`}
                 </div>
 
                 <div className={ns("content")}>
-                  See <a to="/blog/perfectmerging">Perfect Merging</a> for more.
+                  See <a href="/blog/perfectmerging">Perfect Merging</a> for more.
                 </div>
 
               </div>

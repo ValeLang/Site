@@ -262,7 +262,7 @@ fn main() {
               </div>
 
               <Note name="nomatchyet" customIcon="notyet" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
-                Planned feature; see <a to="/roadmap">Roadmap</a>!
+                Planned feature; see <a href="/roadmap">Roadmap</a>!
               </Note>
 
             </div>

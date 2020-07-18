@@ -8,6 +8,7 @@ import ss2svg from './superstructures2.svg';
 import '../common.css';
 import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
+import Snippet from '../components/Snippet.jsx';
 
 const ns = (classes) => "c-ssreferences m-tripage m-superstructures " + (classes || "");
 
@@ -45,9 +46,12 @@ class Page extends React.Component {
               <div className={ns("main")}>
 
                 <h1 className={ns("noline")}>Superstructures Guide: References</h1>
+                <div style={{color: "purple"}} className={ns("content")}>
+                  (This is historical documentation for a feature that didn't make it into Vale, but later evolved into regions)
+                </div>
 
                 <div className={ns("content")}>
-                  In the <a to="/superstructures/intro">intro</a>, we made a superstructure that contained some planets and some moons, shown below. It contained only <strong>owning</strong> references. This page will show how we can add <strong>strong</strong> and <strong>weak</strong> references.
+                  In the <a href="/superstructures/intro">intro</a>, we made a superstructure that contained some planets and some moons, shown below. It contained only <strong>owning</strong> references. This page will show how we can add <strong>strong</strong> and <strong>weak</strong> references.
                 </div>
 
                 <div className={ns("content splitter")}>
@@ -270,7 +274,7 @@ mySS.root.astronauts.add(
                 </div>
 
                 <div className={ns("content")}>
-                  See <a to="/superstructures/constraints">Constraints</a> for more.
+                  See <a href="/superstructures/constraints">Constraints</a> for more.
                 </div>
 
                 <div style={{clear: "both"}}/>
@@ -332,7 +336,7 @@ mySS.root.astronauts.add(
                 </div>
 
                 <div className={ns("content")}>
-                  Code inside superstructure functions look the same, thanks to <a to="/blog/superlining">Superlining</a>, which automatically interleaves instructions to do as many parallel fetches as possible for uncached data.
+                  Code inside superstructure functions look the same, thanks to <a href="/blog/superlining">Superlining</a>, which automatically interleaves instructions to do as many parallel fetches as possible for uncached data.
                 </div>
 
                 <div className={ns("content cozy")}>
@@ -352,7 +356,7 @@ mySS.root.astronauts.add(
                 </div>
 
                 <div className={ns("content cozy")}>
-                  See <a to="/blog/superlining">Superlining</a> and <a to="/superstructures/functions">Functions</a> for more.
+                  See <a href="/blog/superlining">Superlining</a> and <a href="/superstructures/functions">Functions</a> for more.
                 </div>
 
                 <div style={{clear: "both"}}></div>*/}
@@ -370,11 +374,11 @@ mySS.root.astronauts.add(
               </div>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="noteMove">
-                This does not apply to code inside <a to="/superstructures/functions">superstructure functions</a>; data inside superstructure functions are still considered "part of the superstructure", just temporarily detached.
+                This does not apply to code inside <a href="/superstructures/functions">superstructure functions</a>; data inside superstructure functions are still considered "part of the superstructure", just temporarily detached.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="noteMove2">
-                See <a to="/superstructures/functions">Functions</a> for how to much more easily move things around and in and out of superstructures.
+                See <a href="/superstructures/functions">Functions</a> for how to much more easily move things around and in and out of superstructures.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="noteYouCanDoIt">
@@ -387,7 +391,7 @@ mySS.root.astronauts.add(
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="noteStrong">
-                See <a to="/basics">Basics</a> for more on Owning, Strong, and Weak references.
+                See <a href="/basics">Basics</a> for more on Owning, Strong, and Weak references.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="note3">

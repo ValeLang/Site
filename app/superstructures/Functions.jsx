@@ -8,6 +8,7 @@ import ss2svg from './superstructures2.svg';
 import '../common.css';
 import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
+import Snippet from '../components/Snippet.jsx';
 
 const ns = (classes) => "c-ssfunctions m-tripage m-superstructures " + (classes || "");
 
@@ -45,6 +46,9 @@ class Page extends React.Component {
               <div className={ns("main")}>
 
                 <h1 className={ns("noline")}>Superstructures Guide: Functions</h1>
+                <div style={{color: "purple"}} className={ns("content")}>
+                  (This is historical documentation for a feature that didn't make it into Vale, but later evolved into regions)
+                </div>
 
                 <div className={ns("content")}>
                   For simple operations, accessing superstructure data directly works well.
@@ -89,7 +93,7 @@ addMoonWithRandomMass(
 
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -118,7 +122,7 @@ addMoonWithRandomMass(
     ret ints.fold(0, +);`} {this.noteAnchor("reducer")}{`
   }
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -126,7 +130,7 @@ addMoonWithRandomMass(
                 <h3>Constraints</h3>
 
                 <div className={ns("content cozy")}>
-                  In the <a to="/superstructures/constraints">Constraints</a> page, we made a superstructure that enforced that planets were heavier than their moons. The following code would violate the constraint:
+                  In the <a href="/superstructures/constraints">Constraints</a> page, we made a superstructure that enforced that planets were heavier than their moons. The following code would violate the constraint:
                 </div>
                 <div className={ns("content code cozy")}>
 {`let mySS =
@@ -169,7 +173,7 @@ mySS.root.planets.0.moons.0.mass = 50;`}
                 <h3>References in Functions</h3>
 
                 <div className={ns("content")}>
-                  In <a to="/superstructures/references">References</a>, we talked about how moving something out of a superstructure while there's still a strong reference to it will halt the program.
+                  In <a href="/superstructures/references">References</a>, we talked about how moving something out of a superstructure while there's still a strong reference to it will halt the program.
                 </div>
                 <div className={ns("content")}>
                   Functions solve that, just how they solve the above constraints problem. References in a function are still considered part of the superstructure, albeit temporarily detached.
@@ -181,7 +185,7 @@ mySS.root.planets.0.moons.0.mass = 50;`}
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`superstructure MySuperstructure {
   root struct Game {
     bases: List:Base;
@@ -199,10 +203,10 @@ mySS.root.planets.0.moons.0.mass = 50;`}
     turret: &Turret;
   }
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`let mySS =
   MySuperstructure(
     Game(
@@ -224,7 +228,7 @@ mySS.root.planets.0.moons.0.mass = 50;`}
         "Raynor",
         &mySS.root.bases.0
           .turrets.0));`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -280,7 +284,7 @@ moveTurret(shootybob, &mySS.root.bases.0, &mySS.root.bases.1);`}
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`superstructure MySuperstructure {
   ...
 
@@ -298,10 +302,10 @@ moveTurret(shootybob, &mySS.root.bases.0, &mySS.root.bases.1);`}
     ret ints.fold(0, +);
   }
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`let mySS =
   MySuperstructure(
    SolarSystem(
@@ -317,7 +321,7 @@ mySS.addAfterRequestObserver(
 let saturn = &mySS.root.planets.1;
 addMoonWithRandomMass(
   saturn, "Enceladus");`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -344,14 +348,14 @@ addMoonWithRandomMass(
                     </div>
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`struct Call:addMoonWithRandomMass {
   isa ICall;`} {this.noteAnchor("isa")}{`
 
   planet: Int;
   moonName: Str;
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -404,7 +408,7 @@ addMoonWithRandomMass(
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {``}<div className={ns("comment")}>{`// Server
 `}</div>{`
 fn main() {
@@ -437,10 +441,10 @@ fn main() {
 
   doutln "Done!";
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {``}<div className={ns("comment")}>{`// Client
 `}</div>{`
 fn main() {
@@ -487,7 +491,7 @@ fn main() {
   doutln "Done!";
 }
 `}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -500,7 +504,7 @@ fn main() {
                 </div>
 
                 <div className={ns("content")}>
-                  The server might choose to keep the entire superstructure in memory at all times, for speedy execution, or it might put the superstructure in storage. The code looks the same in both cases, thanks to <a to="/networking/superlining">Superlining</a>, which aggressively and transparently pre-fetches and caches data from underlying storage.
+                  The server might choose to keep the entire superstructure in memory at all times, for speedy execution, or it might put the superstructure in storage. The code looks the same in both cases, thanks to <a href="/networking/superlining">Superlining</a>, which aggressively and transparently pre-fetches and caches data from underlying storage.
                 </div>
               </div>
             </div>
@@ -534,7 +538,7 @@ fn main() {
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="values">
-                Values are primitives like Int or Str, plus any user-defined value structs. See <a to="/superstructures/basics">Basics</a> for more.
+                Values are primitives like Int or Str, plus any user-defined value structs. See <a href="/superstructures/basics">Basics</a> for more.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="disregard">

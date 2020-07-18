@@ -797,7 +797,7 @@ fn main() {
                   Vale's run-time solution is more unified, safe, and explicit: constraint references.
                 </div>
                 <div style={{marginTop: "8px"}}>
-                  See <a to="/blog/rustcomparison">Borrowing Comparison</a> for comparisons between various languages' borrowing approaches.
+                  See <a href="/blog/rustcomparison">Borrowing Comparison</a> for comparisons between various languages' borrowing approaches.
                 </div>
               </Note>
 
@@ -806,7 +806,7 @@ fn main() {
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="inlinterfaces">
-                Vale can even inline interfaces if they're {incode("sealed")}, resulting in something similar to tagged unions in C, or enums in Rust. See <a to="/ref/interfaces">Interfaces</a> for more.
+                Vale can even inline interfaces if they're {incode("sealed")}, resulting in something similar to tagged unions in C, or enums in Rust. See <a href="/ref/interfaces">Interfaces</a> for more.
               </Note>
 
               {/*<Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="constraintlike">
@@ -866,7 +866,7 @@ fn main() {
                   This line is checking if {incode("ship.origin")} is the one-member subclass {incode("Live")} and if so, assigns its member to {incode("o")}.
                 </div>
                 <div style={{marginTop: "8px"}}>
-                  This is a <b>conditional destructure</b>, see <a to="/ref/patterns">Pattern Matching</a> for more.
+                  This is a <b>conditional destructure</b>, see <a href="/ref/patterns">Pattern Matching</a> for more.
                 </div>
               </Note>
 

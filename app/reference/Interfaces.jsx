@@ -349,7 +349,7 @@ fn main() {
               </Note>
 
               <Note name="nosealedyet" customIcon="notyet" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
-                Planned feature; see <a to="/roadmap">Roadmap</a>!
+                Planned feature; see <a href="/roadmap">Roadmap</a>!
               </Note>
 
               {/*<Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="packing">

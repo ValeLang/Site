@@ -8,6 +8,7 @@ import ss2svg from './superstructures2.svg';
 import '../common.css';
 import '../components/Tripage.css';
 import SuperstructuresTOC from './SuperstructuresTOC.jsx';
+import Snippet from '../components/Snippet.jsx';
 
 const ns = (classes) => "c-sssnapshots m-tripage m-superstructures " + (classes || "");
 
@@ -45,6 +46,9 @@ class Page extends React.Component {
               <div className={ns("main")}>
 
                 <h1 className={ns("noline")}>Superstructures Guide: Snapshots</h1>
+                <div style={{color: "purple"}} className={ns("content")}>
+                  (This is historical documentation for a feature that didn't make it into Vale, but later evolved into regions)
+                </div>
                 <div className={ns("content")}>
                   Valence not only has a way to revert our superstructure to a past version, but it also lets us read that data without reverting.
                 </div>
@@ -52,7 +56,7 @@ class Page extends React.Component {
                   At any time, we can make a <strong>snapshot</strong> of our superstructure, and from then on, we can read it and query it.
                 </div>
                 <div className={ns("content")}>
-                  One would assume it's extremely expensive to take a copy like this, but thanks to the underlying <a to="/superstructures/chronobase">chronobase</a>, <strong>this operation is free</strong>.
+                  One would assume it's extremely expensive to take a copy like this, but thanks to the underlying <a href="/superstructures/chronobase">chronobase</a>, <strong>this operation is free</strong>.
                 </div>
 
                 <h3 className={ns("cozy")}>What can we use snapshots for?</h3>
@@ -60,7 +64,7 @@ class Page extends React.Component {
                 <ul className={ns("cozy")}>
                   <li className={ns()}>Make graphs over time of how your data has evolved.</li>
                   <li className={ns()}>Pipelining; one part of your application can use a "good" version of the data while the rest of your application builds the next version.</li>
-                  <li className={ns()}>Since theyre immutable, we can send them across thread boundaries at will. This is incredibly powerful when combined with <a to="/superstructures/forking">Forking</a> and <a to="/superstructures/synchronization">Synchronization</a>.</li>
+                  <li className={ns()}>Since theyre immutable, we can send them across thread boundaries at will. This is incredibly powerful when combined with <a href="/superstructures/forking">Forking</a> and <a href="/superstructures/synchronization">Synchronization</a>.</li>
                 </ul>
 
                 <h3>Snapshotting in Action</h3>
@@ -201,7 +205,7 @@ List(Moon#6("Raine", 898))`}
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="note3">
-                {incode("{ doutln _; }")} is the same as {incode("{(x) doutln x; }")} or even just {incode("doutln")} in this case, see <a to="/basics/calling">Calling</a> for more.
+                {incode("{ doutln _; }")} is the same as {incode("{(x) doutln x; }")} or even just {incode("doutln")} in this case, see <a href="/basics/calling">Calling</a> for more.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="note4">
@@ -214,7 +218,7 @@ List(Moon#6("Raine", 898))`}
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="note6">
-                This is a simplified {incode("ListAppendEffect")} struct. The actual one has much more, see the <a to="/reference/superstructures">reference</a>.
+                This is a simplified {incode("ListAppendEffect")} struct. The actual one has much more, see the <a href="/reference/superstructures">reference</a>.
               </Note>
 
               */}
