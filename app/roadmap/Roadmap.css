@@ -1,0 +1,99 @@
+
+.c-roadmap.page {
+  width: 896px;
+  margin: auto;
+}
+
+h1.c-roadmap {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  font-size: 18pt;
+}
+
+.c-roadmap.columns {
+  display: flex;
+}
+.c-roadmap.column1 {
+  width: 25%;
+  flex-grow: 1;
+  margin: 0 8px 8px 0;
+}
+.c-roadmap.column2 {
+  width: 25%;
+  flex-grow: 1;
+  margin: 0 0 8px 8px;
+}
+.c-roadmap.column3 {
+  width: 25%;
+  flex-grow: 1;
+  margin: 0 0 8px 8px;
+}
+.c-roadmap.column4 {
+  width: 25%;
+  flex-grow: 1;
+  margin: 0 0 8px 8px;
+}
+
+ul.c-roadmap {
+  margin: 0;
+  padding-left: 1.5em;
+  list-style-type: none;
+}
+
+h3.c-roadmap {
+  margin-top: 16px;
+  padding-top: 0;
+  margin-bottom: 0;
+  margin-right: 0;
+  font-size: 12pt;
+}
+
+.c-roadmap.v01 {
+  font-weight: bold;
+}
+
+.c-roadmap.intro {
+  width: 60%;
+  margin-bottom: 16px;
+}
+.c-roadmap.legend {
+  width: 40%;
+  margin-bottom: 16px;
+}
+
+
+
+.c-roadmap.icon {
+  background-image: url("../components/Sphere144-128-Red.png");
+  background-size: 14px 14px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 4px;
+  margin-top: -1px;
+  margin-bottom: -1px;
+}
+
+.c-roadmap.done .c-roadmap.icon {
+  filter: hue-rotate(120deg) saturate(150%);
+}
+
+.c-roadmap.v01 .c-roadmap.icon {
+  filter: hue-rotate(50deg) saturate(300%);
+  
+}
+
+.c-roadmap.v02 .c-roadmap.icon {
+  opacity: .5;
+  filter: saturate(0%) brightness(120%);
+}
+
+  /*
+  gray: filter: saturate(0%) brightness(120%);
+  red: filter: hue-rotate(0deg) saturate(150%);
+  orange: filter: hue-rotate(50deg) saturate(300%);
+  blue: filter: hue-rotate(240deg) saturate(300%);
+  purple: filter: hue-rotate(280deg) saturate(200%);
+  green: filter: hue-rotate(120deg) saturate(150%);
+  */
+  

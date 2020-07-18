@@ -1,0 +1,15 @@
+
+.c-superstructurestoc.root {
+	padding: 16px 0;
+}
+
+ul.c-superstructurestoc {
+	margin: 0;
+	padding-left: 20px;
+}
+li.c-superstructurestoc {
+	margin: 0;
+}
+li.c-superstructurestoc + li.c-superstructurestoc {
+	margin: 0;
+}

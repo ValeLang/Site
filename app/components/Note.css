@@ -1,0 +1,99 @@
+
+.c-note .inline-code {
+	font-family: Roboto Mono, Courier New, Courier;
+	padding: 0 4px;
+	white-space: nowrap;
+	font-size: 10pt;
+  border: 1px solid #E0E0E0;
+  background-color: #FFFFFF;
+}
+
+.c-note.anchor.root {
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+	position: relative;
+	vertical-align: baseline;
+}
+
+.c-note.anchor.image {
+	background-image: url("./Sphere144-128-Red.png");
+	background-size: 12px 12px;
+	width: 12px;
+	height: 12px;
+}
+
+.c-note.anchor.image {
+	display: block;
+}
+
+.c-note ul {
+	padding-left: 1.25em;
+}
+
+.code .c-note.anchor {
+	width: 13px;
+	height: 13px;
+}
+.code .c-note.anchor.image {
+	background-size: 13px 13px;
+	width: 13px;
+	height: 13px;
+	position: relative;
+	top: 2px;
+	background-image: url("./Sphere144-128-Red-whiteborder.png");
+}
+
+.c-note.note.root {
+	position: absolute;
+	right: 0;
+	width: 264px;
+	padding: 0 8px;
+	box-sizing: border-box;
+}
+
+.c-note.note.image-container {
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+	position: relative;
+	vertical-align: baseline;
+}
+
+.c-note.note.image {
+	background-image: url("./Sphere144-128-Red.png");
+	background-size: 12px 12px;
+	width: 12px;
+	height: 12px;
+}
+
+.c-note.icon0 {
+	filter: hue-rotate(-15deg) saturate(200%);
+}
+
+.c-note.icon1 {
+	filter: hue-rotate(50deg) saturate(300%);
+}
+
+.c-note.icon2 {
+	filter: hue-rotate(120deg) saturate(150%);
+}
+
+.c-note.icon3 {
+	filter: hue-rotate(240deg) saturate(300%);
+}
+
+.c-note.icon4 {
+	filter: hue-rotate(280deg) saturate(200%);
+}
+
+.c-note.icon5 {
+	filter: saturate(0%) brightness(120%);
+}
+
+.c-note.note.image.notyet {
+	background-image: url("../images/clock48.png");
+}
+.c-note.anchor.image.notyet {
+	background-image: url("../images/clock48.png");
+}

@@ -1,0 +1,33 @@
+
+.playground .code {
+	margin: 8px 0;
+	color: #f8f8f2;
+	border: 1px solid #C0C0C0;
+	background-color: #282923;
+	padding: 0.5em;
+	white-space: pre;
+	font-size: 10pt;
+	font-family: Roboto Mono, Courier New, Courier;
+	line-height: 12pt;
+	overflow: auto;
+}
+.playground .output {
+	color: #f8f8f2;
+	margin: 8px 0;
+	border: 1px solid #C0C0C0;
+	background-color: #282923;
+	padding: 0.5em;
+	white-space: pre;
+	font-size: 10pt;
+	font-family: Roboto Mono, Courier New, Courier;
+	line-height: 12pt;
+	overflow: auto;
+}
+.playground .code-header {
+	font-weight: bold;
+	margin: 16px 0 8px 0;
+}
+.playground .output-header {
+	font-weight: bold;
+	margin: 8px 0;
+}

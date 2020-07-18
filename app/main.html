@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<style type="text/css">
+body {
+  font-family: 'Lato', Roboto, Tahoma, Arial;
+  font-size: 12pt;
+  margin: 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<base href="/" />
+<title><%= htmlWebpackPlugin.options.title %></title>
+<link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Roboto+Mono" rel="stylesheet">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/agate.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8"
+ src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/languages/go.min.js"></script>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyANCT3tmNKCB92ch5y3Ikqn_BmMcXI1G4Y",
+    authDomain: "valesite.firebaseapp.com",
+    databaseURL: "https://valesite.firebaseio.com",
+    projectId: "valesite",
+    storageBucket: "valesite.appspot.com",
+    messagingSenderId: "670338061455",
+    appId: "1:670338061455:web:cfbb4a2f69f9bd7a83ccfa",
+    measurementId: "G-G3JH78EBKK"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+<script src="./nodeModules.js"></script>
+<script src="./valeSiteComponents.js"></script>
+<script src="./everythingElse.js"></script>
+
+</head>
+<body>
+  <div id="main"></div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+
+.c-blog .c-toc a {
+  font-weight: normal;
+}
+
+
+.cppSnippet.root {
+  width: 100%;
+  position: relative;
+  margin: 0;
+  font-size: 12px;
+}
+
+.cppSnippet.header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  opacity: .7;
+  padding-right: 4px;
+  font-size: 16px;
+}

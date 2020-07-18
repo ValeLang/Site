@@ -1,0 +1,25 @@
+
+.external-link {
+	padding-right: 20px;
+	background-image: url('./images/external-link.png');
+	background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+a {
+	color: #2a6496;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a[disabled] {
+	color: inherit;
+}
+a[disabled]:hover {
+	text-decoration: none;
+}
