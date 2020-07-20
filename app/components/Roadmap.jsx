@@ -98,6 +98,7 @@ class Roadmap extends React.Component {
                 <li className={ns("done")}><span className={ns("icon")}></span> Mutability</li>
                 <li className={ns("done")}><span className={ns("icon")}></span> Auto-drop</li>
                 <li className={ns("done")}><span className={ns("icon")}></span> Member constructing</li>
+                <li className={ns("v02")}><span className={ns("icon")}></span> Permissions</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Explicit auto-drop</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> constructor&lt;T&gt;</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Destructor Parameters</li>
@@ -120,7 +121,7 @@ class Roadmap extends React.Component {
                 <li className={ns("done")}><span className={ns("icon")}></span> If</li>
                 <li className={ns("done")}><span className={ns("icon")}></span> While</li>
                 <li className={ns("done")}><span className={ns("icon")}></span> Each</li>
-                <li className={ns("v01")}><span className={ns("icon")}></span> Match</li>
+                <li className={ns("v02")}><span className={ns("icon")}></span> Match</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> EachI</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> If Let</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> If Let Else</li>
