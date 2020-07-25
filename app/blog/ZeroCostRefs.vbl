@@ -1,0 +1,475 @@
+<imports />
+
+<page ns="c-blog" path="blog/zero-cost-refs-regions">
+<main>
+<title>Zero-Cost References with Regions in Vale</title>
+<subtitle>Watch regions eliminate reference-counting overhead!</subtitle>
+
+<date-and-author date="July 26th, 2020" author="Evan Ovadia" />
+
+<section>
+  Vale is rapidly approaching v0.1, and now that the foundations (generics, interfaces, closures) are complete, we can tell the world what's in store for Vale.
+</section>
+
+<section>
+  <p>Vale aims to be as fast as C++, as safe as Java, and easy to learn. Using a novel combination of single ownership, reference counting, region borrow checking, and an arsenal of other optimizations, Vale can reduce ref-counting overhead lower than ever before.</p>
+  <p>Any safe memory management strategy has run-time overhead. Garbage collected languages (Java, Javascript) must "stop the world" for milliseconds at a time, <n>630</n> and reference counting languages (Python, Swift, ObjC, some C++) pay costs in incrementing and decrementing ref counts. Even borrow checking languages (Rust, Cyclone) pay RC or Vec costs, when the borrow checker forces us into them; memory safety has a run-time cost, no matter what language you're in. <n>915</n></p>
+  <p>Vale is no exception; its Normal Mode and Resilient Mode guarantee memory safety, but have some minor overhead at run-time. <n>1138</n> However, Vale's <b>region borrow checking, compile time ref-counting, constraint references, memory pools, and bump allocation</b> work together to drastically reduce the overhead, giving us speed with perfect memory safety.</p>
+  <p>v0.2 will be the regions release, where add support for all of these features. We're still designing it and seeing if it will work! Let us know if you have any questions or ideas, or if you see any opportunities or mistakes!</p>
+</section>     
+
+<h2>Reference Counting</h2>
+
+<section>
+  <p>Vale uses reference counting to guarantee safety: whenever we make a new reference to an object, we must increment that object's <b>reference count</b>, <n>930</n> and when that reference goes away, we must decrement it again. We can't deallocate an object until its reference count is zero.</p>
+  <p>The first optimization that will help with this is called <b>compile-time reference counting</b>. It was invented by Wouter van Oortmerssen for Lobster, and it uses Rust-inspired lifetime analysis to eliminate 95% of increments and decrements at compile time, leaving only 5% to happen at run-time. <n>627</n></p>
+  <p>Now let's look at the overhead of the remaining 5%. Reference counting has what is commonly <n>1020</n> known as the <b>three vexing fears: cycles, atomicity, mispredictions, and cache-misses.</b> <n>608</n> Vale solves all of them.</p>
+</section>
+
+<h3>Cycles</h3>
+
+<p>The first weakness of RC is that it can form cycles, causing memory leaks. Vale doesn't have this problem because every object has one owning reference, and it enforces that no other references are alive when we let go of the owning reference.</p>
+
+<h3>Atomicity</h3>
+
+  <p>When two threads increment or decrement the same object's reference count, they can interfere with each other. There are various ways to avoid this:</p>
+
+  <ul className={ns("content cozy")}>
+    <li>In Python, the incrementing/decrementing is non-atomic, but that means only one thread can run at a given time.</li>
+    <li>In Swift, we can have multiple threads, but it means every reference count is atomic, which is very slow.</li>
+  </ul>
+
+  <p>Christian Aichinger tried making Python's ref-counting atomic, and it resulted in a <a href="https://greek0.net/blog/2015/05/23/python_atomic_refcounting_slowdown/">23% slowdown</a>. This is probably the main reason Swift is slower than C. <n>939</n></p>
+
+  <p>In Vale, an object can only be modified by one thread at a time, so a program can have threads and still use non-atomic ref-counting.</p>
+
+  <h3>Branch Mispredictions</h3>
+
+  <p>RC can also suffer from branch misprediction, where the CPU can't predict whether we'll deallocate the object or not. Vale allows the CPU to perfectly predict: letting go of constraint references will never deallocate the object, and letting go of owning references will always deallocate it.</p>
+
+  <h3>Cache Misses</h3>
+
+  <p>A CPU can non-atomically increment or decrement an integer very quickly; instructions are basically free on modern CPUs. The real bottleneck is in how far the data is: if it's been recently accessed, it's in the nearby cache (the data is "hot"). Otherwise the CPU will "cache miss" and have to bring it in all the way from RAM (the data is "cold").</p>
+
+  <p>So, even if we make our ref-counting non-atomic and optimize most of it away, any remaining ref-counts on cold data will still incur cache-miss costs.</p>
+
+  <p>Vale can avoid ref-counting on cold data by using <b>read-only regions</b>.</p>
+
+
+  <h2>Read-Only Regions</h2>
+
+  <p>In Vale, we can split our memory into various regions. We can lock a region, and all references into it are <b>completely free;</b> we don't have to increment or decrement its objects' ref counts.</p>
+
+  <p>We can do this with <b>implicit locking</b> and <b>explicit locking.</b></p>
+
+
+  <h3>Implicit Locking</h3>
+
+  <p>Programs often have "pure" functions, where a function reads the outside world through its parameters, does a bit of calculation (perhaps modifying some of its own locals along the way), and then returns a result, all without modifying the outside world. In Vale, we can annotate a function with the <b>pure</b> keyword to make the compiler enforce this. This is a common design pattern, and leads to much more maintainable and testable code.</p>
+
+  <p>If we add <b>region annotations</b> to our pure function, Vale will <b>implicitly lock</b> all existing memory, thus making references to any existing memory <b>completely free;</b> we don't have to increment or decrement anything because all these references are temporary anyway. Below, we use region annotations (highlighted) to tell the compiler which references point to the outside world.</p>
+
+  <p>Let's see it in action! Let's say we have a turn-based game, which runs in Unity. Whenever the player unit acts, each of the enemy units takes a turn to act too.</p>
+
+
+  <split>
+    <half>
+      <p>Each enemy unit figures out what it wants to do most.</p>
+      <p>To do this, each unit looks at all the things it can do (it's <c>abilities</c>, such as Idle, Wander, Chase, Attack), and asks each ability, "what do you want?".</p>
+      <p>A <c>Desire</c> describes what the unit could do, and how much it wants to do that.</p>
+      <p>When we have all the {incode("Desire", "s")}, we sort them to figure out what the strongest one is, and enact it.</p>
+    </half>
+    <half>
+<vale>
+fn gameLoop(world &World) {
+  each (world.enemyUnits) (unit){
+    desire =
+      unit.strongestDesire(world);
+    unit.enactDesire(desire);
+  }
+}
+
+pure «111» fn strongestDesire<'r ro, 'i>
+    (this 'r &Unit) Desire<'r, 'i> «956» {
+  desires =
+    this.abilities*.getDesire(); «1136»
+  desires.sort(
+    { _.strength() > _.strength() }); «911»
+  ret desires[0];
+}
+</vale>
+  </half>
+</split>
+
+
+
+<split>
+  <half>
+    <p>To generate a desire, an ability will look at its unit and the world around it.</p>
+    <p>For example, {incode("ChaseAbility", "'s")} <c>getDesire</c> function will look for the nearest unit, and return a very strong (70!) desire to chase it.</p>
+    <p>This function doesn't change anything about itself or the unit or the world, it just reads them and does calculations.</p>
+    <p>By adding the <c>'r</c> to {incode("strongestDesire", "'s")} <c>this &Unit</c>, we're telling the compiler that <c>this</c> will come from a region we call <c>'r</c>.</p>
+    <p>There's no specific region whose name is <c>'r</c> (rather, <c>'r</c> is how we refer to whatever region contains <c>this</c>, so it's a generic parameter, hence the <c><'r ro></c>. The <c>ro</c> specifies that it's a read-only region, making all references into <c>'r</c> free.</p>
+  </half>
+  <half>
+<vale>
+struct ChaseDesire<'r ro, 'i> {
+  impl IDesire;
+
+  strength Int;
+  victim 'r &Unit;
+  path List<Location>;
+
+  fn strength(&this impl IDesire) «1134»
+  Int {
+    ret this.strength;
+  }
+}
+
+pure fn getDesire<'r ro, 'i>
+  (this 'r &ChaseAbility impl IAbility)
+Desire<'r, 'i> {
+  unit = this.unit;
+  world = unit.world;
+  loc = unit.location;
+  nearbyUnits =
+    world.findNearbyUnits(loc);
+  closest = nearbyUnits[0];
+  closestLoc = closest.location;
+  path =
+    world.findPath(loc, closestLoc);
+  ret ChaseDesire(70, closest, path);
+}
+</vale>
+  </half>
+</split>
+
+
+<p><c>getDesire</c> is a heavy, read-only operation. It doesn't change anything, but it does breadth-first searches, A* pathfinding, and a bunch of other algorithms, which make (and then let go of) a lot of references into the World.</p>
+
+<p>Without the region annotations, every time we make (or let go of) a reference into the unit or anything else in the world, we increment and decrement a ref-count. Worse, the World would be cold, because Unity's rendering process has probably rendered a few hundred frames since the last turn, and has long since wiped our World from the cache.</p>
+
+<p>With the region annotations, the compiler knows that only the things inside the <c>'i</c> region can change, and nothing in the <c>'r</c> region will change, making references into <c>'r</c> completely free. <b>All of our references to this cold data, which would have incurred RC costs, are now free.</b></p>
+
+<p>There is a caveat: When we return a reference from the implicitly locked call, it increments the ref-count in the object it's pointing to. In the example, ChaseDesire.victim will increment the Unit it's pointing at, as it's returned. <n>1152</n> <n>1109</n> One can often use explicit locking to avoid this kind of overhead.</p>
+
+
+
+<h3>Explicit Locking</h3>
+
+<p>Implicit locking locked all existing memory, and made a small new region called 'i which we could modify. There's a more precise way to manage regions: mutexes! <n>152</n></p>
+
+<p>The Vale compiler itself has a great example of when we'd want explicit locking. Six transformation stages translate the source code into intermediate ASTs <n>334</n> and eventually into an executable binary. <n>1050</n> Each stage takes in the previous AST, read-only, and constructs the next AST.</p>
+
+<p>One of those is the "Templar" stage, which reads the "astrouts" AST and builds the "temputs" AST. We can put the astrouts in a Mutex, and the temputs in another Mutex. The Templar gets read-only access to the astrouts mutex, while it uses it's read-write access to the temputs mutex to build it up.</p>
+
+<split>
+  <half>
+    <p>Here, the <c>templar</c> function takes in the <c>astroutsMutex</c>.</p>
+    <p>The <c>astroutsMutex</c> starts closed, so we call <c>openro</c> to open it for read-only access.</p>
+    <p>We then create a new Mutex containing an empty Temputs. We immediately open it in read-write mode.</p>
+    <p>We give both the temputs and a function from the astrouts to translateFunction, so it can make a translated function and add it to temputs.</p>
+    <p>At the end of <c>templar</c>, the locks are dropped, automatically closing the mutexes, and we return the now-closed <c>temputsMutex</c>.</p>
+
+    <p>With our <c>Mutexes</c> and region annotations, the compiler can give us free, zero-cost access to everything in the astrouts.</p>
+
+  </half>
+  <half>
+
+<vale>
+fn templar(
+    astroutsMutex &!Mutex<Astrouts>) {
+  astroutsLock = astroutsMutex.openro();
+  astrouts = astroutsLock.contents;
+
+  temputsMutex = Mutex({ Temputs() }); 
+  temputsLock =
+    temputsMutex.openrw(); «345»
+  temputs = temputsLock.contents;
+
+  translateFunction(
+      astrouts.functions[0], &temputs);
+
+  ...;
+
+  ret temputsMutex;
+}
+
+fn translateFunction<'a ro, 't>(
+    func 'a &AFunction,
+    temputs 't &!Temputs) TFunction {
+  // Read func, add things to temputs.
+  ...;
+}
+</vale>
+  </half>
+</split>
+
+<p>We still increment and decrement the ref-counts of objects inside 'i, but we just made those objects, so they'll likely be hot in the cache.</p>
+
+<p>We can take this even further: we can combine explicit locking and implicit locking, and even do implicit locks from within implicit locks. By layering these locking techniques, we can compound our benefits and speed up our program even more!</p>
+
+<h2>Region Memory Strategy</h2>
+
+<p>In our example above, references into <c>'r</c> were completely free. And references into <c>'i</c> were probably hot in the cache, making its reference counting very fast.</p>
+<p>How much more can we do? <b>Much more.</b> This is where things get a bit crazy.</p>
+
+<p>Vale's <b>pool and arena allocation</b> can eliminate the ref-counting overhead in <c>'i</c> too, and <b>lets eliminate its malloc and free overhead as well, while we're at it.</b></p>
+<p>The default memory management strategy for a region is to use the <b>heap</b>, which uses malloc and free under the hood.</p>
+<p>We can make it so a certain region uses <b>pool</b> allocation, which is <i>much</i> faster. Pool allocation will cache all freed structs for future allocations of the same type. <n>452</n></p>
+
+<p>Functions can also use <b>arena</b> allocation, where we instead use a large "slab" of memory, and we keep allocating from the next part of it. Whenever it runs out, Vale allocates another slab of memory. <n>754</n> This can push performance even faster, though one should be careful when using this, as it could destroy the heap. Fun fact: the pool allocator is built on top of the arena allocator, under the hood.</p>
+
+<p>Pool allocation's benefits:</p>
+
+<ul>
+  <li>It's <i>extremely</i> fast, because instead of an expensive call to malloc, allocation is simply incrementing the "bump pointer" in the underlying slab.</li>
+  <li>It's very cache-friendly, because all of our allocated objects are right next to each other.</li>
+  <li>In release mode, we can <i>completely</i> optimize out all constraint reference counting to references inside the pool region, with no loss to safety. <n>743</n></li>
+  <li>We pay no cost to deallocate, because we deallocate it all at once at the end of the function!</li>
+</ul>
+
+<p>Pool allocation's costs:</p>
+
+<ul>
+  <li>Since we cache these structs, our memory usage could be higher. For example, if we make 120 Spaceships and let go of 20 of them, those 20 will still be using up memory. That's why pools are useful for the span of certain functions, and not the entire program.</li>
+  <li>Moving objects between regions (e.g. when returning from an implicit lock function that uses a pool region) requires copying those objects. <n>752</n></li>
+</ul>
+
+<p>Used well, a pool allocator can drastically speed up a region.</p>
+
+
+<split>
+  <half>
+    <p>For example, we could use pool allocation for this basic breadth-first-search algorithm, that checks for units at every nearby location.</p>
+    <p>Using pool allocation with an implicit lock is often called a <b>pool-call.</b></p>
+    <p>We use the keyword <c>pool</c> after the region declaration <c>'i</c>.</p>
+    <p>A List <n>731</n> uses up to 2x <n>1023</n> as much memory in a pool allocator, so this function takes twice as much memory, but it is also <i>much</i> faster.</p>
+  </half>
+  <half>
+
+{/*
+
+  this parses:
+
+pure fn findNearbyUnits<'r ro, 'i pool>
+    (world 'r &World, origin Location)
+    'i List<'r &Unit> «504» {
+  result = List<'r &Unit>(); «1140»
+  exploredSet = HashSet<Location>();
+  unexploredQueue = Queue<Location>(origin); «510»
+  unexploredSet = HashSet<Location>(origin);
+  while (unexploredQueue.nonEmpty()) {
+    // Get next location, mark it explored.
+    loc = unexploredQueue.pop();
+    unexploredSet.remove(loc);
+    exploredSet.add(loc);
+
+    // Add nearby locations we haven't seen yet.
+    newNearbyLocs =
+        world.getAdjacentLocations(loc).filter({ not exploredSet.has(_) }).filter({ not unexploredSet.has(_) });
+    unexploredQueue.addAll(&newNearbyLocs);
+    unexploredSet.addAll(&newNearbyLocs);
+  }
+  ret result;
+}
+
+this doesnt. it needs:
+- the 'i on the body
+- the if-let
+- the spaces before the dot
+- the 'r in the list we make'
+
+*/}
+{`
+pure fn findNearbyUnits<'r ro, 'i pool>
+    (world 'r &World, origin Location)
+    'i List<'r &Unit> 'i `}{this.noteAnchor("504")}{` {
+  result = List<'r &Unit>(); `}{this.noteAnchor("1140")}{`
+  exploredSet = HashSet<Location>();
+  unexploredQueue =
+    Queue<Location>(origin); `}{this.noteAnchor("510")}{`
+  unexploredSet =
+    HashSet<Location>(origin);
+  while (unexploredQueue.nonEmpty()) {
+    // Get next loc, mark it explored.
+    loc = unexploredQueue.pop();
+    unexploredSet.remove(loc);
+    exploredSet.add(loc);
+
+    // If there's a unit here, add it.
+    if ((u) = world.unitsByLoc(loc)) {
+      result.add(u);
+    }
+
+    // Add nearby locs not seen yet.
+    newNearbyLocs =
+      world.getAdjacentLocations(loc)
+        .filter(
+          { not exploredSet.has(_) })
+        .filter(
+          { not unexploredSet.has(_) })
+    unexploredQueue.addAll(
+      &newNearbyLocs);
+    unexploredSet.addAll(
+      &newNearbyLocs);
+  }
+  ret result;
+}
+`}
+  </half>
+</split>
+
+<p><b>We just made ref-counting free</b> for our findNearbyUnits function, and completely avoided malloc and free overhead.</p>
+
+<ul>
+  <li>References into the <c>'r</c> region are free because it's read-only.</li>
+  <li>References into the <c>'i</c> region are free because it uses pool allocation.</li>
+</ul>
+
+<p>The only memory overhead we pay is when we copy {incode("findNearbyUnits", "'s")} <c>'i List<'r &Unit></c> result from the pool region into the caller's region.</p>
+<p>Because Vale makes it so easy to optimize with pool allocation, Vale could become the obvious choice for performance-critical software.</p>
+
+
+<h2>Fast and Safe</h2>
+
+
+<p>Vale uses single ownership and region isolation to optimize its reference counting, and then offers read-only regions and pool-allocation for when we want to eliminate it altogether.</p>
+<p>With these, Vale can be 100% safe, while also being one of the fastest languages in existence.</p>
+</main>
+
+<margin>
+
+<Note name="915">
+  See <a href="https://vale.dev/blog/raii-next-steps">The Next Steps for Single Ownership and RAII</a>.
+</Note>
+
+<Note name="1138">
+  <p>Some applications choose to use Fast Mode which has zero overhead, and gain more confidence in its safety by developing and testing more in Normal Mode.</p>
+  <p>If we're looking for 100% certainty though, we must use Normal Mode or Resilient Mode.</p>
+</Note>
+
+<Note name="930">
+  This can be a constraint reference count or a weak reference count, depending on the reference.
+</Note>
+
+<Note name="627">
+  Read more at <a href="https://aardappel.github.io/lobster/memory_management.html">https://aardappel.github.io/lobster/memory_management.html</a>
+</Note>
+
+<Note name="1020">
+  Commonly in some very small circles, that is.
+</Note>
+
+<Note name="608">
+  We had plenty of off-by-one errors when implementing RC.
+</Note>
+
+<Note name="939">
+  See <a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/swift-gcc.html">Benchmarks Game</a>.
+</Note>
+
+<Note name="630">
+  Similar to Rust's approach, where we can move objects between threads, but can't share them, unless they're in a Mutex.
+</Note>
+
+<Note name="111">
+  <c>pure</c> means it doesn't access any globals or modify any of its arguments. We can also have <c>pure</c> functions without lifetime annotations.
+</Note>
+              
+<Note name="956">
+  We could take these annotations out and the program would still work, but it wouldn't be as optimized as it is here.
+</Note>
+
+<Note name="1136">
+  <p>This is the "map" operator, it calls the method on the right on all the elements of the collection on the left.</p>
+  <p>
+    It's equivalent to:<br />
+    <c>unit.capabilities.map(</c><br />
+    <c>  (c){ c.generateImpulse() } )</c>
+  </p>
+  <p>
+    or in other languages:<br />
+    <c>unit.capabilites.map(</c><br />
+    <c>  c => c.generateImpulse() )</c>
+  </p>
+</Note>
+
+<Note name="911">
+  <p>The _ means "the argument".</p>
+  <p>
+    This is equivalent to:<br />
+    <c>(a, b){ a.strength < b.strength }</c>
+  </p>
+  <p>
+    or in other languages:<br />
+    <c>(a, b) => a.strength < b.strength</c>
+  </p>
+</Note>
+
+<Note name="1134">
+  impl is like @Override in java.
+</Note>
+
+<Note name="1152">
+  One could say that we're only doing the reference counting we need to, for the result of the function.
+</Note>
+
+<Note name="1109">
+  There are some potential SIMD opportunities to parallelize these increments.
+</Note>
+
+<Note name="152">
+  They aint just for multi-threading anymore!
+</Note>
+
+<Note name="334">
+  Stands for Abstract Syntax Tree, which is a simplified version of code, after we've parsed it from the original text.
+</Note>
+
+<Note name="1050">
+  If you're curious, the six stages are named Scout, Seer, Astronomer, Templar, Hammer, and Midas.
+</Note>
+
+<Note name="345">
+  Mutex takes a function which it will call to get its initial value.
+</Note>
+
+<Note name="452">
+  Type-specific pools are 100% safe with no ref-counting overhead, because use-after-free doesn't actually use a freed object, it uses one that's still alive in memory, and of the correct structure.
+</Note>
+
+<Note name="754">
+  This only applies to objects that would have been on the heap; any objects we put on the stack will still use the stack.
+</Note>
+
+<Note name="743">
+  This is safe because the memory is not reclaimed by anyone else, we're just accessing old data, which isn't a memory safety problem (just a logic problem).
+</Note>
+
+<Note name="752">
+  One could say that we're only paying the RC cost for the things we actually return from the function.
+</Note>
+
+<Note name="504">
+  We do this to make <c>'i</c> the default region for our function calls and new objects, like the List we make on the next line.
+</Note>
+
+<Note name="1140">
+  In Vale, List is backed by an array. If one wants a linked list, they can use LinkedList.
+</Note>
+
+<Note name="510">
+  Circular queue, backed by vec
+</Note>
+
+<Note name="1023">
+  It uses 1x if we initialize it to the correct capacity.
+</Note>
+
+<Note name="731">
+  HashSet and Queue are both backed by List, so in this function, we basically have four Lists.
+</Note>
+
+</margin>
+</page>

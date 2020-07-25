@@ -131,6 +131,7 @@ class Home extends React.Component {
             <div className={ns("recent-posts")}>
               <div className={ns("recent-posts-title")}>Recent posts:</div>
               <ul>
+                {/*<li><a href="/blog/zero-cost-refs-regions">Zero Cost References with Regions</a></li>*/}
                 <li><a href="/blog/next-steps-raii">The Next Steps for Single Ownership and RAII</a></li>
                 <li><a href="https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/">Announcing Vale!</a></li>
                 {/*<li><a href="/blog/verdagon/2020-no-garbage-collection">Safety without Garbage Collection</a></li>
@@ -174,9 +175,9 @@ fn main() {
 }*/}
 <span class="Prog"><span class="Fn">fn <span class="FnName">planets</span><span class="Params">()</span> <span class="Block">&#123;<br />  <span class="Seq">[<span class="Str">"Venus"</span>, <span class="Str">"Earth"</span>, <span class="Str">"Mars"</span>]</span><br />&#125;</span></span><br /><span class="Fn">fn <span class="FnName">main</span><span class="Params">()</span> <span class="Block">&#123;<br />  <span class="Call"><span class="CallLookup">each</span> <span class="Call"><span class="CallLookup">planets</span>()</span> <span class="Lambda"><span class="Params">(<span class="Pat"><span class="Capture"><span class="CaptureName">planet</span></span></span>)</span><span class="Block">&#123;<br />    <span class="Call"><span class="CallLookup">println</span>("Hello " + planet<span class="Call"><span class="Call"><span class="Str"></span><span class="CallLookup"></span><span class="Lookup"></span></span> <span class="CallLookup">+</span> <span class="Str">"!"</span></span>)</span>;<span class="W"></span><br />  &#125;</span></span></span><span class="W"></span><br />&#125;</span></span><br /></span>
 </Snippet>
-<div className={ns("equivalent")}>
+{/*<div className={ns("equivalent")}>
 <a href="#">See equivalent C++, JS, Rust, Scala, Python</a>
-</div>
+</div>*/}
 </div>
 
 <div className={ns("output")}>

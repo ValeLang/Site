@@ -13,7 +13,7 @@
 .m-tripage.inline-code {
 	font-family: Roboto Mono, Courier New, Courier;
 	padding: 0 4px;
-	white-space: nowrap;
+	white-space: pre;
 	font-size: 10pt;
 }
 
@@ -64,6 +64,10 @@
 }
 
 .m-tripage .content {
+  margin-bottom: 16px;
+}
+
+.m-tripage .section {
   margin-bottom: 16px;
 }
 

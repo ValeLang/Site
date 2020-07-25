@@ -97,3 +97,12 @@
 .c-note.anchor.image.notyet {
 	background-image: url("../images/clock48.png");
 }
+
+
+.c-note.note.root > .c-note.note.image-container + div {
+	display: inline;
+}
+
+.c-note.note.root > .c-note.note.image-container + div + div {
+	margin-top: 8px;
+}
