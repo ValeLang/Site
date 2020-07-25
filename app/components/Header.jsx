@@ -51,7 +51,7 @@ class Header extends React.Component {
 						</div>
 						<div className="header links">
 							<a href="/ref">Reference</a>
-							<a href="https://github.com/Verdagon/Vale">Github</a>
+							<a href="https://github.com/ValeLang/Vale">Github</a>
 							<a href="https://reddit.com/r/Vale">r/Vale</a>
 							<a href="https://discord.gg/SNB8yGH">Discord</a>
 						</div>

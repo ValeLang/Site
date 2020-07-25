@@ -19,7 +19,7 @@ function incode(code, suffix) {
   }
 }
 
-class BlogRaiiNextSteps extends React.Component {
+class Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -1264,6 +1264,6 @@ public:
 }
 
 ReactDOM.render(
-  <BlogRaiiNextSteps />,
+  <Page />,
   document.getElementById('main')
 );
