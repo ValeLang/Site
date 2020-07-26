@@ -22,7 +22,7 @@ class Roadmap extends React.Component {
             <div className={ns("intro")}>
               <div>Vale is currently version 0.0: getting the basic language to work.</div>
               <div>(...plus generics and lambdas, because we couldn't help ourselves!)</div>
-              <div>We're currently <b>94%</b> of the way to version 0.1!</div>
+              <div>We're currently <b>97%</b> of the way to version 0.1!</div>
             </div>
             <div className={ns("legend")}>
               <div className={ns("done")}><span className={ns("icon")}></span> Done</div>
@@ -34,19 +34,13 @@ class Roadmap extends React.Component {
 
           <div className={ns("columns")}>
             <div className={ns("column1")}>
-              {/*<li className={ns()}>Basics</li>
-              <ul className={ns()}>
-                <li className={ns("done")}><span className={ns("icon")}></span> "Vivem" Vale VM</li>
-                <li className={ns("done")}><span className={ns("icon")}></span> Int, Bool, Float, Str</li>
-                <li className={ns("done")}><span className={ns("icon")}></span> Type Inference</li>
-              </ul>*/}
               <h3 className={ns()}>References</h3>
               <ul className={ns()}>
                 <li className={ns("done")}><span className={ns("icon")}></span> Immutables' Refs</li>
                 <li className={ns("done")}><span className={ns("icon")}></span> Owning Refs</li>
                 <li className={ns("done")}><span className={ns("icon")}></span> Moving</li>
                 <li className={ns("done")}><span className={ns("icon")}></span> Constrant Refs</li>
-                <li className={ns("v01")}><span className={ns("icon")}></span> Weak Refs</li>
+                <li className={ns("done")}><span className={ns("icon")}></span> Weak Refs</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Expect</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Optional Sugar</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Inlining</li>
@@ -155,6 +149,7 @@ class Roadmap extends React.Component {
               <h3 className={ns()}>LLVM Codegen</h3>
               <ul className={ns()}>
                 <li className={ns("done")}><span className={ns("icon")}></span> Native Executables</li>
+                <li className={ns("v02")}><span className={ns("icon")}></span> Resilient Mode</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Continue on panic</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Constraint Modes</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Threading</li>
@@ -163,14 +158,19 @@ class Roadmap extends React.Component {
               <h3 className={ns()}>Regions</h3>
               <ul className={ns()}>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Basics</li>
-                <li className={ns("v02")}><span className={ns("icon")}></span> Read-only Calling</li>
+                <li className={ns("v02")}><span className={ns("icon")}></span> Read-only Regions</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Mutexes</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Transmigrating</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Seceding</li>
               </ul>
+              <h3 className={ns()}>Optimization</h3>
+              <ul className={ns()}>
+                <li className={ns("v02")}><span className={ns("icon")}></span> Compile-Time RC</li>
+                <li className={ns("v02")}><span className={ns("icon")}></span> Fast Resilient Mode</li>
+              </ul>
               <h3 className={ns()}>Ergonomics</h3>
               <ul className={ns()}>
-                <li className={ns("v02")}><span className={ns("icon")}></span> Compile Errors</li>
+                <li className={ns("v01")}><span className={ns("icon")}></span> Compile Errors</li>
                 <li className={ns("v02")}><span className={ns("icon")}></span> Syntax Highlighting</li>
               </ul>
               <h3 className={ns()}>Possibilities</h3>

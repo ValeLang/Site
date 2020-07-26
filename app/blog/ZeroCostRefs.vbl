@@ -248,47 +248,14 @@ fn translateFunction<'a ro, 't>(
   </half>
   <half>
 
-{/*
-
-  this parses:
-
+<vale>
 pure fn findNearbyUnits<'r ro, 'i pool>
     (world 'r &World, origin Location)
-    'i List<'r &Unit> «504» {
+    'i List<'r &Unit> 'i «504» {
   result = List<'r &Unit>(); «1140»
   exploredSet = HashSet<Location>();
-  unexploredQueue = Queue<Location>(origin); «510»
-  unexploredSet = HashSet<Location>(origin);
-  while (unexploredQueue.nonEmpty()) {
-    // Get next location, mark it explored.
-    loc = unexploredQueue.pop();
-    unexploredSet.remove(loc);
-    exploredSet.add(loc);
-
-    // Add nearby locations we haven't seen yet.
-    newNearbyLocs =
-        world.getAdjacentLocations(loc).filter({ not exploredSet.has(_) }).filter({ not unexploredSet.has(_) });
-    unexploredQueue.addAll(&newNearbyLocs);
-    unexploredSet.addAll(&newNearbyLocs);
-  }
-  ret result;
-}
-
-this doesnt. it needs:
-- the 'i on the body
-- the if-let
-- the spaces before the dot
-- the 'r in the list we make'
-
-*/}
-{`
-pure fn findNearbyUnits<'r ro, 'i pool>
-    (world 'r &World, origin Location)
-    'i List<'r &Unit> 'i `}{this.noteAnchor("504")}{` {
-  result = List<'r &Unit>(); `}{this.noteAnchor("1140")}{`
-  exploredSet = HashSet<Location>();
   unexploredQueue =
-    Queue<Location>(origin); `}{this.noteAnchor("510")}{`
+    Queue<Location>(origin); «510»
   unexploredSet =
     HashSet<Location>(origin);
   while (unexploredQueue.nonEmpty()) {
@@ -308,7 +275,7 @@ pure fn findNearbyUnits<'r ro, 'i pool>
         .filter(
           { not exploredSet.has(_) })
         .filter(
-          { not unexploredSet.has(_) })
+          { not unexploredSet.has(_) });
     unexploredQueue.addAll(
       &newNearbyLocs);
     unexploredSet.addAll(
@@ -316,7 +283,7 @@ pure fn findNearbyUnits<'r ro, 'i pool>
   }
   ret result;
 }
-`}
+</vale>
   </half>
 </split>
 

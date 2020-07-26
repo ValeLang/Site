@@ -16,7 +16,7 @@ def procrun(args: List[str], input, **kwargs) -> subprocess.CompletedProcess:
     # process_output = child_proccess.communicate()[0]
     # proccess.stdin.close()
     # return process_output
-    return subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, input=input, text=True)
+    return subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, input=input, text=True)
 
 def highlight(valestrom_filepath, text):
     driver_class = "net.verdagon.vale.driver.Driver"
@@ -32,6 +32,10 @@ def highlight(valestrom_filepath, text):
             "stdout:"
         ],
         text)
+
+    if process.returncode != 0:
+        print(process.stderr)
+        exit(1)
     return process.stdout
 
 
