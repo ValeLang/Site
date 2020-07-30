@@ -61,6 +61,8 @@ class Page extends React.Component {
 
                 <div className={ns("content")} style={{marginBottom: "32px"}}><span className={ns("date")}>July 15th, 2020</span> <span className={ns("author")}>&nbsp;&mdash;&nbsp; Evan Ovadia</span></div>
 
+                <div className={ns("content")} style={{border: "1px solid #D0D8E0", backgroundColor: "#E0F0FF", padding: "8px"}}>(Updated Jul 29th: Edited article to reflect Normal Mode's new name, Assist Mode)</div>
+
                 <div className={ns("content")}>
                   While diving the depths of single ownership, we discovered a hidden gem from the most unlikely of places. With it, we were able to reassemble C++ into something that really unleashes the full potential of RAII.
                 </div>
@@ -263,7 +265,7 @@ struct BigClass {
                 <h4 className={ns()}>Constraint Behavior Modes</h4>
 
                 <div className={ns("content cozy")}>
-                  <b>Normal Mode</b> is used in development and testing, where we halt the program when we accidentally free an object that a constraint reference is pointing at.
+                  <b>Assist Mode</b> is used in development and testing, where we halt the program when we accidentally free an object that a constraint reference is pointing at.
                 </div>
 
                 <div className={ns("content cozy")}>
@@ -279,7 +281,7 @@ struct BigClass {
                 </div>
 
                 <div className={ns("content cozy")}>
-                  Luckily, Vale's region isolation allows Normal Mode and Resilient Mode to use non-atomic ref counting, which is much faster. {this.noteAnchor("rorc")} {this.noteAnchor("nocycles")}
+                  Luckily, Vale's region isolation allows Assist Mode and Resilient Mode to use non-atomic ref counting, which is much faster. {this.noteAnchor("rorc")} {this.noteAnchor("nocycles")}
                 </div>
 
                 <div className={ns("content cozy")}>
@@ -875,7 +877,7 @@ public:
                       <td className={ns("good")}>Yes</td>
                     </tr>
                     <tr className={ns()}>
-                      <th className={ns()}>Vale, Normal / Resilient Mode</th>
+                      <th className={ns()}>Vale, Assist / Resilient Mode</th>
                       <td className={ns("good")}>Yes</td>
                       <td className={ns("meh")}>Optimized Rc<br/>Overhead {this.noteAnchor("elide")}</td>
                       <td className={ns("bad")}>8b for all objs {this.noteAnchor("1041")}</td>
@@ -895,17 +897,16 @@ public:
                   <li className={ns()}><b>Borrow w/ Rc</b>: Using the borrow checker, with {incode("Rc<T>")} as a fall-back. Assuming an Rc control block of 8b share count and 8b weak count.</li>
                   <li className={ns()}><b>Borrow w/ IDs</b>: Using the borrow checker, generational IDs instead of aliasing.</li>
                   <li className={ns()}><b>Borrow w/ Unsafe</b>: Using the borrow checker, with unsafe as a fall-back.</li>
-                  <li className={ns()}><b>C Refs, Fast</b>: Fast mode, where constraint refs are compiled to raw pointers.</li>
-                  <li className={ns()}><b>C Refs, Resilient</b>: Constraint refs keep objects alive, only panic on dereferencing.</li>
-                  <li className={ns()}><b>C Refs, Normal</b>: Dangling reference halts the program.</li>
-                  <li className={ns()}><b>Vale w/ Imm Region Borrowing</b>: Resilient/Normal mode, using immutable region borrowing. {this.noteAnchor("immrb")}</li>
+                  <li className={ns()}><b>Vale, Fast Mode</b>: Fast mode, where constraint refs are compiled to raw pointers.</li>
+                  <li className={ns()}><b>Vale, Assist / Resilient Mode</b>: Ref counting for constraint and weak refs.</li>
+                  <li className={ns()}><b>Vale w/ Imm Region Borrowing</b>: Resilient/Assist Mode, using immutable region borrowing. {this.noteAnchor("immrb")}</li>
                 </ul>
 
                 <div className={ns("content cozy")}>
                   Rust and Vale both accomplish speed and safety, but in different ways and with different tradeoffs. {this.noteAnchor("436")} Comparing the average Vale program to the average Rust program, each with a mix of their strategies:
                 </div>
                 <ul className={ns("content cozy")}>
-                  <li className={ns()}>Vale's Normal and Resilient modes are safer, because the Rust program has parts that are {incode("unsafe")}. They could be faster or slower, depending on how many IDs and {incode("Rc")} the Rust program used to get around the borrow checker.</li>
+                  <li className={ns()}>Vale's Assist and Resilient modes are safer, because the Rust program has parts that are {incode("unsafe")}. They could be faster or slower, depending on how many IDs and {incode("Rc")} the Rust program used to get around the borrow checker.</li>
                   <li className={ns()}>Vale's Fast Mode uses less memory and is probably faster, because it doesn't suffer the {incode("Rc")} and {incode("Vec")}+ID overhead. Fast Mode could be less safe, depending on test coverage and how much {incode("unsafe")} there is in the Rust program.</li>
                   <li className={ns()}>Vale could be easier, because it allows aliasing freely, and one can opt-out of constraint refs to use weak refs for any particular case at any time.</li>
                 </ul>

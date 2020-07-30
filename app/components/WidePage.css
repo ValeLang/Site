@@ -1,0 +1,11 @@
+
+.c-widepage.page {
+  width: 896px;
+  margin: auto;
+}
+
+h1.c-widepage {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  font-size: 18pt;
+}

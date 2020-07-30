@@ -2,11 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import '../common.css'
 import './Roadmap.css'
+import '../components/WidePage.css'
 import Header from '../components/Header.jsx'
 import Footer from '../components/Footer.jsx';
 
 // namespaces classes
-const ns = (classes) => "c-roadmap " + (classes || "");
+const ns = (classes) => "c-roadmap c-widepage " + (classes || "");
 
 class Roadmap extends React.Component {
   render() {

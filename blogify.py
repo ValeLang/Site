@@ -34,6 +34,8 @@ def highlight(valestrom_filepath, text):
         text)
 
     if process.returncode != 0:
+        print("Failed compiling:")
+        print(process.stdout)
         print(process.stderr)
         exit(1)
     return process.stdout
@@ -163,7 +165,11 @@ ReactDOM.render(
     title_match = re.search(r'<title>([^<]+)</title>', contents)
     assert(title_match != None)
     title = title_match.group(1)
-    replacement = '<h1 className={ns("noline cozy")} style={{marginTop: "8px"}}>' + title + '</h1>'        
+    # Note the space in '</h1 >', this prevents us from matching it again later
+    replacement = (
+        '<h1 className={ns("noline cozy")} style={{marginTop: "8px"}}>' +
+        title +
+        '</h1 >')
     contents = contents[:title_match.start()] + replacement + contents[title_match.end():]
 
 
@@ -251,6 +257,12 @@ ReactDOM.render(
             '<ul className={ns("content cozy")}>',
             contents))
 
+    contents = (
+        re.sub(
+            r'<ol>',
+            '<ol className={ns("content cozy")}>',
+            contents))
+
 
     contents = (
         re.sub(
@@ -262,18 +274,26 @@ ReactDOM.render(
     headers = []
 
     while True:
-        match = re.search(r'<h(.)>([^<]+)</h.>', contents)
+        match = re.search(r'<h(.)( [^>]+)?>([^<]+)</h.>', contents)
         if match == None:
             break
 
         strength = match.group(1)
-        header_text = match.group(2)
+        attrs = match.group(2) or ""
+        header_text = match.group(3)
         anchor_name = header_text.lower()
         anchor_name = re.sub(r'[ \r\n-]+', '', anchor_name)
 
-        replacement = '<a name="' + anchor_name + '"></a><h' + strength + ' className={ns()}>' + header_text + '</h' + strength + '>'
+        replacement = (
+            '<a name="' + anchor_name + '"></a>' +
+            '<h' + strength + ' ' + attrs + '>' +
+            header_text +
+            # Note the space in ' >', this prevents us from matching it again
+            '</h' + strength + ' >')
         
         contents = contents[:match.start()] + replacement + contents[match.end():]
+
+        print("Found header " + header_text)
 
         headers.append([header_text, anchor_name, int(strength)])
 
@@ -335,7 +355,6 @@ ReactDOM.render(
             r'</margin>',
             '</div>',
             contents))
-
 
 
 

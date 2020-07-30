@@ -40,8 +40,11 @@
 .c-home .featuring-title {
 	font-weight: bold;
 }
+.c-home .contribute {
+	margin-bottom: 16px;
+}
 .c-home .recent-posts {
-	margin-bottom: 32px;
+	margin-bottom: 16px;
 }
 .c-home .recent-posts-title {
 	font-weight: bold;

@@ -8,6 +8,7 @@ module.exports = {
   entry: {
     home: './app/home/Home.jsx',
     roadmap: './app/roadmap/Roadmap.jsx',
+    contribute: './app/contribute/Contribute.jsx',
     raiiNextSteps: './app/blog/RaiiNextSteps.jsx',
     zeroCostRefs: './app/blog/ZeroCostRefs.jsx',
     refIntro: './app/reference/Intro.jsx',
@@ -68,6 +69,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['home'], filename: 'index.html', title: "Home - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['roadmap'], filename: 'roadmap', title: "Roadmap - Vale", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['contribute'], filename: 'contribute', title: "Contribute - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['raiiNextSteps'], filename: 'blog/next-steps-raii', title: "The Next Steps for Single Ownership and RAII - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['raiiNextSteps'], filename: 'blog/raii-next-steps', title: "The Next Steps for Single Ownership and RAII - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['zeroCostRefs'], filename: 'blog/zero-cost-refs-regions', title: "Zero Cost References with Regions - Vale", inject: true }),
