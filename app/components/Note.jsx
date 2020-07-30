@@ -186,6 +186,7 @@ class NoteManager {
       notesHeaderRect: null,
       noteSizesAndCustomIcons: {},
       noteIconsAndPositions: {},
+      nextUpdateIn: 50, // Update positions again 50ms from now. We'll double each time.
     };
     this.mounted = false;
   }
@@ -262,7 +263,7 @@ class NoteManager {
     return noteIconsAndPositions;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     let readyNotes = new Set(Object.keys(this.owner.state.noteSizesAndCustomIcons));
     let readyAnchors = new Set(Object.keys(this.owner.state.noteAnchorPositions));
     let missingNotes = new Set([...readyAnchors].filter(x => !readyNotes.has(x)));
@@ -280,6 +281,13 @@ class NoteManager {
         });
       }
     }
+    setTimeout(() => {
+      this.owner.setState((state, props) => {
+        console.log("updating");
+        state.nextUpdateIn *= 2;
+        return state;
+      });
+    }, this.owner.state.nextUpdateIn);
   }
 }
 

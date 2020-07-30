@@ -76,11 +76,11 @@ class Page extends React.Component {
 </div>
 
 <div className={ns("section")}>
-  <div className={ns("content cozy")}>However, in the real world, we don't have unlimited time; we might only have a few days, an evening, or a couple hours to implement what we need. When time is a factor, we need a language that can <b>optimize as much as possible with as little effort as possible.</b> Even if we did have unlimited time, we want to spend it adding cool features, not optimizing slow code!</div>
+  <div className={ns("content cozy")}>However, in the real world, we don't have unlimited time; we might only have a few days, an evening, or a couple hours to implement what we need. When development time is a factor, we need a language that can <b>optimize as much as possible with as little effort as possible.</b> Even if we did have unlimited time, we want to spend it adding cool features, not optimizing slow code!</div>
 </div>
 
 <div className={ns("section")}>
-  <div className={ns("content cozy")}><b>Development speed and ergonomics matter too.</b> 5 hours fixing undefined behavior bugs is 5 hours not spent optimizing. But also, if a language forces us to spend time prematurely optimizing <i>everything</i>, we spend less time optimizing the hot path. {this.noteAnchor("critical")}</div>
+  <div className={ns("content cozy")}><b>Because we don't have unlimited time, development speed and ergonomics matter.</b> Five hours fixing undefined behavior bugs is five hours not spent optimizing. But also, if a language forces us to think hard about and prematurely optimize <i>everything</i>, we spend less time optimizing the hot path. {this.noteAnchor("critical")}</div>
 </div>
 
 <div className={ns("section")}>
@@ -95,7 +95,7 @@ class Page extends React.Component {
   <div className={ns("content cozy")}>To overcome that, Vale can use its unique mix of single ownership and regions to: {this.noteAnchor("otherplans")}</div>
   <ul className={ns("content cozy")}>
     <li className={ns()}>Reduce safety overhead as close to zero as possible.</li>
-    <li className={ns()}>Make it <i>ridiculously</i> easy to use bump allocation and pool allocation.</li>
+    <li className={ns()}>Make it <i>ridiculously</i> easy to use bump allocation and pool allocation, such that we use it in more places.</li>
   </ul>
 </div>
 
@@ -114,7 +114,7 @@ class Page extends React.Component {
 <a name="referencecounting"></a><h2 >Reference Counting</h2 >
 
 <div className={ns("section")}>
-  <div className={ns("content cozy")}>Vale's Fast Mode doesn't use reference counting, but its Assist Mode and Resilient Mode use it to implement non-owning references (constraint references and weak references). This incurs some minor overhead at run-time.</div>
+  <div className={ns("content cozy")}>Vale's Fast Mode doesn't use reference counting, but its Assist Mode and Resilient Mode use it to implement non-owning references (constraint references and weak references). This is heavily optimized (more below), but still incurs some non-zero overhead at run-time.</div>
 
   <div className={ns("content cozy")}>Whenever we make a new reference to an object, we must increment that object's <b>reference count</b>, {this.noteAnchor("930")} and when that reference goes away, we must decrement it again. We can't deallocate an object until its reference count is zero.</div>
 
@@ -144,7 +144,7 @@ class Page extends React.Component {
 
 <a name="branchmispredictions"></a><h3  className={ns("noline")}>Branch Mispredictions</h3 >
 
-<div className={ns("content cozy")}>RC can also suffer from branch misprediction, where the CPU can't predict whether we'll deallocate the object or not. Vale allows the CPU to perfectly predict: letting go of constraint references will never deallocate the object, and letting go of owning references will always deallocate it.</div>
+<div className={ns("content cozy")}>RC can also suffer from branch misprediction, where the CPU can't predict whether we'll deallocate the object or not. In Vale, there's no branching at all; letting go of constraint or weak references will never deallocate the object, and letting go of an owning reference will always deallocate it.</div>
 
 <a name="cachemisses"></a><h3  className={ns("noline")}>Cache Misses</h3 >
 
@@ -190,7 +190,7 @@ class Page extends React.Component {
 <div className={ns("content splitter")}>
   <div className={ns("half")}>
     <div className={ns("content cozy")}>Each enemy unit figures out what it wants to do most.</div>
-    <div className={ns("content cozy")}>To do this, each unit looks at all the things it can do (it's {incode("abilities")}, such as Idle, Wander, Chase, Attack), and asks each ability, "what do you want?".</div>
+    <div className={ns("content cozy")}>To do this, each unit looks at all the things it can do (its {incode("abilities")}, such as Idle, Wander, Chase, Attack), and asks each ability, "what do you want?".</div>
     <div className={ns("content cozy")}>To generate a desire, an ability will look at its unit and the world around it.</div>
     <div className={ns("content cozy")}>An {incode("IDesire")} describes what the unit could do, and how much it wants to do that.</div>
     <div className={ns("content cozy")}>When we have all the {incode("IDesire", "s")}, we sort them to figure out what the strongest one is, and enact it.</div>
@@ -208,7 +208,7 @@ class Page extends React.Component {
 
 <div className={ns("content cozy")}>{incode("getDesire")} is a heavy, read-only operation. It doesn't change anything about the unit or the world, but it does breadth-first searches, A* pathfinding, and a bunch of other algorithms, which make (and then let go of) a lot of references into the World.</div>
 
-<div className={ns("content cozy")}>Without the region annotations, every time we make (or let go of) a reference into the unit or anything else in the world, we increment and decrement a ref-count. Worse, the World would be cold, because Unity's has probably rendered a few hundred frames since the last turn, and has long since wiped our World from the cache.</div>
+<div className={ns("content cozy")}>Without the region annotations, every time we make (or let go of) a reference into the unit or anything else in the world, we increment and decrement a ref-count. Worse, the World would be cold, because Unity has probably rendered a few hundred frames since the last turn, and has long since wiped our World from the cache.</div>
 
 <div className={ns("content cozy")}>With the region annotations, the compiler knows that only the things inside the {incode("'i")} region can change, and nothing in the {incode("'r")} region will change, making references into {incode("'r")} completely free. <b>All of our references to this cold data, which would have incurred RC costs, are now free.</b></div>
 
@@ -316,6 +316,10 @@ class Page extends React.Component {
 
 <div className={ns("content cozy")}>
   If you want to see this happen sooner, or just want to contribute to something cool, we invite you to <a href="/contribute">come join us!</a> {this.noteAnchor("help")}
+</div>
+
+<div className={ns("content cozy")}>
+  We'd love to hear your thoughts on regions and zero-cost references, so <a href="https://www.reddit.com/r/vale/comments/i0pyo5/zero_cost_references_with_regions/">leave a comment</a>!
 </div>
 
 <div className={ns("content cozy")}>
@@ -544,7 +548,7 @@ class Page extends React.Component {
 </Note>
 
 <Note name="fastest" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
-  See <a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/cpp.html">Benchmarks Game</a>. Fortran, C, and Rust are also close to C++'s performance. See the afterword for a comparison with Rust!
+  See <a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/cpp.html">Benchmarks Game</a>. Fortran, C, and Rust are also close to C++'s performance.
 </Note>
 
 <Note name="1140" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>

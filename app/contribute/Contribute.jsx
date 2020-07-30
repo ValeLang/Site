@@ -20,7 +20,7 @@ class Page extends React.Component {
 
           <div className={ns("columns")}>
             <p>
-              Vale is currently version 0.0, <a href="/roadmap">97% of the way towards its first launch at v0.1.</a>
+              Vale is currently <a href="/roadmap">97% of the way towards its first launch at v0.1.</a>
             </p>
 
             <p>
