@@ -56,7 +56,7 @@ class Page extends React.Component {
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -70,10 +70,10 @@ class Page extends React.Component {
     radius: Int;
   }
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -88,7 +88,7 @@ class Page extends React.Component {
             Moon("Titan", 2576),
             Moon("Mimas", 562))))));
  `}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -103,12 +103,12 @@ class Page extends React.Component {
                     Just as with regular Valence variables, fields' names must end in {incode("!")} to be modified. If we change {incode("Planet")}'s {incode("name")} field to {incode("name!")} then we can modify it.
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`struct Planet {
   name!: Str;
   moons: List:Moon;
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -117,11 +117,11 @@ class Page extends React.Component {
                     Now, we can get a reference to it and modify its name.
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`let mySS = ...;
 let saturn = &mySS.root.planets.1;
 mut saturn.name! = "Flamscrankle";`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -134,10 +134,10 @@ mut saturn.name! = "Flamscrankle";`}
                     {incode("List")} has a method called {incode("append")} which we can call to add new elements to the list.
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`mySS.root.planets.append(
   Planet("Bogglewog", List()));`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -146,10 +146,10 @@ mut saturn.name! = "Flamscrankle";`}
                     We can also use {incode("List")}'s {incode("remove")} method to remove things.
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`mySS.root.planets.remove(
   &mySS.root.planets.2);`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 

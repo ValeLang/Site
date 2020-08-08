@@ -76,7 +76,7 @@ class Page extends React.Component {
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
 
-  <div className={ns("code")}>
+  <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -92,10 +92,10 @@ class Page extends React.Component {
 }
 
 `}
-  </div>
+  </Snippet>
                   </div>
                   <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -114,7 +114,7 @@ let snapshot2 = mySS.snapshot();
 
 doutln snapshot1;
 doutln snapshot2;`}
-  </div>
+  </Snippet>
                   </div>
                 </div>
 
@@ -123,7 +123,7 @@ doutln snapshot2;`}
                 </div>
 
                 <div className={ns("content")}>
-                  <div className={ns("code")}>
+                  <Snippet>
 {`MySuperstructure(
   SolarSystem#5(
     List#4(Planet#3("Earth", List#2(Moon#1("Luna", 1737))))))
@@ -135,7 +135,7 @@ MySuperstructure(
         List#2(
           Moon#1("Luna", 1737),
           Moon#6("Raine", 898))))))`}
-                  </div>
+                  </Snippet>
                 </div>
 
                 <div className={ns("content cozy")}>
@@ -143,10 +143,10 @@ MySuperstructure(
                 </div>
 
                 <div className={ns("content cozy")}>
-                  <div className={ns("code")}>
+                  <Snippet>
 {`doutln mySS.findAll:Moon();`} {this.noteAnchor("note2")}{`
 doutln snapshot1.findAll:Moon();`}
-                  </div>
+                  </Snippet>
                 </div>
 
                 <div className={ns("content cozy")}>
@@ -154,10 +154,10 @@ doutln snapshot1.findAll:Moon();`}
                 </div>
 
                 <div className={ns("content")}>
-                  <div className={ns("code")}>
+                  <Snippet>
 {`List()
 List(Moon#6("Raine", 898))`}
-                  </div>
+                  </Snippet>
                 </div>
 
                 <h3 className={ns("cozy")}>Keep in mind...</h3>

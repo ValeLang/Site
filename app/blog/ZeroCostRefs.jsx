@@ -362,10 +362,14 @@ class Page extends React.Component {
         <li className={ns()}>Luckily, this can be learned. After a while, you can understand when and how to work around the borrow checker, and when to fall back on {incode("unsafe")} code.</li>
       </ul>
       <li className={ns()}>It makes certain patterns impossible, and one often finds their architecture forced in a certain direction to appease the borrow checker. {this.noteAnchor("observer")}</li>
+      <ul className={ns("content cozy")}>
+        <li className={ns()}>One can use {incode("Rc<RefCell<T>>")} for a lot of these situations, but it's regarded as a code smell by a lot of the Rust community. {this.noteAnchor("smell")} If we're to consider a Rust program that has a blend of {incode("Rc<RefCell<T>>")} and its associated run-time overhead, we should also consider other fast low-run-time-overhead languages.</li>
+        <li className={ns()}>{incode("Cell")} is also useful in certain situations!</li>
+      </ul>
     </ul>
 
     <div className={ns("content cozy")}>
-      Rust is an <i>amazing</i> tradeoff for low-level systems programming (drivers, embedded, operating systems, etc), and fits better for those use cases than it does for apps, certain kinds of games, or anything with a lot of interconnected state.
+      Rust is an <i>amazing</i> tradeoff for low-level systems programming (drivers, embedded, operating systems, etc). It still works well in higher-level use cases (apps, certain kinds of games, anything with a lot of interconnected state), but not as well as for the low-level cases.
     </div>
   </div>
 
@@ -453,7 +457,12 @@ class Page extends React.Component {
 <Note name="111" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
   {incode("IDesire<'r, 'i>")} is defined below. It uses region arguments so it can point into multiple regions at once.
 </Note>
-              
+
+<Note name="smell" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
+  <div className={ns("content cozy")}>Personally, I think that it shouldn't be regarded as a code smell. I think using {incode("Rc<RefCell<T>>")} for objects at a higher level and then use borrow checking for the object's members (and sub-objects) is a really solid pattern.</div>
+  <div className={ns("content cozy")}>Also check out <a href="https://cone.jondgoodwin.com/">Cone</a>, a language which is exploring compiler-assisted DIY memory management that allows you to optimize performance and safety across arena, pool, single-owner, RC, tracing GC, and borrowed ref strategies.</div>
+</Note>
+
 <Note name="956" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
   The {incode("'r ro")} and {incode("'i")} are <b>regions</b>. {incode("'")} means region, and {incode("ro")} means read-only.
 </Note>

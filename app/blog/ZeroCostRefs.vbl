@@ -415,10 +415,14 @@ pure 'i {
         <li>Luckily, this can be learned. After a while, you can understand when and how to work around the borrow checker, and when to fall back on <c>unsafe</c> code.</li>
       </ul>
       <li>It makes certain patterns impossible, and one often finds their architecture forced in a certain direction to appease the borrow checker. <n>observer</n></li>
+      <ul>
+        <li>One can use <c>Rc<RefCell<T>></c> for a lot of these situations, but it's regarded as a code smell by a lot of the Rust community. <n>smell</n> If we're to consider a Rust program that has a blend of <c>Rc<RefCell<T>></c> and its associated run-time overhead, we should also consider other fast low-run-time-overhead languages.</li>
+        <li><c>Cell</c> is also useful in certain situations!</li>
+      </ul>
     </ul>
 
     <p>
-      Rust is an <i>amazing</i> tradeoff for low-level systems programming (drivers, embedded, operating systems, etc), and fits better for those use cases than it does for apps, certain kinds of games, or anything with a lot of interconnected state.
+      Rust is an <i>amazing</i> tradeoff for low-level systems programming (drivers, embedded, operating systems, etc). It still works well in higher-level use cases (apps, certain kinds of games, anything with a lot of interconnected state), but not as well as for the low-level cases.
     </p>
   </section>
 
@@ -492,7 +496,12 @@ pure 'i {
 <Note name="111">
   <c>IDesire<'r, 'i></c> is defined below. It uses region arguments so it can point into multiple regions at once.
 </Note>
-              
+
+<Note name="smell">
+  <p>Personally, I think that it shouldn't be regarded as a code smell. I think using <c>Rc<RefCell<T>></c> for objects at a higher level and then use borrow checking for the object's members (and sub-objects) is a really solid pattern.</p>
+  <p>Also check out <a href="https://cone.jondgoodwin.com/">Cone</a>, a language which is exploring compiler-assisted DIY memory management that allows you to optimize performance and safety across arena, pool, single-owner, RC, tracing GC, and borrowed ref strategies.</p>
+</Note>
+
 <Note name="956">
   The <c>'r ro</c> and <c>'i</c> are <b>regions</b>. <c>'</c> means region, and <c>ro</c> means read-only.
 </Note>

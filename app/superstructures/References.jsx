@@ -56,7 +56,7 @@ class Page extends React.Component {
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -70,10 +70,10 @@ class Page extends React.Component {
     radius: Int;
   }
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -89,7 +89,7 @@ class Page extends React.Component {
             Moon("Mimas", 562))))));
 
 `}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -140,7 +140,7 @@ class Page extends React.Component {
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
 
-                    <div className={ns("code")}>
+                    <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -159,11 +159,11 @@ class Page extends React.Component {
     planet: &Planet;
   }
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
 
-                    <div className={ns("code")}>
+                    <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -183,7 +183,7 @@ mySS.root.astronauts.add(
   Astronaut(
     "Raynor",
     &mySS.root.planets.1));`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 

@@ -9,8 +9,11 @@ module.exports = {
     home: './app/home/Home.jsx',
     roadmap: './app/roadmap/Roadmap.jsx',
     contribute: './app/contribute/Contribute.jsx',
+
     raiiNextSteps: './app/blog/RaiiNextSteps.jsx',
     zeroCostRefs: './app/blog/ZeroCostRefs.jsx',
+    crossPlatformCore: './app/blog/CrossPlatformCore.jsx',
+
     refIntro: './app/reference/Intro.jsx',
     refStructs: './app/reference/Structs.jsx',
     refReferences: './app/reference/References.jsx',
@@ -18,6 +21,7 @@ module.exports = {
     refGenerics: './app/reference/Generics.jsx',
     refPatterns: './app/reference/Patterns.jsx',
     refRegions: './app/reference/Regions.jsx',
+
     superstructuresIntro: './app/superstructures/Intro.jsx',
     superstructuresComparing: './app/superstructures/Comparing.jsx',
     superstructuresConstraints: './app/superstructures/Constraints.jsx',
@@ -73,6 +77,7 @@ module.exports = {
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['raiiNextSteps'], filename: 'blog/next-steps-raii', title: "The Next Steps for Single Ownership and RAII - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['raiiNextSteps'], filename: 'blog/raii-next-steps', title: "The Next Steps for Single Ownership and RAII - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['zeroCostRefs'], filename: 'blog/zero-cost-refs-regions', title: "Zero Cost References with Regions - Vale", inject: true }),
+    new HtmlWebpackPlugin({template: './app/main.html', chunks: ['crossPlatformCore'], filename: 'blog/cross-platform-core-vision', title: "Vision for the Cross-Platform Core - Vale", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['refIntro'], filename: 'ref/index.html', title: "Intro - Vale Reference", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['refIntro'], filename: 'ref/intro', title: "Intro - Vale Reference", inject: true }),
     new HtmlWebpackPlugin({template: './app/main.html', chunks: ['refStructs'], filename: 'ref/structs', title: "Structs - Vale Reference", inject: true }),

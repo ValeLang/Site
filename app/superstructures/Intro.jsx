@@ -69,7 +69,7 @@ class Page extends React.Component {
                   <div className={ns("half")}>
                     <p className={ns("cozy")}>Here's an example superstructure:</p>
 
-                    <div className={ns("code")}>
+                    <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;`} {this.noteAnchor("note1")}{`
@@ -83,12 +83,12 @@ class Page extends React.Component {
     radius: Int;
   }
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
                     <p className={ns("cozy")}>And here's some data:</p>
 
-                    <div className={ns("code")}>
+                    <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -103,7 +103,7 @@ class Page extends React.Component {
             Moon("Titan", 2576),
             Moon("Mimas", 562)))));
 `}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -141,7 +141,7 @@ class Page extends React.Component {
 
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`MySuperstructure(
   SolarSystem#9(
     List#8(
@@ -154,7 +154,7 @@ class Page extends React.Component {
         List#6(
           Moon#4("Titan", 2576),
           Moon#5("Mimas", 562))))));`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -176,20 +176,20 @@ class Page extends React.Component {
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`foreach mySS.root.planets {(planet) `}{this.noteAnchor("noteForeach")}{`
   foreach planet.moons {(moon)
     doutln moon.radius;
   }
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {`1737
 2576
 562`}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
@@ -234,7 +234,7 @@ class Page extends React.Component {
 
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {``}<div className={ns("comment")}>{`// Server
 `}</div>{`
 fn main() {
@@ -273,10 +273,10 @@ fn main() {
 
   doutln "Done!";
 }`}
-                    </div>
+                    </Snippet>
                   </div>
                   <div className={ns("half")}>
-                    <div className={ns("code")}>
+                    <Snippet>
 {``}<div className={ns("comment")}>{`// Client
 `}</div>{`
 fn main() {
@@ -319,7 +319,7 @@ fn main() {
   doutln "Done!";
 }
 `}
-                    </div>
+                    </Snippet>
                   </div>
                 </div>
 
