@@ -65,14 +65,20 @@ class Page extends React.Component {
 
 <div className={ns("content")} style={{marginBottom: "32px"}}><span className={ns("date")}>August 77th, 2020</span> <span className={ns("author")}>&nbsp;&mdash;&nbsp; Someone</span></div>
 
+                
+
+<div className={ns("section")}>
+  <div className={ns("content")} style={{border: "1px solid #D0D8E0", backgroundColor: "#E0F0FF", padding: "8px"}}>(This isn't published yet, and will probably go up early September. Still needs a few waves of editing, more snarky side-notes, some adjustments to the syntax, and updating the syntax highlighter to work with this theoretical syntax. Please dont share this page!)</div>
+</div>
+
 <div className={ns("section")}>
   <div className={ns("content cozy")}>App development is one of the fastest-growing areas of software engineering today. There are <a href="https://www.statista.com/statistics/330695/number-of-smartphone-users-worldwide/">3.5 billion smartphone users</a> in the world, using <a href="https://buildfire.com/app-statistics/">2.2 million</a> App Store apps and <a href="https://buildfire.com/app-statistics/">2.8 million</a> Play Store apps. Many of those have counterparts on the web, too.</div>
 
   <div className={ns("content cozy")}>Most app developers write separate code for Android, iOS, and web, resulting in <b>triple</b> the amount of code.</div>
 
-  <div className={ns("content cozy")}>Many platforms have risen and fallen trying to solve this problem, but they all have large drawbacks. The world is looking for a way to share fast code without the usual language barriers.</div>
+  <div className={ns("content cozy")}>Empires have risen and fallen trying to solve this problem, but they all have drawbacks. The world is looking for a way to share fast code without the usual language barriers.</div>
 
-  <div className={ns("content cozy")}>Every good language has one thing that it can do better than any others. This post will show how Vale's unique blend of single ownership and aliasing makes it the perfect language for cross-platform code.</div>
+  <div className={ns("content cozy")}>Every good language has one thing that it can do better than any others. This post will show how Vale's unique blend of single ownership and aliasing makes it the perfect language for cross-platform code, and the only language that can bring truly native speed to all three platforms.</div>
 
   <div className={ns("content cozy")}>These are planned features. Now that Vale has reached version 0.1, we can start exploring this combination of seamless cross-compilation and the native shared core.</div>
 </div>
@@ -103,9 +109,9 @@ class Page extends React.Component {
 <a name="transpilingagc'dsharedcore"></a><h4  className={ns("noline")}>Transpiling a GC'd Shared Core</h4 >
 
 <div className={ns("section")}>
-  <div className={ns("content cozy")}>JVM languages are making some strides here. <a href="https://kotlinlang.org/docs/reference/native-overview.html">Kotlin Native</a> and <a href="http://www.scala-native.org/en/v0.3.9-docs/">Scala Native</a> both compile to native machine code which uses garbage collection.</div>
+  <div className={ns("content cozy")}>JVM languages are making some strides here. <a href="https://kotlinlang.org/docs/reference/native-overview.html">Kotlin Native</a> and <a href="http://www.scala-native.org/en/v0.3.9-docs/">Scala Native</a> both compile to native machine code which uses garbage collection. They have a bit of a performance ceiling, but they do their job well! {this.noteAnchor("jit")}</div>
 
-  <div className={ns("content cozy")}>One can also transpile Java straight to objective-C. <a href="https://developers.google.com/j2objc/guides/projects-that-use-j2objc">j2objc</a> is the tool that cross compile's the Java code to make the iOS apps for GMail, Chat, Calendar, Docs, and others. Instead of using a garbage collector, it compiles straight to objective-C, but the transpiled Java code can leak if it makes any reference cycles. {this.noteAnchor("weak")}</div>
+  <div className={ns("content cozy")}>One can also transpile Java straight to objective-C. <a href="https://developers.google.com/j2objc/guides/projects-that-use-j2objc">j2objc</a> is the tool that cross compile's the Java code to make the iOS apps for GMail, Chat, Calendar, Docs, and others. Instead of using a garbage collector, it compiles to objective-C, which is <a href="https://yalantis.com/blog/is-swift-faster-than-objective-c/">a bit slower</a>, and the transpiled Java code can leak if it makes any reference cycles. {this.noteAnchor("weak")}</div>
 
   <div className={ns("content cozy")}>These solutions has some great benefits, and will still be the best approach for some cases. However, there's a big aspect where we can do even better: performance!</div>
 </div>
@@ -124,7 +130,7 @@ class Page extends React.Component {
 
   <div className={ns("content cozy")}>Many companies have turned to C++ (<a href="https://slack.engineering/libslack-the-c-library-at-the-foundation-of-our-client-application-architecture-97470b5ef9b3">Slack</a>, <a href="https://web.dev/earth-webassembly/">Earth</a>, <a href="https://dropbox.tech/mobile/the-not-so-hidden-cost-of-sharing-code-between-ios-and-android">Dropbox</a>), which is <a href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/swift-gpp.html">much faster</a>. We can say from our own experiences that it's a headache to communicate back and forth between C++ and JVM languages, and it's very difficult for people to learn C++.</div>
 
-  <div className={ns("content cozy")}>This is where Vale can shine: native speed, and easy interop the host language.</div>
+  <div className={ns("content cozy")}>This is where Vale can shine: native speed, and easy interop with the host language.</div>
 </div>
 
 <a name="vale'sapproach"></a><h2  className={ns("noline")}>Vale's Approach</h2 >
@@ -315,9 +321,9 @@ class Page extends React.Component {
   Once one can identify the memory leak, they can break reference cycles by annotating their code with @Weak.
 </Note>
 
-{/*<Note name="jit" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
-  JVM languages rely on Just-in-Time (JIT) compilation for speed, but Apple doesn't allow JIT on iOS, presumably for security reasons.
-</Note>*/}
+<Note name="jit" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
+  JVM languages rely on Just-in-Time (JIT) compilation for speed, but Apple doesn't allow JIT on iOS. A cross-compiled JVM language will unfortunately not be as fast on iOS as it is on Android, because of the lack of JIT.
+</Note>
 
 <Note name="inl" iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon}>
   The compiler is intelligent and will put objects on the stack whenever possible, but the user can use the {incode("inl")} keyword to force it. The {incode("inl")} keyword would be obeyed on native, but ignored on JVM or JS.

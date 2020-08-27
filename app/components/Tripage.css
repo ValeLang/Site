@@ -28,7 +28,7 @@
 	background-color: #F0F0FF;
 	padding: 16px 16px 1px 16px;
 	border-right: 2px solid #E8E8FF;
-  margin-top: 16px;
+  margin-top: 32px;
 }
 
 .m-tripage.plans .m-tripage.inline-code,
@@ -148,6 +148,18 @@
 
 
 
+ul.c-toc {
+  margin: 0;
+  padding-left: 30px;
+}
+li.c-toc {
+  margin: 0;
+}
+li.c-toc + li.c-toc {
+  margin: 0;
+}
+
+
 
 .m-tripage p {
   margin: 0 0 16px 0;
@@ -157,16 +169,17 @@
   margin-bottom: 8px;
 }
 
-ul.m-tripage,
-ol.m-tripage {
-  margin: 8px 0;
+.m-tripage.main ul.m-tripage,
+.m-tripage.main ol.m-tripage {
+  margin: 0 0 8px 0;
 }
 
-li.m-tripage {
+
+.m-tripage.main li.m-tripage {
   margin-bottom: 0;
 }
 
-li.m-tripage + li.m-tripage {
+.m-tripage.main li.m-tripage + li.m-tripage {
   margin-top: 8px;
 }
 
@@ -182,7 +195,7 @@ li.m-tripage + li.m-tripage {
 
 .m-tripage h2 {
   border-top: 2px solid #E0E0E0;
-  margin-top: 16px;
+  margin-top: 20px;
   padding-top: 8px;
   margin-bottom: 16px;
   font-size: 16pt;
@@ -228,12 +241,6 @@ li.m-tripage + li.m-tripage {
   color: #A0A0A0;
 }
 
-.m-tripage ul,
-.m-tripage ol {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
 
 .m-tripage.afterword table {
   background-color: white;
@@ -255,6 +262,9 @@ table.m-tripage.comparison .good {
 }
 table.m-tripage.comparison .meh {
   background-color: #F0E8D8;
+}
+table.m-tripage.comparison .na {
+  background-color: #F0F0F0;
 }
 table.m-tripage.comparison .bad {
   background-color: #F0D8D8;

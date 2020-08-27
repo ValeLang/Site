@@ -250,6 +250,30 @@ ReactDOM.render(
             contents))
 
 
+    contents = (
+        re.sub(
+            r'<width40>',
+            '<div className={ns("width40")}>',
+            contents))
+    contents = (
+        re.sub(
+            r'</width40>',
+            '</div>',
+            contents))
+
+
+    contents = (
+        re.sub(
+            r'<width60>',
+            '<div className={ns("width60")}>',
+            contents))
+    contents = (
+        re.sub(
+            r'</width60>',
+            '</div>',
+            contents))
+
+
 
     contents = (
         re.sub(
@@ -278,7 +302,7 @@ ReactDOM.render(
         if match == None:
             break
 
-        strength = match.group(1)
+        strength = int(match.group(1))
         attrs = match.group(2) or ""
         header_text = match.group(3)
         anchor_name = header_text.lower()
@@ -286,16 +310,17 @@ ReactDOM.render(
 
         replacement = (
             '<a name="' + anchor_name + '"></a>' +
-            '<h' + strength + ' ' + attrs + '>' +
+            '<h' + str(strength) + ' ' + attrs + '>' +
             header_text +
             # Note the space in ' >', this prevents us from matching it again
-            '</h' + strength + ' >')
+            '</h' + str(strength) + ' >')
         
         contents = contents[:match.start()] + replacement + contents[match.end():]
 
         print("Found header " + header_text)
 
-        headers.append([header_text, anchor_name, int(strength)])
+        if strength == 1 or strength == 2 or strength == 3:
+            headers.append([header_text, anchor_name, strength])
 
 
     contents = (
@@ -319,18 +344,18 @@ ReactDOM.render(
 
     replacement += '<b>' + title + '</b>'
     current_strength = 2
-    replacement += '<ul>'
+    replacement += '<ul className={ns("c-toc")}>'
 
     for header_text, anchor_name, strength in headers:
         while current_strength < strength:
-            replacement += "<ul>"
+            replacement += '<ul className={ns("c-toc")}>'
             current_strength = current_strength + 1
 
         while current_strength > strength:
             replacement += "</ul>"
             current_strength = current_strength - 1
 
-        replacement += '<li><a href="/' + page_path + '#' + anchor_name + '">' + header_text + '</a></li>'
+        replacement += '<li className={ns("c-toc")}><a href="/' + page_path + '#' + anchor_name + '">' + header_text + '</a></li>'
 
         while current_strength > 2:
             replacement += "</ul>"
