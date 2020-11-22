@@ -119,8 +119,8 @@ fn main() {
                     <Snippet>
 {/*
 interface Bipedal {
-  fn hop(s &Human) Void;
-  fn skip(s &Human) Void;
+  fn hop(s &Bipedal) Void;
+  fn skip(s &Bipedal) Void;
 }
 
 struct Human { ... }

@@ -1,0 +1,342 @@
+
+.m-annotated.subtitle {
+  opacity: .6;
+}
+
+.m-annotated.author {
+  opacity: .6;
+}
+.m-annotated.date {
+  font-weight: bold;
+}
+
+
+.m-annotated.area {
+  display: flex;
+  flex-direction: row;
+}
+
+.m-annotated.area-contents {
+  width: 632px;
+}
+
+.m-annotated.area-notes {
+  width: 264px;
+  background-color: #E8F0FF;
+}
+
+
+.m-annotated.inline-code {
+  font-family: Roboto Mono, Courier New, Courier;
+  padding: 0 4px;
+  white-space: pre;
+  font-size: 10pt;
+}
+
+.m-annotated.main .m-annotated.inline-code {
+  border: 1px solid #E0E0E0;
+  background-color: #F0F0F0;
+}
+
+.m-annotated.networking,
+.m-annotated.afterword,
+.m-annotated.plans {
+  background-color: #F0F0FF;
+  padding: 16px 16px 1px 16px;
+  border-right: 2px solid #E8E8FF;
+  margin-top: 32px;
+}
+
+.m-annotated.plans .m-annotated.inline-code,
+.m-annotated.afterword .m-annotated.inline-code {
+  border: 1px solid #D0D0D0;
+  background-color: white;
+}
+
+.m-annotated.page {
+  width: 896px;
+  box-sizing: border-box;
+  margin: auto;
+  position: relative;
+}
+
+.m-annotated.margined.columns {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.m-annotated.left {
+  width: 896px;
+}
+
+.m-annotated.margined.left {
+  overflow: auto;
+  width: 632px;
+}
+
+.m-annotated.main {
+  overflow: auto;
+  padding-top: 16px;
+}
+
+.m-annotated.margined.main {
+  padding-right: 16px;
+}
+
+.m-annotated.margin {
+  float: right;
+}
+.m-annotated.margined.margin {
+  position: absolute;
+  width: 264px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #F0F4FF;
+}
+
+.m-annotated .content {
+  margin-bottom: 16px;
+}
+
+section.m-annotated {
+  margin-bottom: 16px;
+}
+/*section.m-annotated:last-child {
+  margin-bottom: 0;
+}*/
+
+.m-annotated .input {
+  width: 100%;
+  box-sizing: border-box;
+  color: #f8f8f2;
+  background-color: #506090;
+  padding: 0.5em;
+  white-space: pre;
+  font-size: 9.5pt;
+  font-family: Roboto Mono, Courier New, Courier;
+  line-height: 12pt;
+  overflow: auto;
+}
+
+.m-annotated .output {
+  width: 100%;
+  box-sizing: border-box;
+  color: #f8f8f2;
+  background-color: #505050;
+  padding: 0.5em;
+  white-space: pre;
+  font-size: 9.5pt;
+  font-family: Roboto Mono, Courier New, Courier;
+  line-height: 12pt;
+  overflow: auto;
+}
+
+.m-annotated .splitter {
+  display: flex;
+}
+
+.m-annotated.half {
+  flex-grow: 1;
+  width: calc(50% - 8px);
+}
+.m-annotated.half + .m-annotated.half {
+  margin-left: 16px;
+}
+
+.m-annotated.width60 {
+  flex-grow: 1;
+  width: calc(60% - 8px);
+}
+.m-annotated.width40 {
+  flex-grow: 1;
+  width: calc(40% - 8px);
+}
+.m-annotated.width60 + .m-annotated.width40 {
+  margin-left: 16px;
+}
+.m-annotated.width40 + .m-annotated.width60 {
+  margin-left: 16px;
+}
+
+
+.m-annotated.intro-container {
+  width: 616px;
+}
+.m-annotated.toc-container {
+  width: 264px;
+  background-color: white;
+  box-sizing: border-box;
+}
+.m-annotated.margined.toc-container {
+  position: absolute;
+}
+
+.m-annotated.notes-header {
+  opacity: .5;
+  font-style: italic;
+  text-align: center;
+  margin-top: 4px;
+}
+.m-annotated.margined.notes-header {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+
+.m-annotated.c-toc.root {
+  background-color: white;
+  padding-bottom: 16px;
+}
+
+
+.m-annotated.c-toc ul.m-annotated.c-toc {
+  margin: 0;
+  padding-left: 30px;
+}
+.m-annotated.c-toc li.m-annotated.c-toc {
+  margin: 0;
+}
+.m-annotated.c-toc li.m-annotated.c-toc + li.m-annotated.c-toc {
+  margin: 0;
+}
+.m-annotated.c-toc a.m-annotated.c-toc {
+  font-weight: normal;
+}
+
+
+
+p.m-annotated {
+  margin: 0 0 16px 0;
+}
+p.m-annotated:last-child {
+  margin: 0;
+}
+
+.m-annotated .cozy {
+  margin-bottom: 8px;
+}
+
+.m-annotated.main ul.m-annotated,
+.m-annotated.main ol.m-annotated {
+  margin: 0 0 8px 0;
+}
+
+
+.m-annotated.main li.m-annotated {
+  margin-bottom: 0;
+}
+
+.m-annotated.main li.m-annotated + li.m-annotated {
+  margin-top: 8px;
+}
+.m-annotated.main li.m-annotated > ul.m-annotated {
+  margin-top: 8px;
+}
+
+.m-annotated.end {
+  margin-bottom: 0;
+}
+
+.m-annotated h1 {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  font-size: 18pt;
+}
+
+.m-annotated h2 {
+  border-top: 2px solid #E0E0E0;
+  margin-top: 20px;
+  padding-top: 8px;
+  margin-bottom: 16px;
+  font-size: 16pt;
+}
+
+.m-annotated.line {
+  border-top: 2px solid #E0E0E0;
+  margin: 16px 0;
+}
+
+.m-annotated h3 {
+  border-top: 2px solid #E0E0E0;
+  margin-top: 16px;
+  padding-top: 8px;
+  margin-bottom: 16px;
+  margin-right: 16px;
+  font-size: 14pt;
+}
+
+.m-annotated h4 {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  margin-right: 16px;
+  font-size: 13pt;
+  color: #303030;
+}
+
+.m-annotated h5 {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  margin-right: 16px;
+  font-size: 11pt;
+  color: #000000;
+  font-weight: bold;
+}
+
+.m-annotated.noline {
+  border-top-width: 0;
+  padding-top: 0;
+}
+
+.m-annotated.comment {
+  color: #A0A0A0;
+}
+
+
+.m-annotated.afterword table {
+  background-color: white;
+}
+
+table.m-annotated.comparison {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+table.m-annotated.comparison td,
+table.m-annotated.comparison th {
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #C0C0C0;
+  vertical-align: top;
+}
+table.m-annotated.comparison .good {
+  background-color: #D8F0D8;
+}
+table.m-annotated.comparison .meh {
+  background-color: #F0E8D8;
+}
+table.m-annotated.comparison .na {
+  background-color: #F0F0F0;
+}
+table.m-annotated.comparison .bad {
+  background-color: #F0D8D8;
+}
+
+
+
+
+
+
+
+.m-annotated.note-starter {
+  float: left;
+  margin-right: 4px;
+}
+
+.m-annotated.note {
+  padding: 8px;
+}
+
+.m-annotated.note + .m-annotated.note {
+  margin-top: 8px;
+}

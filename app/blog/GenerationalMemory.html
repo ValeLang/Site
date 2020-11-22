@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<style type="text/css">
+body {
+  font-family: 'Lato', Roboto, Tahoma, Arial;
+  font-size: 12pt;
+  margin: 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Generational Memory</title>
+<link rel="stylesheet" type="text/css" href="../components/Header.css"/>
+<link rel="stylesheet" type="text/css" href="../components/Footer.css"/>
+<link rel="stylesheet" type="text/css" href="../components/Annotated.css"/>
+<link rel="stylesheet" type="text/css" href="../common.css"/>
+<link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Roboto+Mono" rel="stylesheet">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/agate.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8"
+ src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/languages/go.min.js"></script>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: " AIzaSyBGXQQdJQJ_KkEz8mz1HSia3CMBXqmpKk0 ",
+    authDomain: "valesite.firebaseapp.com",
+    databaseURL: "https://valesite.firebaseio.com",
+    projectId: "valesite",
+    storageBucket: "valesite.appspot.com",
+    messagingSenderId: "670338061455",
+    appId: "1:670338061455:web:cfbb4a2f69f9bd7a83ccfa",
+    measurementId: "G-G3JH78EBKK"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+<script src="./nodeModules.js"></script>
+<script src="./valeSiteComponents.js"></script>
+<script src="./everythingElse.js"></script>
+
+</head>
+<body>
+  <div id="main">
+
+    <div class="c-blog m-annotated root">
+      
+      <div class="header root  small">
+        <div class="header contents">
+          <a href="/">
+      <div class="header vorb-container">
+        <div class="header vorb"></div>
+      </div>
+    </a>
+          <div class="header text">
+            <a href="/">
+      <div class="header title"><span class="header explorations">Explorations</span> in <span class="header vale">Vale</span></div>
+    </a>
+          </div>
+
+          
+      <div class="header links">
+        <a href="/">Home</a>
+        <a href="https://reddit.com/r/Vale">r/Vale</a>
+        <a href="https://discord.gg/SNB8yGH">Discord</a>
+      </div>
+    
+        </div>
+      </div>
+    
+
+      <div class="c-blog m-annotated page">
+        <div class="c-blog m-annotated columns">
+
+          <div class="c-blog m-annotated left">
+            <div class="c-blog m-annotated main">
+  
+
+    <div class="c-blog m-annotated area">
+      <div class="c-blog m-annotated area-contents">
+
+        <h1 class="c-blog m-annotated noline cozy" style="margin-top: 8px">Generational Memory</h1 >
+        <div class="c-blog m-annotated subtitle content cozy">A completely new way to do memory safety</div>
+
+        <div class="c-blog m-annotated content" style="margin-bottom: 32px"><span class="c-blog m-annotated date">Oct 17 2020</span> <span class="c-blog m-annotated author">&nbsp;&mdash;&nbsp; Evan Ovadia</span></div>
+  
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+Vale's <b>generational memory</b> is a new ground-breaking memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. Keep reading to learn how it's done!
+</p>
+
+</section>
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+At the core of generational memory is <b>single ownership</b>. <a href="#note0">[0]</a> In single ownership, a specific reference keeps an object alive, and when that reference goes away, the object is deallocated.
+</p>
+
+</section>
+
+      </div>
+  
+<div class="c-blog m-annotated area-notes">
+
+      <div class="c-blog m-annotated c-toc root"><b>Vale's Hybrid-Generational Memory Model, Part 1</b><ul class="c-blog m-annotated c-toc"><ul class="c-blog m-annotated c-toc"><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#speedorsimplicity?">Speed or Simplicity?</a></li></ul><ul class="c-blog m-annotated c-toc"><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#both!">Both!</a></li></ul><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#generationalindices!">Generational Indices!</a></li><ul class="c-blog m-annotated c-toc"><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#objectandgenerationtables">Object and Generation Tables</a></li></ul><ul class="c-blog m-annotated c-toc"><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#genind:ageneration+index">GenInd: A Generation + Index</a></li></ul><ul class="c-blog m-annotated c-toc"><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#dereferencingagenind">Dereferencing a GenInd</a></li></ul><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#stage1:asimplebeginning">Stage 1: A Simple Beginning</a></li><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#stage2:addinggenerationnumbers">Stage 2: Adding Generation Numbers</a></li><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#nextsteps">Next Steps</a></li><li class="c-blog m-annotated c-toc"><a class="c-blog m-annotated c-toc" href="/blog/next-gen-memory-model#afterword:anarcanetellingofwhat'stocome">Afterword: An Arcane Telling of What's to Come</a></li></ul></div>
+      <div class="c-blog m-annotated notes-header"><div>Notes</div></div>
+    
+<div id="note0" class="c-blog m-annotated note">
+<div class="c-blog m-annotated note-starter">[0]:</div>
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+C++ was the first language with single ownership. Modern C++ uses <code>std::unique_ptr<T></code> to represent the "owning reference" to an object.
+</p>
+
+</section>
+</div>
+</div>
+
+    </div>
+    <div class="c-blog m-annotated area">
+      <div class="c-blog m-annotated area-contents">
+  
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+Regular line
+</p>
+<p class="c-blog m-annotated ">
+Here's a <b>bold</b> line
+</p>
+
+</section>
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+And <i>an italic</i> line
+</p>
+
+</section>
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+One <b>with <i>both</i> things</b> 
+</p>
+<p class="c-blog m-annotated ">
+And <a href="#note1">[1]</a> here
+</p>
+<p class="c-blog m-annotated ">
+And some <code>code that does stuff</code> here
+</p>
+
+</section>
+
+      </div>
+  
+<div class="c-blog m-annotated area-notes">
+<div id="note1" class="c-blog m-annotated note">
+<div class="c-blog m-annotated note-starter">[1]:</div>
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+note
+</p>
+
+</section>
+</div>
+</div>
+
+    </div>
+    <div class="c-blog m-annotated area">
+      <div class="c-blog m-annotated area-contents">
+  
+<section class="c-blog m-annotated ">
+<div class="c-blog m-annotated code">
+<span class="Prog"><br /><span class="Fn">fn <span class="FnName">main</span><span class="Params">()</span> <span class="Ret"><span class="Typ">int</span> </span><span class="Block">&#123;<br />  <span class="Ret">ret <span class="Num">0</span>;</span><br />&#125;</span></span></span>
+
+</div>
+
+</section>
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+And lownote <a href="#note2">[2]</a> here
+</p>
+<p class="c-blog m-annotated ">
+and another <a href="#note3">[3]</a> paragraph
+</p>
+
+</section>
+<section class="c-blog m-annotated ">
+<ul>
+<li>
+list item 1
+</li>
+<ul>
+<li>
+list item 1a
+</li>
+<li>
+list item 1b
+</li>
+</ul>
+<li>
+list item 2
+</li>
+</ul>
+
+</section>
+
+      </div>
+  
+<div class="c-blog m-annotated area-notes">
+<div id="note2" class="c-blog m-annotated note">
+<div class="c-blog m-annotated note-starter">[2]:</div>
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+a lownote is one that is too long
+</p>
+<p class="c-blog m-annotated ">
+some stuff
+</p>
+<p class="c-blog m-annotated ">
+and more stuff
+</p>
+
+</section>
+</div>
+<div id="note3" class="c-blog m-annotated note">
+<div class="c-blog m-annotated note-starter">[3]:</div>
+<section class="c-blog m-annotated ">
+<p class="c-blog m-annotated ">
+and more note stuff here
+</p>
+
+</section>
+</div>
+</div>
+
+    </div>
+    <div class="c-blog m-annotated area">
+      <div class="c-blog m-annotated area-contents">
+  
+
+      </div>
+  
+<div class="c-blog m-annotated area-notes">
+</div>
+
+    </div>
+    <div class="c-blog m-annotated area">
+      <div class="c-blog m-annotated area-contents">
+  
+
+      </div>
+    </div>
+  
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        
+    <div class="c-footer root">
+      <div class="c-footer copyright">
+        Copyright © 2020 Evan Ovadia - Previously known as GelLLVM
+      </div>
+      <div class="c-footer everest">
+        (Not to be confused with Project Everest's <a href="https://github.com/project-everest/vale">VALE: Verified Assembly Language for Everest</a>)
+      </div>
+    </div>
+  
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+  

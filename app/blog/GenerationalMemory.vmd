@@ -1,0 +1,69 @@
+---
+title: Generational Memory
+subtitle: A completely new way to do memory safety
+author: Evan Ovadia
+date: Oct 17 2020
+path: blog/generational-memory
+namespace: c-blog m-annotated
+---
+
+
+Vale's *generational memory* is a new ground-breaking memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. Keep reading to learn how it's done!
+
+
+At the core of generational memory is *single ownership*. [#sown] In single ownership, a specific reference keeps an object alive, and when that reference goes away, the object is deallocated.
+
+
+<notes>
+#sown: C++ was the first language with single ownership. Modern C++ uses {std::unique_ptr<T>} to represent the "owning reference" to an object.
+</notes>
+
+
+
+Regular line
+
+Here's a *bold* line
+
+
+And _an italic_ line
+
+
+One *with _both_ things* 
+
+And [note] here
+
+And some {code that does stuff} here
+
+
+
+<notes/>
+
+
+<code>
+fn main() int {
+  ret 0;
+}
+</code>
+
+
+And lownote [#1] here
+
+and another [#2] paragraph
+
+
+ * list item 1
+    * list item 1a
+    * list item 1b
+ * list item 2
+
+
+<notes>
+#1: a lownote is one that is too long
+
+some stuff
+
+and more stuff
+
+#2: and more note stuff here
+
+</notes>

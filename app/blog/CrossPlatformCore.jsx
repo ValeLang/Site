@@ -63,13 +63,9 @@ class Page extends React.Component {
 <h1 className={ns("noline cozy")} style={{marginTop: "8px"}}>Vision for the Cross-Platform Core</h1 >
 <div className={ns("subtitle content cozy")}>Seamless Speed, Safety, and Reuse Without Frameworks</div>
 
-<div className={ns("content")} style={{marginBottom: "32px"}}><span className={ns("date")}>August 77th, 2020</span> <span className={ns("author")}>&nbsp;&mdash;&nbsp; Someone</span></div>
+<div className={ns("content")} style={{marginBottom: "32px"}}><span className={ns("date")}>October 4th, 2020</span> <span className={ns("author")}>&nbsp;&mdash;&nbsp; Evan Ovadia</span></div>
 
                 
-
-<div className={ns("section")}>
-  <div className={ns("content")} style={{border: "1px solid #D0D8E0", backgroundColor: "#E0F0FF", padding: "8px"}}>(This isn't published yet, and will probably go up early September. Still needs a few waves of editing, more snarky side-notes, some adjustments to the syntax, and updating the syntax highlighter to work with this theoretical syntax. Please dont share this page!)</div>
-</div>
 
 <div className={ns("section")}>
   <div className={ns("content cozy")}>App development is one of the fastest-growing areas of software engineering today. There are <a href="https://www.statista.com/statistics/330695/number-of-smartphone-users-worldwide/">3.5 billion smartphone users</a> in the world, using <a href="https://buildfire.com/app-statistics/">2.2 million</a> App Store apps and <a href="https://buildfire.com/app-statistics/">2.8 million</a> Play Store apps. Many of those have counterparts on the web, too.</div>

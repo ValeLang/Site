@@ -61,15 +61,18 @@
   top: 0;
   right: 0;
   bottom: 0;
-  background-color: #F0F0F0;
+  background-color: #F0F4FF;
 }
 
 .m-tripage .content {
   margin-bottom: 16px;
 }
 
-.m-tripage .section {
+section.m-tripage {
   margin-bottom: 16px;
+}
+section.m-tripage:last-child {
+  margin-bottom: 0;
 }
 
 .m-tripage .input {
@@ -161,8 +164,11 @@ li.c-toc + li.c-toc {
 
 
 
-.m-tripage p {
+p.m-tripage {
   margin: 0 0 16px 0;
+}
+p.m-tripage:last-child {
+  margin: 0;
 }
 
 .m-tripage .cozy {
@@ -180,6 +186,9 @@ li.c-toc + li.c-toc {
 }
 
 .m-tripage.main li.m-tripage + li.m-tripage {
+  margin-top: 8px;
+}
+.m-tripage.main li.m-tripage > ul.m-tripage {
   margin-top: 8px;
 }
 
