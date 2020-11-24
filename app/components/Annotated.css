@@ -18,6 +18,10 @@
 
 .m-annotated.area-contents {
   width: 632px;
+  padding-right: 8px;
+}
+.m-annotated.note .m-annotated.area-contents {
+  padding-right: 0;
 }
 
 .m-annotated.area-notes {
@@ -36,6 +40,10 @@
 .m-annotated.main .m-annotated.inline-code {
   border: 1px solid #E0E0E0;
   background-color: #F0F0F0;
+}
+
+.m-annotated.area-notes .m-annotated.inline-code {
+  background-color: white;
 }
 
 .m-annotated.networking,
@@ -100,7 +108,10 @@
 }
 
 section.m-annotated {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+}
+.m-annotated.area-notes section.m-annotated {
+  margin-bottom: 0px;
 }
 /*section.m-annotated:last-child {
   margin-bottom: 0;
@@ -208,7 +219,7 @@ section.m-annotated {
 
 
 p.m-annotated {
-  margin: 0 0 16px 0;
+  margin: 0 0 8px 0;
 }
 p.m-annotated:last-child {
   margin: 0;
@@ -223,34 +234,43 @@ p.m-annotated:last-child {
   margin: 0 0 8px 0;
 }
 
+.m-annotated.area-notes ul.m-annotated {
+  margin: 0 0 8px 0;
+  padding-left: 16px;
+}
+
 
 .m-annotated.main li.m-annotated {
-  margin-bottom: 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
-.m-annotated.main li.m-annotated + li.m-annotated {
-  margin-top: 8px;
-}
 .m-annotated.main li.m-annotated > ul.m-annotated {
   margin-top: 8px;
 }
+
+.m-annotated.c-toc li.m-annotated,
+.m-annotated.c-toc ul.m-annotated {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 
 .m-annotated.end {
   margin-bottom: 0;
 }
 
 .m-annotated h1 {
-  margin-top: 16px;
+  margin-top: 4px;
   margin-bottom: 16px;
   font-size: 18pt;
 }
 
 .m-annotated h2 {
-  border-top: 2px solid #E0E0E0;
-  margin-top: 20px;
-  padding-top: 8px;
+  color: #0b5394;
+  margin-top: 4px;
   margin-bottom: 16px;
-  font-size: 16pt;
+  font-size: 18pt;
 }
 
 .m-annotated.line {
@@ -259,16 +279,14 @@ p.m-annotated:last-child {
 }
 
 .m-annotated h3 {
-  border-top: 2px solid #E0E0E0;
-  margin-top: 16px;
-  padding-top: 8px;
+  margin-top: 4px;
   margin-bottom: 16px;
   margin-right: 16px;
   font-size: 14pt;
 }
 
 .m-annotated h4 {
-  margin-top: 16px;
+  margin-top: 4px;
   margin-bottom: 16px;
   margin-right: 16px;
   font-size: 13pt;
@@ -276,7 +294,7 @@ p.m-annotated:last-child {
 }
 
 .m-annotated h5 {
-  margin-top: 16px;
+  margin-top: 4px;
   margin-bottom: 16px;
   margin-right: 16px;
   font-size: 11pt;
@@ -298,27 +316,27 @@ p.m-annotated:last-child {
   background-color: white;
 }
 
-table.m-annotated.comparison {
+.comparison {
   border-spacing: 0;
   border-collapse: collapse;
 }
-table.m-annotated.comparison td,
-table.m-annotated.comparison th {
+.comparison td,
+.comparison th {
   text-align: left;
   padding: 8px;
   border: 1px solid #C0C0C0;
   vertical-align: top;
 }
-table.m-annotated.comparison .good {
+.comparison .good {
   background-color: #D8F0D8;
 }
-table.m-annotated.comparison .meh {
+.comparison .meh {
   background-color: #F0E8D8;
 }
-table.m-annotated.comparison .na {
+.comparison .na {
   background-color: #F0F0F0;
 }
-table.m-annotated.comparison .bad {
+.comparison .bad {
   background-color: #F0D8D8;
 }
 
