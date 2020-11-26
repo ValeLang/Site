@@ -225,6 +225,20 @@ p.m-annotated:last-child {
   margin: 0;
 }
 
+
+
+.m-annotated.quote {
+  margin: 0 0 8px 0;
+  border-left: 4px #E0E0FF solid;
+  padding-left: 16px;
+}
+
+
+.m-annotated.c-snippet.root {
+  margin: 8px 0;
+}
+
+
 .m-annotated .cozy {
   margin-bottom: 8px;
 }
@@ -353,8 +367,4 @@ p.m-annotated:last-child {
 
 .m-annotated.note {
   padding: 8px;
-}
-
-.m-annotated.note + .m-annotated.note {
-  margin-top: 8px;
 }

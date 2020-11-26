@@ -132,6 +132,7 @@ class Home extends React.Component {
             <div className={ns("recent-posts")}>
               <div className={ns("recent-posts-title")}>Recent posts:</div>
               <ul>
+                <li><a href="/blog/generational-references">Generational References</a> (Nov 24)</li>
                 <li><a href="/blog/zero-cost-refs-regions">Zero Cost References with Regions</a> (Jul 29)</li>
                 <li><a href="/blog/next-steps-raii">The Next Steps for Single Ownership and RAII</a> (Jul 15)</li>
                 <li><a href="https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/">Announcing Vale!</a> (Jul 11)</li>

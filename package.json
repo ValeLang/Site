@@ -31,7 +31,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "build": "webpack --mode development && cp app/blog/GenerationalMalloc.html build/blog/generational-malloc",
+    "build": "webpack --mode development",
     "start": "webpack-dev-server"
   }
 }

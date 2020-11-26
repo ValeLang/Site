@@ -1,5 +1,5 @@
 ---
-title: Hybrid-Generational Memory
+title: Vale's Hybrid-Generational Memory
 subtitle: For speed and simplicity!
 author: Evan Ovadia and Theo Watkins
 date: Nov 24 2020
@@ -11,9 +11,11 @@ namespace: c-blog m-annotated
 Vale's *hybrid-generational memory* is a new ground-breaking memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. [#resilient]
 
 
-We'll be publishing a series of articles soon which explain the model much more fully and understandably. This page is here for those that want an early look.
+We'll be publishing a series of articles soon which explain the model much more fully and understandably. *This page is is a draft, here for those that want an early explanation.*
+
 
 *Warning:* We're packing several articles' worth of explanation into a very dense single page. Only read this if you're familiar with free-lists, generational indices, thread-local storage, borrow checking, atomicity, fat pointers, branch misprediction, and cache misses!
+
 
 If you have any questions, feel free to come by the [discord server](https://discord.gg/SNB8yGH) and we'll be happy to explain the model fully.
 
@@ -83,6 +85,9 @@ Add a u16 counter to every allocation, next to the u48 generation number.
     * Eliminating all liveness checks within the scope.
 
 
+<notes/>
+
+
 ## Stack Allocations
 
 
@@ -91,13 +96,18 @@ Now we'll introduce stack-allocated objects and the Local Generation Table:
  * In every stack allocation, before the object, is a u47 index into a thread-global {vector<[u48, u16]>} called the Local Generation Table (LGT). [# {[u48, u16]} means a pair, with a u48 and a u16.]
     * The u48 is the generation number for a stack object.
     * The u16 is the RC for a stack object.
- * Deallocating a stack object will increment the u48 and use the u16 to add this "open space" to a free-list.
+ * Deallocating a stack object will increment the u48 and use the u16 to add this "open space" to a free-list. [#freelist]
  * Stack allocated objects needn't check their RC before freeing. [# This is because the above RC incrs/decrs are tied to particular scopes.]
  * Add a u1 isHeap to each reference. If true, referred object is on the heap, else it's on the stack.
  * Add a u47 "LGT index" to each reference. If it's a stack object, it's used to hold the index into the LGT.
  * To get a generation from a reference:
     * If isHeap true, look at the top of the allocation. Else, look in the LGT at the index contained in the u47.
     * The above can be turned into multiply and add.
+
+
+<notes>
+#freelist: The LGT's free-list has a touch of sorcery. The LGT is divided into 2^16-entry chunks. The u16 in each entry describes where in this chunk the next open space is. The first entry in this chunk is special; its u48 contains not a generation number but instead the index of the next chunk that's completely full of open spaces. In this way, the LGT has a free-list of free-lists.
+</notes>
 
 
 ## Inline Objects
@@ -111,7 +121,7 @@ Now we'll support objects containing other objects inline. The only complication
 ## Reducing Reference Size
 
 
-Our references so far contain a pointer, a u48, a {u1}, a u47, and a u16, totalling to 176 bytes. Let's reduce that to 128 bytes. Start by keeping the {u1} isHeap.
+Our references so far contain a pointer, a u48, a {u1}, a u47, and a u16, totalling to 176 bytes. Let's reduce that to 128 bytes. [# A reference being 128b might seem unusual, but this is the width of C++'s {std::unique_ptr<T>}, {std::shared_ptr<T>}, {std::weak_ptr<T>}, and the default size of {generational_arena}'s {Index}.] Start by keeping the {u1} isHeap.
 
  * If isHeap true, the reference contains the 64b pointer, the u48 (target generation), and the u15 offset.
  * If isHeap false, the reference contains a 32b pointer (relative to stack start), the u48 (target generation), and the u15 offset, and the 47b LGT index.
@@ -152,7 +162,10 @@ uint48_t getGeneration(GenRef ref) {
 }}}
 
 
-However, that might incur some branching costs. We can instead do some adding and multiplying with the isHeap boolean:
+<notes/>
+
+
+However, that might incur some branching costs. We can instead do some adding and multiplying with the isHeap boolean: [#defeat]
 
 {{{
 uint48_t getGeneration(GenRef ref) {
@@ -165,17 +178,19 @@ uint48_t getGeneration(GenRef ref) {
 That's basically it! There are some more things we could do to speed it up even more, using virtual memory, regions, or more static analysis, but we'll stop the explanation here.
 
 
+<notes>
+#defeat: This causes problems for the optimizer. We'll likely need to implement our own optimization pass to run after the other passes for this benefit to be realized.
+</notes>
+
+
 # Minor Extra Details
 
 To address some frequently asked questions:
 
- * A reference being 128b might seem unusual, but this is the width of C++'s {std::unique_ptr<T>}, {std::shared_ptr<T>}, {std::weak_ptr<T>}, and the default size of {generational_arena}'s {Index}.
  * When we move something across thread boundaries, we must recurse through and:
     * Increment all the generation numbers, effectively cutting off access to the rest of this thread.
     * Assert the RC is zero; assert that there are no locals pointing at the object.
  * Objects from other threads must be annotated with the {mig}ratory keyword. Instead of freeing these objects, they're sent back to their original thread for deallocation, to avoid race conditions.
- * The LGT's free-list has a touch of sorcery. The LGT is divided into 2^16-entry chunks. The u16 in each entry describes where in this chunk the next open space is. The first entry in this chunk is special; its u48 contains not a generation number but instead the index of the next chunk that's completely full of open spaces. In this way, the LGT has a free-list of free-lists.
- * In the {[u48, u16]}, 48 and 16 bits were chosen arbitrarily.
  * When a generation number hits the maximum, don't use that generation number anymore; the LGT shouldnt use it, and genFree shouldn't let it be reused. genFree can slice up the allocation into smaller ones that don't include the initial 8b.
 
 
@@ -201,7 +216,7 @@ Some potential weaknesses to explore:
 # How might it compare to Rust?
 
 
-Vale is a high-level language with zero unsafe, so an apples-to-apples comparison would be with a Rust where the only {unsafe} is in the standard library and generational_arena.
+Vale is a high-level language with zero {unsafe}, so an apples-to-apples comparison would be with a Rust where the only {unsafe} is in the standard library and generational_arena.
 
 
 Memory safety is never free, except for the most trivial of programs. Cyclone, Rust, ATS, Fortran, and every other language incurs _some_ overhead to ensure safety. This comes in the form of branching and cache miss costs, for example in:
@@ -210,14 +225,15 @@ Memory safety is never free, except for the most trivial of programs. Cyclone, R
  * Check if something's still alive, e.g. with booleans or generation liveness checks.
  * Reference count increments/decrements.
 
-
-<notes/>
-
-
-A normal Rust program will contain a blend of RC and generation checks, each where they most make sense. Hybrid-generational memory does the same; it only uses RC where the compiler predicts it will save a large swath of generation checks.
+Or large memory costs, for example if objects are stored in vectors.
 
 
-Like Lobster, Vale's hybrid-generational memory uses implicit borrow references to determine which checks it can elide, and also tracks them across function boundaries. Rust uses borrow references, supplied by the user. In the end, this results in most references being borrow references, with a few remaining Rc operations and generation checks, which looks surprisingly like hand-written Rust code. [# Keep in mind, when a program is translated to Rust, only some of its references can become borrow references, often they must become Rc or generational indices instead.]
+Rust programs uses borrow references where they can, and otherwise use {Rc} or generational indices to get around the borrow checker, which incurs run-time overhead.
+
+
+Vale produces a similar result, but from a very different direction. Vale starts by using generation checks, but then removes the vast majority of them using static analysis and by strategically inserting ref-counting where it would eliminate even more generation checks.
+
+In the end, this results in most references being borrow references, with a few remaining Rc operations and generation checks, which looks surprisingly like hand-written Rust code.
 
 
 <notes/>
@@ -241,4 +257,4 @@ There are other differences between Rust and Vale which could factor into a comp
 <notes/>
 
 
-Time will tell if hybrid-generational memory becomes an Automatic Rust, or something faster, or something slower.
+Time will tell how hybrid-generational memory compares with the borrow checker!
