@@ -1,4 +1,29 @@
 
+.page {
+  width: 896px;
+  box-sizing: border-box;
+  margin: auto;
+  position: relative;
+  padding-top: 16px;
+}
+
+.subtitle {
+  opacity: .6;
+}
+
+.author {
+  opacity: .6;
+}
+.date {
+  font-weight: bold;
+}
+
+h1 {
+  margin-top: 4px;
+  margin-bottom: 16px;
+  font-size: 18pt;
+}
+
 .external-link {
 	padding-right: 20px;
 	background-image: url('./images/external-link.png');
@@ -22,4 +47,63 @@ a[disabled] {
 }
 a[disabled]:hover {
 	text-decoration: none;
+}
+
+
+p {
+  margin: 0 0 8px 0;
+}
+p:last-child {
+  margin: 0;
+}
+
+
+
+.quote {
+  margin: 0 0 8px 0;
+  border-left: 4px #E0E0FF solid;
+  padding-left: 16px;
+}
+
+
+.c-snippet.root {
+  margin: 8px 0;
+}
+
+
+
+.cozy {
+  margin-bottom: 8px;
+}
+
+.area-contents ul,
+.area-contents ol {
+  margin: 0 0 8px 0;
+}
+
+
+.area-contents li {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.area-contents li > ul {
+  margin-top: 8px;
+}
+
+.c-toc li,
+.c-toc ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.c-toc ul {
+  padding-left: 20px;
+}
+
+section {
+  margin-bottom: 24px;
+}
+
+.metadata {
+	margin-bottom: 32px;
 }

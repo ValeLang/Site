@@ -126,7 +126,7 @@ interface Bipedal {
 struct Human { ... }
 fn hop(s &Human) { ... }
 fn skip(s &Human) { ... }
-impl Human for Bipedal;
+impl Bipedal for Human;
 
 fn hopscotch(s &Bipedal) {
   s.hop();
@@ -137,7 +137,7 @@ fn hopscotch(s &Bipedal) {
 struct DarkElf { ... }
 fn hop(s &DarkElf) { ... }
 fn skip(s &DarkElf) { ... }
-impl DarkElf for Bipedal;
+impl Bipedal for DarkElf;
 
 fn main() {
   wulfgar = Human(...);

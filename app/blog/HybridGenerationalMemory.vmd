@@ -3,7 +3,9 @@ title: Vale's Hybrid-Generational Memory
 subtitle: For speed and simplicity!
 author: Evan Ovadia and Theo Watkins
 date: Nov 24 2020
+realm: blog
 path: blog/hybrid-generational-memory
+layout: annotated
 namespace: c-blog m-annotated
 ---
 
@@ -132,7 +134,7 @@ Our references so far contain a pointer, a u48, a {u1}, a u47, and a u16, totall
 
 Assuming these structs:
 
-{{{
+```
 struct GenerationAndRc {
   u48 gen;
   u16 rc;
@@ -146,12 +148,12 @@ struct GenRef {
     struct { u47 lgtIndex; u32 relativeAddrFromStack; } whenStack;
   };
 }
-}}}
+```
 
 
 We would get a reference's generation like so:
 
-{{{
+```
 uint48_t getGeneration(GenRef ref) {
   if (ref.isHeap) {
     return ((GenerationAndRc*)(ref.obj - ref.offset))->gen;
@@ -159,7 +161,7 @@ uint48_t getGeneration(GenRef ref) {
     return lgt[ref.lgtIndex].gen;
   }
 }
-}}}
+```
 
 
 <notes/>
@@ -167,12 +169,12 @@ uint48_t getGeneration(GenRef ref) {
 
 However, that might incur some branching costs. We can instead do some adding and multiplying with the isHeap boolean: [#defeat]
 
-{{{
+```
 uint48_t getGeneration(GenRef ref) {
   return ref.isHeap * ((GenerationAndRc*)(ref.obj - ref.offset))->gen +
     (!ref.isHeap) * lgt[ref.lgti].gen;
 }
-}}}
+```
 
 
 That's basically it! There are some more things we could do to speed it up even more, using virtual memory, regions, or more static analysis, but we'll stop the explanation here.
@@ -202,9 +204,9 @@ To address some frequently asked questions:
 Some potential weaknesses to explore:
 
  * Limits:
- * Individual structs cannot be larger than 32kb.
- * Limited to 2^95 stack allocations over the lifetime of the thread (a 5ghz processor would take at least 268 million years to hit this limit).
- * Note: we could increase the struct size limit if we lower the stack allocations limit.
+    * Individual structs cannot be larger than 32kb.
+    * Limited to 2^95 stack allocations over the lifetime of the thread (a 5ghz processor would take at least 268 million years to hit this limit).
+       * Note: we could increase the struct size limit if we lower the stack allocations limit.
  * The pointer magic might prevent some LLVM optimizations, in which case we'll need our own optimization pass.
  * Storing the generation number at the top of a <=64b allocation means a liveness check won't incur an extra cache miss since we're about to dereference the object anyway, and the entire object is on one cache line. However, for larger objects, it does incur an extra cache miss. Most objects are small, but programs with an unusually large proportion of medium sized objects not in an array could suffer a small performance hit.
  * Having a separate heap per size class could increase fragmentation. This might be mitigating by using the regular malloc() and free() for large structs.
