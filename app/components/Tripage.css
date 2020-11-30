@@ -10,6 +10,10 @@
   font-weight: bold;
 }
 
+.m-tripage.section {
+  margin-bottom: 20px;
+}
+
 .m-tripage.inline-code {
 	font-family: Roboto Mono, Courier New, Courier;
 	padding: 0 4px;

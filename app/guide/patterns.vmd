@@ -1,0 +1,152 @@
+---
+title: Generics
+path: guide/generics
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: [Structs](/guide/structs)
+series-entry: [References](/guide/references)
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: [Generics](/guide/generics)
+series-entry: []()
+series-entry: [Regions](/guide/regions)
+---
+
+Patterns are a convenient, concise syntax for receiving some incoming data and doing some common things with it. Keep reading to see how.
+
+
+# Patterns Make Locals
+
+We use patterns to make new locals.
+
+Everything to the left of an `=` is a pattern.
+
+The pattern on the left receives incoming data from the expression on the right.
+
+<<<<
+To the left of this `=` is a pattern that stores the incoming data into a local named a.
+////
+```Vale
+fn main() {
+  a = 3 + 4;
+}
+```
+>>>>
+
+
+# Destructuring
+
+<<<<
+If we're receiving a struct, we can *destructure* the incoming struct and put its members into locals.
+
+In this example, we're taking the parts of the `Vec3` and assigning them into locals `a`, `b`, `c`.
+////
+```Vale
+struct Vec3 imm {
+  x int;
+  y int;
+  z int;
+}
+fn makeVec() { Vec3(3, 4, 5) }
+
+fn main() {
+  // Without destructure pattern:
+  tempVec = makeVec();
+  a = tempVec.x;
+  b = tempVec.y;
+  c = tempVec.z;
+
+  // Equivalent, using destructure:
+  Vec3(a, b, c) = makeVec();
+
+  println("a: " + a);
+}
+```
+```stdout
+a: 3
+```
+>>>>
+
+
+# Parameters
+
+<<<<
+Every parameter is a pattern.
+
+Here, we're using destructuring for this function's parameters.
+////
+```Vale
+// Using above Vec3
+
+// Without destructuring:
+fn refuel(
+    vec Vec3,
+    len float) {
+  Vec3(
+      vec.x * len,
+      vec.y * len,
+      vec.z * len)
+}
+
+// With destructuring:
+fn refuel(
+    Vec3(x, y, z),
+    len float) {
+  Vec3(x * len, y * len, z * len)
+}
+```
+>>>>
+
+
+# Match Statement [# Planned feature; see [Roadmap](/roadmap)!]
+
+<<<<
+We can use a pattern to check if the incoming data is a certain value.
+
+Here, we're using a match statement to check what the user entered.
+
+In patterns, `_` matches any incoming data and discards it.
+////
+```
+fn main() {
+  mat inputInt() {
+    1 { println("One!"); }
+    2 { println("Two!"); }
+    _ { println("Other!"); }
+  }
+}
+```
+>>>>
+
+<<<<
+We can even check an incoming interface, to see what substruct it is.
+
+We can even destructure it at the same time!
+////
+```
+interface ISpaceship { }
+
+struct Firefly { name str; }
+impl ISpaceship for Firefly;
+
+struct Raza { name str; fuel int; }
+impl ISpaceship for Raza;
+
+fn main() {
+  serenity = Firefly("Serenity", 2);
+
+  mat serenity {
+    Firefly(name) {
+      println("Firefly name " + name);
+    }
+    Raza(name, fuel) {
+      println("Raza name " + name);
+    }
+  }
+}
+```
+```stdout
+Firefly name Serenity
+```
+>>>>

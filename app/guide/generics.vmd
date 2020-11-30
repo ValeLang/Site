@@ -1,0 +1,163 @@
+---
+title: Generics
+path: guide/generics
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: [Structs](/guide/structs)
+series-entry: [References](/guide/references)
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: []()
+series-entry: [Patterns](/guide/patterns)
+series-entry: [Regions](/guide/regions)
+---
+
+Generics are a different way to reuse code for different types.
+
+We can use [interfaces](/guide/interfaces) for this, but interfaces have some limitations.
+
+
+# Limitations of Interfaces
+
+<<<<
+We often want to reuse a function for multiple types. On the [interfaces](/guide/interfaces) page, we used an interface to allow the function to operate on any type that conformed to a certain contract.
+
+A function that takes an interface doesn't have to care about the original type of the substruct we pass in.
+
+However, that can also be its downside: it forgets the original type of the substruct we pass in. This can be mighty inconvenient, like in this example.
+
+Notice how main is giving two `Firefly` to `longerShip`, so we know that `longerShip` should return a `Firefly`.
+
+main doesn't know that though; all is sees is that `longerShip` returns an `&ISpaceship`.
+
+Because of this, we can't call `crazyIvan` on the longer ship!
+////
+```Vale
+interface ISpaceship {
+  fn length() Int;
+  fn honk() Void;
+}
+
+fn longerShip(
+    a &ISpaceship,
+    b &ISpaceship)
+&ISpaceship {
+  if (a.length() > b.length()) {
+    ret a;
+  } else {
+    ret b;
+  }
+}
+
+struct Raza { ... }
+fn length(r &Raza) { 4 }
+fn honk(r &Raza) { ... }
+impl ISpaceship for Raza;
+
+struct Firefly { ... }
+fn length(f &Firefly) { 3 }
+fn honk(f &Firefly) { ... }
+fn crazyIvan(f &Firefly) { ... }
+impl ISpaceship for Firefly;
+
+fn main() {
+  flametail = Firefly(...);
+  serenity = Firefly(...);
+  ship = longerShip(
+    flametail, serenity);
+  // Compile error: ship is type
+  // ISpaceship, not Firefly!
+  ship.crazyIvan();
+}
+```
+>>>>
+
+<notes/>
+
+
+# Using Generics
+
+<<<<
+We can make longerShip into a *generic* function.
+
+Its parameters aren't exactly `ISpaceship`, they are any type `T` that implements `ISpaceship`.
+
+Since the parameters and return type are all `T`, the compiler knows that if we hand in `Firefly`s, we return a `Firefly`.
+
+In this case, we're calling it like `longerShip<Firefly>(...)`, which specifies that we should use the version of `longerShip` where `T` is a `Firefly`.
+
+`longerShip<T>` returns a `T`, so `main` knows that `longerShip<Firefly>` returns a `Firefly`.
+////
+```Vale
+interface ISpaceship {
+  fn length() Int;
+  fn honk() Void;
+}
+
+fn longerShip//<T impl ISpaceship>
+(a &T, b &T) &T {
+  if (a.length() > b.length()) {
+    ret a;
+  } else {
+    ret b;
+  }
+}
+
+struct Raza { ... }
+fn length(r &Raza) { 4 }
+fn honk(r &Raza) { ... }
+impl ISpaceship for Raza;
+
+struct Firefly { ... }
+fn length(f &Firefly) { 3 }
+fn honk(f &Firefly) { ... }
+fn crazyIvan(f &Firefly) { ... }
+impl ISpaceship for Firefly;
+
+fn main() {
+  flametail = Firefly(...);
+  serenity = Firefly(...);
+  ship =
+    longerShip<Firefly>( «meh»
+      flametail, serenity);
+  // This works now!
+  ship.crazyIvan(); 
+}
+```
+>>>>
+
+<notes>
+#meh: We can actually leave off the `<Firefly>` here, the compiler can figure it out from the arguments we passed in.
+</notes>
+
+
+# Generic Structs
+
+<<<<
+We can make generic structs too.
+
+Here we're making a Flock struct that can hold multiple of the same ship.
+////
+```Vale
+// Using above ISpaceship,
+// Firefly, Raza
+
+struct Flock//<T impl ISpaceship>
+{
+  ships List<T>;
+}
+
+fn main() {
+  f = Flock<Firefly>(List<Firefly>());
+  f.ships.add(Firefly(...));
+  f.ships.add(Firefly(...));
+
+  firstShip = f.ships.0;
+  // This works because the compiler
+  // can see that firstShip is a
+  // Firefly.
+  firstShip.crazyIvan();
+}
+```
+>>>>

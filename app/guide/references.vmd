@@ -1,0 +1,335 @@
+---
+title: References
+path: guide/references
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: [Structs](/guide/structs)
+series-entry: []()
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: [Generics](/guide/generics)
+series-entry: [Patterns](/guide/patterns)
+series-entry: [Regions](/guide/regions)
+---
+
+# Owning Reference
+
+<<<<
+An owning reference keeps an object alive. When a struct has no owning reference pointing to it anymore, the struct is deallocated.
+
+Every mutable struct has exactly one owning reference pointing to it. [#ownership]
+////
+```Vale
+fn main() {
+  ship = Spaceship("Serenity", 2);
+  // ship is an owning reference
+
+  println(ship.name);
+
+  // implicit ship^.drop()
+}
+```
+>>>>
+
+
+## References to Immutables
+
+<<<<
+Immutables, such as primitives or immutable structs, can have multiple owning references pointing to them. [#notquite]
+
+When we say `a = b;` for an immutable struct, both a and b can still be used.
+
+Immutables are simple to use. The rest of the page is about references to mutable structs.
+////
+```Vale
+struct Vec3 imm {
+  x float;
+  y float;
+  z float;
+}
+fn main() {
+  firstRef = Vec3(3, 4, 5);
+  otherRef = firstRef;
+  // Can use both freely.
+  println(firstRef.x + otherRef.y);
+}
+```
+```stdout
+7
+```
+>>>>
+
+
+## Moving
+
+A local can give up the owning reference with the `^` symbol. [# This serves the same purpose as C++'s `std::move`.] Afterwards, that local is gone, and we cannot use it. This is called a *move*.
+
+This is used to influence when the struct is `drop`ped, to keep it alive for longer or destroy it sooner.
+
+<<<<
+In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
+////
+```Vale
+fn main() {
+  a = Spaceship(); «alocal»
+  b = ^a;
+  // b now owns the Spaceship.
+  // Can't use a now.
+}
+```
+>>>>
+
+<<<<
+It works the same way when passing an owning reference to a function.
+////
+```Vale
+fn foo(b Spaceship) {
+  println(b.name);
+}
+fn main() {
+  a = Spaceship();
+  foo(^a);
+  // Can't use a now.
+}
+```
+>>>>
+
+
+<notes>
+#ownership: Ownership is also found in C++ (`unique_ptr`), Rust, and Cyclone.
+
+C also has "conceptual" ownership, in that we must track ownership without the language's help, to know when to free an object.
+
+Vale's references has the flexibility of C++'s `unique_ptr` while guaranteeing memory safety.
+
+#notquite: These are references from the user's perspective, but under the hood, references to small immutables (including primitives and small structs) are inlined and copied around, for performance.
+
+#alocal: Rather than thinking "`a` is an owning reference", think instead that `a` is a *local* that *currently contains* an owning reference.
+
+On the next line, `a` is destroyed, but the owning reference that it contained still lives on (inside `b`).
+</notes>
+
+
+# Non-Owning References
+
+Vale has two kinds of non-owning references:
+
+ * The *Constraint Reference*, which halts the program when we deallocate the struct it's pointing at (in development and testing). [# Specifically, in assist mode, see below.]
+ * The *Weak Reference*, which becomes null when we deallocate the struct it's pointing at.
+
+These are explained in more detail below.
+
+Note that there are no shared-ownership references [# Like C++'s `shared_ptr` or Rust's `Rc` or all references in Java and Python.] in Vale, except for immutable structs.
+
+<notes />
+
+
+## Constraint References
+
+<<<<
+We can use constraint references to *detect when we accidentally destroy an object we're still pointing at.* [# A constraint reference is similar to a foreign key constraint in SQL: it prevents us from deallocating the object it points to.]
+
+This behavior helps us find logic errors. [# This behavior is turned off in production, see resilient mode below.] [# This behavior is *not* a memory safety feature. Vale's memory safety comes from resilient mode's [hybrid-generational memory](/blog/hybrid-generational-memory).]
+
+To make a constraint reference, use the & symbol.
+
+In this example, we're making a constraint reference to `ship` and giving it to the `foo` function.
+////
+```Vale
+struct Spaceship {
+  name str;
+  numWings int;
+}
+fn foo(s &Spaceship) {
+  println(s.name);
+}
+fn main() {
+  ship = Spaceship("Serenity", 2);
+  foo(ship);
+}
+```
+>>>>
+
+For example, if we have an open UI dialog for editing an entry in a given spreadsheet, the dialog would want a constraint reference to the entry. [# A constraint reference is the best kind of reference to use here. A weak reference just delays the halt until we try to dereference it. It's often better to catch bugs sooner.]
+
+<<<<
+If we delete an object while a constraint reference is pointing to it, the program halts and shows which constraint reference was violated. [# Planned feature; see [Roadmap](/roadmap)!]
+
+In this example, Vale detects that shipCRef becomes a dangling [# Dangling means pointing to a deallocated struct.] pointer and halts the program so the developer can fix it.
+
+To avoid the program halting:
+
+ * Keep the object alive for longer.
+ * Get rid of the constraint reference sooner. [# For example, by copying the needed data out. In this example, we could have copied into a `wings` local.]
+ * If the reference doesn't actually require the object to be alive, use a weak reference instead.
+////
+```Vale
+struct Spaceship {
+  name str;
+  wings int;
+}
+fn takeAndDestroy(ship Spaceship) {
+  println("Name: " + ship.name);
+
+  // Ship destroyed here, so
+  // constraint violated here.
+}
+fn main() {
+  // ship contains an owning ref
+  ship = Spaceship("Serenity", 2);
+  // shipCRef contains a constraint ref
+  shipCRef = ship;
+
+  // Moves ship into function.
+  takeAndDestroy(^ship);
+
+  println("Wings: " + shipCRef.wings);
+}
+```
+```stdout
+Name: Serenity
+Error: Dangling pointers detected!
+Dead object:
+  takeAndDestroy::ship main.vale:5:19
+Dangling pointers:
+  main::shipCRef main.vale:13:3
+Continue? [y,N]
+```
+>>>>
+
+<notes />
+
+
+### Constraint Modes
+
+We can also configure Vale to have different behavior for constraint references.
+
+ * Assist mode behaves as previously described; it halts when we *make* dangling references.
+    * Assist mode is slower, because it uses reference counting.
+ * Resilient mode halts when we *dereference* dangling references. [# In the last example, the program would instead have crashed on the final println, because that's when the `shipCRef` constraint ref is used.]
+    * Resilient mode uses [hybrid-generational memory](/blog/hybrid-generational-memory) which uses some memory per-object but is incredibly fast.
+ * Unsafe mode turns off all protections, and compiles them to raw pointers.
+
+Different modes will be useful at different times.
+
+ * Most apps will want to release in resilient mode, but develop and test in assist mode to reduce their risk of *halts*.
+ * Games (for example) will release in unsafe mode, but develop and test in assist mode to reduce their risk of *memory unsafety*. [#betterthancpp]
+
+<notes>
+#betterthancpp: This is safer than C++, because we can do our testing in assist mode, giving us more confidence that we aren't even _making_ any pointers dangle, which makes us even more confident that we wouldn't accidentally _dereference_ any dangling pointers.
+</notes>
+
+
+## Weak References
+
+<<<<
+We often have a reference to a struct, and we would be fine with that struct being deallocated while we have a reference to it.
+
+In these situations, we use *weak references*.
+
+A weak reference will set itself to null when the object it's pointing at is destroyed.
+
+We can make a weak reference with `&&`.
+
+To use a weak reference, call `lock`, which will return an optional constraint reference (`?&Spaceship`). We can then check if it contains a `&Spaceship` or is empty.
+
+In other words, we cannot reach into a struct through a weak reference directly; we must lock it to try to make it into a constraint reference first.
+
+In this example, we're making a `o` constraint reference from the `ship.origin` weak reference.
+////
+```Vale
+struct Base {
+  name str;
+}
+struct Spaceship {
+  name str;
+  origin &&Base;
+}
+fn printShipBase(ship &Spaceship) {
+  //if ((o) = lock(ship.origin)) { «lock»«mat»
+    println("Ship base: " + o.name);
+  //} else {
+    println("Ship base unknown!");
+  //}
+}
+fn main() {
+  base = Base("Zion");
+  ship = Spaceship("Neb", &&base);
+
+  printShipBase(ship);
+
+  base^.drop(); // Destroys base.
+
+  printShipBase(ship);
+}
+```
+```stdout
+Ship base: Zion
+Ship base unknown!
+```
+>>>>
+
+<notes>
+#lock: Locking a weak reference gives us a `?&Spaceship`, also known as an `Opt<&Spaceship>`. This has two possible subclasses: `None<&Spaceship>` which is empty and `Some<&Spaceship>` which contains a `&Spaceship`.
+
+This line is checking if that `?&Spaceship` is the one-member subclass `Some<&Spaceship>` and if so, assigns its member to `o`.
+
+This is a conditional destructure, see [Pattern Matching](/guide/patterns) for more.
+
+#mat: We could also use a `mat` (match statement) here to check whether the `?&Spaceship` contained anything.
+</notes>
+
+
+# Pointers vs Values ("Inlining") [# Planned feature; see [Roadmap](/roadmap)!]
+
+*Inlining* is used for optimization.
+
+<<<<
+By default, a reference is a pointer, to something on the heap. [# Vale uses escape analysis to automatically inline every local that doesn't get moved into a global or parameter. The `inl` keyword is useful to force it, when optimizing.] A reference can instead be a value on the stack ("inline"), by using the `inl` keyword.
+
+Inline objects are much faster to allocate and deallocate, but cannot be moved.
+////
+```Vale
+struct Spaceship {
+  name str;
+  numWings int;
+}
+fn main() {
+  ship = inl Spaceship();
+  println(ship.name);
+}
+```
+```stdout
+List(1, 3, 7)
+```
+>>>>
+
+<<<<
+`inl` is most often used in structs. [# Vale can even inline interfaces if they're `sealed`, resulting in something similar to tagged unions in C, or enums in Rust. See Interfaces for more.]
+
+When we use `inl` in a struct, the member's memory is here inside the containing struct's memory.
+
+In this example, the `Engine`'s memory is inside the `Spaceship`'s memory. This makes `Spaceship` bigger, and avoids allocation/deallocation overhead.
+
+In a way, `inl` means "It should live here, not somewhere else."
+////
+```Vale
+struct Engine {
+  model str;
+  fuel int;
+}
+struct Spaceship {
+  name str;
+  engine inl Engine;
+}
+fn main() {
+  ship = Spaceship(
+      "Serenity",
+      inl Engine("TCB", 10));
+  println(ship.name);
+}
+```
+>>>>
+
+<notes/>

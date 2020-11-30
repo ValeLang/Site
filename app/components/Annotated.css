@@ -9,6 +9,8 @@
 .m-annotated.page.unimargined .m-annotated.note {
   position: absolute;
   left: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .m-annotated.page.isomargined .m-annotated.page-left {
@@ -41,7 +43,7 @@
 
 a.m-annotated.note-anchor,
 div.m-annotated.note-starter {
-  margin: -1px 4px -1px 2px;
+  margin: -1px;
   border-width: 1px;
   border-style: solid;
   min-width: 1.2em;
@@ -50,43 +52,45 @@ div.m-annotated.note-starter {
 }
 a.m-annotated.note-anchor {
   margin-left: 0px;
+  margin-right: 0px;
   display: inline-block;
-  font-size: 80%;
+  font-size: 9.5pt;
 }
 div.m-annotated.note-starter {
+  margin-left: 2px;
+  margin-right: 4px;
   padding: 0px 2px;
   float: left;
-  margin-right: 4px;
 }
-.m-annotated.note-color0 {  
-  background-color: #F0D0D0;
-  border-color: #E0B8B8;
-  color: #A06060;
-}
-.m-annotated.note-color1 {
+.m-annotated.note-color0 {
   background-color: #D0F0D0;
   border-color: #70E070;
   color: #408040;
 }
-.m-annotated.note-color2 {
+.m-annotated.note-color1 {
   background-color: #F0D0F0;
   border-color: #D0C0D0;
   color: #804080;
 }
-.m-annotated.note-color3 {
-  background-color: #D0D0F0;
-  border-color: #C0C0D0;
-  color: #404080;
+.m-annotated.note-color2 {
+  background-color: #F0D0D0;
+  border-color: #E0B8B8;
+  color: #A06060;
 }
-.m-annotated.note-color4 {
+.m-annotated.note-color3 {
   background-color: #D0F0F0;
   border-color: #70E0E0;
   color: #408080;
 }
+.m-annotated.note-color4 {
+  background-color: #F4E0C0;
+  border-color: #FFC000;
+  color: #B07020;
+}
 .m-annotated.note-color5 {
-  background-color: #F4F480;
-  border-color: #E0E000;
-  color: #606060;
+  background-color: #B8D8FF;
+  border-color: #B0C0FF;
+  color: #202080;
 }
 
 
@@ -154,34 +158,9 @@ div.m-annotated.note-starter {
   margin-bottom: 0;
 }*/
 
-.m-annotated .input {
-  width: 100%;
-  box-sizing: border-box;
-  color: #f8f8f2;
-  background-color: #506090;
-  padding: 0.5em;
-  white-space: pre;
-  font-size: 9.5pt;
-  font-family: Roboto Mono, Courier New, Courier;
-  line-height: 12pt;
-  overflow: auto;
-}
-
-.m-annotated .output {
-  width: 100%;
-  box-sizing: border-box;
-  color: #f8f8f2;
-  background-color: #505050;
-  padding: 0.5em;
-  white-space: pre;
-  font-size: 9.5pt;
-  font-family: Roboto Mono, Courier New, Courier;
-  line-height: 12pt;
-  overflow: auto;
-}
-
 .m-annotated.split {
   display: flex;
+  margin-bottom: 8px;
 }
 .m-annotated.split-left {
   flex-grow: 1;

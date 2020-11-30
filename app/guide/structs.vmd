@@ -1,0 +1,269 @@
+---
+title: Structs
+path: guide/structs
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: []()
+series-entry: [References](/guide/references)
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: [Generics](/guide/generics)
+series-entry: [Patterns](/guide/patterns)
+series-entry: [Regions](/guide/regions)
+---
+
+<<<<
+Here is a basic Spaceship struct, with a couple members.
+
+We can construct it using its *constructor* function, which has the same name and was automatically generated.
+
+All structs are *mutable* by default, more on that in the Mutability section below.
+////
+```Vale
+struct Spaceship {
+  name str;
+  numWings int;
+}
+
+fn main() {
+  ship = Spaceship("Serenity", 2);
+  println(ship.name);
+}
+```
+```stdout
+Serenity
+```
+>>>>
+
+
+# Constructors
+
+<<<<
+We can specify a custom constructor for our struct.
+
+We just need to give it the same name as the struct. [#  Inside the constructor, we must call either another constructor or `constructor<T>`.]
+////
+```Vale
+struct Spaceship {
+  name str;
+  numWings int;
+}
+fn Spaceship() {
+  Spaceship("Serenity", 2)
+}
+
+fn main() {
+  ship = Spaceship();
+  println(ship.name);
+}
+```
+>>>>
+
+<notes/>
+
+
+# Shortcalling Constructors [# Planned feature; see [Roadmap](/roadmap)!]
+
+<<<<
+We normally call a function by name, such as the `Spaceship("Serenity", 2)` above. However, if the code is expecting a certain type, it can automatically call the constructor of the expected type.
+////
+```Vale
+// Using above Spaceship struct
+
+fn main() {
+  // These statements are equivalent:
+  x Spaceship = Spaceship("Raza", 2);
+  x Spaceship = ("Raza", 2);
+}
+```
+>>>>
+
+<<<<
+This saves a lot of typing when calling functions.
+////
+```Vale
+// Using above Spaceship struct
+
+fn foo(s Spaceship) { ... }
+
+fn main() {
+  // These statements are equivalent:
+  foo(Spaceship("Raza", 2));
+  foo(("Raza", 2));
+}
+```
+>>>>
+
+<notes/>
+
+
+
+# Ownership
+
+
+Every mutable struct has exactly one owning reference at any given time. [# There are other kinds of references (constraint, borrow, weak), [References](/guide/references) explains more.] [#ownership]
+
+<<<<
+When we create a mutable struct, we get the owning reference to it. When the owning reference disappears, the struct is automatically deallocated (via `drop`, explained below).
+////
+```Vale
+fn main() {
+  ship = Spaceship("Serenity", 2);
+  // ship is an owning reference
+
+  println(ship.name);
+
+  // implicitly drops ship
+}
+```
+>>>>
+
+<notes>
+#ownership: Ownership is also found in C++ (`unique_ptr`), Rust, and Cyclone.
+
+C also has "conceptual" ownership, in that we must track ownership without the language's help, to know when to `free` a struct.
+
+Vale's ownership has the flexibility of C++'s `unique_ptr` without the mutability and aliasing restrictions of Rust and Cyclone, see [References](/guide/references) to learn how.
+</notes>
+
+
+## Lending
+
+Every mutable struct has exactly one owning reference pointing to it.
+
+<<<<
+When we make another reference to a struct, it will be a non-owning reference. [# More specifically, a constraint reference, see [References](/guide/references).] This is called a *lend*.
+
+In this example, the type of `owningRef` is `Spaceship`, and the type of `nonOwningRef` is `&Spaceship`.
+////
+```Vale
+fn main() {
+  owningRef = Spaceship();
+  nonOwningRef = owningRef;
+}
+```
+>>>>
+
+<notes/>
+
+
+## Moving
+
+A local can give up the owning reference with the `^` symbol. [# This serves the same purpose as C++'s `std::move`.] Afterwards, that local is gone, and we cannot use it. This is called a *move*.
+
+This is used to influence when the struct is `drop`ped, to keep it alive for longer or destroy it sooner.
+
+<<<<
+In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
+////
+```Vale
+fn main() {
+  a = Spaceship(); «alocal»
+  b = ^a;
+  // b now owns the Spaceship.
+  // Can't use a now.
+}
+```
+>>>>
+
+<<<<
+It works the same way when passing an owning reference to a function.
+////
+```Vale
+fn foo(b Spaceship) {
+  println(b.name);
+}
+fn main() {
+  a = Spaceship();
+  foo(^a);
+  // Can't use a now.
+}
+```
+>>>>
+
+
+<notes>
+#alocal: Rather than thinking "`a` is an owning reference", think instead that `a` is a *local* that *currently contains* an owning reference.
+
+On the next line, `a` is destroyed, but the owning reference that it contained still lives on (inside `b`).
+</notes>
+
+
+## Drop
+
+When an owning reference disappears, the struct is automatically deallocated. Vale does this by inserting a call to `drop`. [#drop]
+
+The `drop` function is automatically generated for each struct and interface.
+
+<<<<
+Here we can see where the implicit call to `drop` is.
+
+`drop` is called when the owning reference goes away, which in this case is `ship`.
+////
+```Vale
+fn main() {
+  ship = Spaceship("Serenity", 2);
+  // ship is an owning reference
+
+  println(ship.name);
+
+  // implicit ^ship.drop().
+}
+
+// Implicit:
+// fn drop(s Spaceship) {
+//   destruct s; «destruct» // frees
+// }
+```
+>>>>
+
+We can specify our own `drop` function. A custom drop could be used to:
+
+ * Remove this object from an observers list.
+ * Commit a transaction.
+ * Inform other objects of this object's destruction.
+
+Rule of thumb: if something must happen at some point in the future, put it in a drop function. Vale will make sure that it's not forgotten. [#raii]
+
+<notes>
+#drop: Drop functions also appear in C++ ("destructors") and Rust. Vale's drop functions are like those but more flexible: they can return values and even take extra parameters. In those cases, they must be called manually. See [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for more!
+
+#destruct: The destruct keyword is syntactic sugar for a "move destructure" pattern, see [Pattern Matching](/guide/patterns) for more.
+
+#raii: This is an incredibly powerful pattern, see [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for more.
+</notes>
+
+
+# Mutability
+
+By default, structs are *mutable*. We can make *immutable* structs with the *imm* keyword.
+
+<<<<
+After construction, an immutable struct cannot be changed at all.
+
+Because of that, we can have multiple owning references to it, like Java or Python. [#small]
+
+Vale also automatically derives the functions `println`, `str`, `hash`, `==`, and more.
+
+Immutable structs cannot have drop functions. [# See [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for the reasoning behind this.]
+////
+```Vale
+struct Spaceship imm {
+  name str;
+  numWings int;
+}
+
+fn main() {
+  ship = Spaceship("Serenity", 2);
+  println(ship);
+}
+```
+```stdout
+Spaceship("Serenity", 2)
+```
+>>>>
+
+<notes>
+#small:  Small immutable structs (32b or less) are copied and passed by-value. Larger objects use *SNRC* (strategic nonatomic reference counting) to free themselves.
+</notes>

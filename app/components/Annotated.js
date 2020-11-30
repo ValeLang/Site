@@ -14,6 +14,7 @@ function relayoutNotes() {
   const header = document.querySelectorAll(".m-annotated.notes-header")[0];
   const notes = document.querySelectorAll(".m-annotated.note");
   const newMargin = document.querySelectorAll(".m-annotated.page-right")[0];
+  const pageLeftColumn = document.querySelectorAll(".m-annotated.page-left")[0];
   const pageRightColumn = document.querySelectorAll(".m-annotated.page-right")[0];
   const anchors = document.querySelectorAll(".m-annotated.note-anchor");
 
@@ -45,6 +46,10 @@ function relayoutNotes() {
 
     nextFreeY = actualY + note.getBoundingClientRect().height;
   }
+
+  pageRightColumn.style.height =
+      Math.max(nextFreeY, pageLeftColumn.getBoundingClientRect().height) +
+      "px";
 }
 
 // Add ?isomargined to the url to not do any of the

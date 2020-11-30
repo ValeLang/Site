@@ -1,0 +1,221 @@
+---
+title: Interfaces
+path: guide/interfaces
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: [Structs](/guide/structs)
+series-entry: [References](/guide/references)
+series-entry: []()
+series-entry: [Generics](/guide/generics)
+series-entry: [Patterns](/guide/patterns)
+series-entry: [Regions](/guide/regions)
+---
+
+<<<<
+Normally, our code needs to know the exact type of a struct to be able to work with it.
+
+In this example, `hopscotch` only works for a Human.
+
+If we want a hopscotch for `DarkElf` too, we'd have to copy and paste the hopscotch function and adjust it to use `DarkElf` instead. How tedious!
+
+It would be great if we could make a function accept any kind of reference, as long as it has the right functions (such as `hop` and `skip`).
+
+We can, using *interfaces*!
+////
+```Vale
+struct Human { ... }
+fn hop(s &Human) { ... }
+fn skip(s &Human) { ... }
+
+fn hopscotch(s &Human) {
+  s.hop();
+  s.skip();
+  s.hop();
+}
+
+struct DarkElf { ... }
+fn hop(s &DarkElf) { ... }
+fn skip(s &DarkElf) { ... }
+
+fn main() {
+  wulfgar = Human(...);
+  hopscotch(wulfgar);
+}
+```
+>>>>
+
+
+# Using Interfaces
+
+<<<<
+We can create an interface with the `interface` keyword, like `Bipedal` here.
+
+Then, to tell the compiler that `Human` and `DarkElf` conform to that interface, we use the `impl` keyword. [# When a struct `impl`ements an interface, we call it a *substruct* of that interface.]
+
+Last, we change `hopscotch` to take in a `&Bipedal`, and now we can call it with a `Human` or `DarkElf`, since both implement the `Bipedal` interface.
+////
+```Vale
+interface Bipedal {
+  fn hop(s &Human) void;
+  fn skip(s &Human) void;
+}
+
+struct Human { ... }
+fn hop(s &Human) { ... }
+fn skip(s &Human) { ... }
+impl Bipedal for Human;
+
+fn hopscotch(s &Bipedal) {
+  s.hop();
+  s.skip();
+  s.hop();
+}
+
+struct DarkElf { ... }
+fn hop(s &DarkElf) { ... }
+fn skip(s &DarkElf) { ... }
+impl DarkElf for Bipedal;
+
+fn main() {
+  wulfgar = Human(...);
+  hopscotch(wulfgar);
+  drizzt = DarkElf(...);
+  hopscotch(drizzt);
+}
+```
+>>>>
+
+<notes/>
+
+
+## Open Interface Constructors
+
+(Also known as "Anonymous Substructs")
+
+<<<<
+When we make an open interface like the above `Bipedal`, the compiler makes an *open interface constructor*, a function which can define another substruct.
+
+It takes functions (or lambdas) as arguments, to use for the interface's methods.
+
+In this example, we're giving it a lambda for its `hop` method, and another lambda for its `skip` method.
+////
+```Vale
+// Using above Bipedal interface
+// and hopscotch function
+
+fn main() {
+  x = Bipedal(
+    { println("Hop!"); },
+    { println("Skip!"); });
+  // x is an unnamed substruct which
+  // implements Bipedal.
+
+  hopscotch(x);
+}
+```
+>>>>
+
+<notes/>
+
+
+# Sealed Interfaces [# Planned feature; see [Roadmap](/roadmap)!]
+
+<<<<
+By default, an interface is *open*, which means any struct can implement it.
+
+A *sealed* interface can only be implemented by structs defined in the same file.
+////
+```Vale
+interface MaybeInt sealed { }
+// sealed: only the below two
+// structs can implement MaybeInt.
+
+struct NoInt { }
+impl None for MaybeInt;
+
+struct SomeInt { value int; }
+impl SomeInt for MaybeInt;
+```
+>>>>
+
+Because the compiler knows all the implementing structs up-front, it:
+
+ * Can be inlined. [#inlsealed]
+ * Checks that `mat` statements consider all substructs.
+ * Generates sealed interface constructors.
+
+<notes>
+#inlsealed: Locals and members can inline sealed interfaces. The compiler will figure out the size of the largest substruct, and reserve that much memory in the stack (if an inl local) or the containing struct (if an inl member), and use that memory for the substruct. (This is the equivalent of a C/C++ union or Rust enum)
+</notes>
+
+
+## Sealed Interface Constructors
+
+<<<<
+A *sealed interface constructor* is a function with the same name of the interface, which constructs the correct subclass depending on the given arguments.
+
+In this example, when we call `MaybeInt(7)`, the compiler finds that the `SomeInt` substruct indeed has a constructor accepting one int, and calls that.
+////
+```Vale
+// Using above MaybeInt/NoInt/SomeInt
+
+fn main() {
+  x = MaybeInt(7);
+  // x is of type SomeInt.
+
+  y = MaybeInt();
+  // y is of type NoInt.
+}
+```
+>>>>
+
+A sealed interface constructor also allows us to make substructs via *shortcalling*. [# See [Structs](/guide/structs) for more on shortcalling.]
+
+<notes/>
+
+
+## Shortcalling Sealed Interface Constructors
+
+<<<<
+We normally call a function by name, such as the `MaybeInt(7)` above. However, if the code is expecting a certain type, it can automatically call the constructor of the expected type.
+////
+```Vale
+// Using above MaybeInt/NoInt/SomeInt
+
+fn main() {
+  // These statements are equivalent:
+  x MaybeInt = MaybeInt(7);
+  x MaybeInt = (7);
+}
+```
+>>>>
+
+<<<<
+This saves a lot of typing when calling functions.
+////
+```Vale
+// Using above MaybeInt/NoInt/SomeInt
+
+fn foo(m MaybeInt) { ... }
+
+fn main() {
+  foo(SomeInt(7));
+  // Equivalent, calling sealed
+  // interface constructor:
+  foo(MaybeInt(7));
+  // Equivalent, shortcalling sealed
+  // interface constructor:
+  foo((7));
+
+  foo(NoInt());
+  // Equivalent, calling sealed
+  // interface constructor:
+  foo(MaybeInt());
+  // Equivalent, shortcalling sealed
+  // interface constructor:
+  foo(());
+}
+```
+>>>>
