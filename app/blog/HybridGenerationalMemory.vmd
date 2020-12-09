@@ -33,7 +33,7 @@ For the purpose of explanation, we'll start with something inefficient and simpl
 
 We'll start with Vale's unsafe-fast mode. Recall:
 
- * Every object is owned by an owning reference (like {unique_ptr}). When the owning reference goes away, the object is freed.
+ * Every object is owned by an owning reference (like `unique_ptr`). When the owning reference goes away, the object is freed.
  * We can have non-owning references ("constraint references") to an object as well.
  * For now, every allocation is on the heap, nothing on the stack yet.
  * Each thread's memory (like Rust and Lobster) is isolated; any given object is only visible to one thread at a time.
@@ -95,7 +95,7 @@ Add a u16 counter to every allocation, next to the u48 generation number.
 
 Now we'll introduce stack-allocated objects and the Local Generation Table:
 
- * In every stack allocation, before the object, is a u47 index into a thread-global {vector<[u48, u16]>} called the Local Generation Table (LGT). [# {[u48, u16]} means a pair, with a u48 and a u16.]
+ * In every stack allocation, before the object, is a u47 index into a thread-global `vector<[u48, u16]>` called the Local Generation Table (LGT). [# `[u48, u16]` means a pair, with a u48 and a u16.]
     * The u48 is the generation number for a stack object.
     * The u16 is the RC for a stack object.
  * Deallocating a stack object will increment the u48 and use the u16 to add this "open space" to a free-list. [#freelist]
@@ -123,7 +123,7 @@ Now we'll support objects containing other objects inline. The only complication
 ## Reducing Reference Size
 
 
-Our references so far contain a pointer, a u48, a {u1}, a u47, and a u16, totalling to 176 bytes. Let's reduce that to 128 bytes. [# A reference being 128b might seem unusual, but this is the width of C++'s {std::unique_ptr<T>}, {std::shared_ptr<T>}, {std::weak_ptr<T>}, and the default size of {generational_arena}'s {Index}.] Start by keeping the {u1} isHeap.
+Our references so far contain a pointer, a u48, a `u1`, a u47, and a u16, totalling to 176 bytes. Let's reduce that to 128 bytes. [# A reference being 128b might seem unusual, but this is the width of C++'s `std::unique_ptr<T>`, `std::shared_ptr<T>`, `std::weak_ptr<T>`, and the default size of `generational_arena`'s `Index`.] Start by keeping the `u1` isHeap.
 
  * If isHeap true, the reference contains the 64b pointer, the u48 (target generation), and the u15 offset.
  * If isHeap false, the reference contains a 32b pointer (relative to stack start), the u48 (target generation), and the u15 offset, and the 47b LGT index.
@@ -138,7 +138,7 @@ Assuming these structs:
 struct GenerationAndRc {
   u48 gen;
   u16 rc;
-}
+};
 
 struct GenRef {
   u48 targetGeneration;
@@ -147,7 +147,7 @@ struct GenRef {
     struct { u15 offsetFromPtr; void* heapObjPtr; } whenHeap;
     struct { u47 lgtIndex; u32 relativeAddrFromStack; } whenStack;
   };
-}
+};
 ```
 
 
@@ -192,7 +192,7 @@ To address some frequently asked questions:
  * When we move something across thread boundaries, we must recurse through and:
     * Increment all the generation numbers, effectively cutting off access to the rest of this thread.
     * Assert the RC is zero; assert that there are no locals pointing at the object.
- * Objects from other threads must be annotated with the {mig}ratory keyword. Instead of freeing these objects, they're sent back to their original thread for deallocation, to avoid race conditions.
+ * Objects from other threads must be annotated with the `mig`ratory keyword. Instead of freeing these objects, they're sent back to their original thread for deallocation, to avoid race conditions.
  * When a generation number hits the maximum, don't use that generation number anymore; the LGT shouldnt use it, and genFree shouldn't let it be reused. genFree can slice up the allocation into smaller ones that don't include the initial 8b.
 
 
@@ -218,7 +218,7 @@ Some potential weaknesses to explore:
 # How might it compare to Rust?
 
 
-Vale is a high-level language with zero {unsafe}, so an apples-to-apples comparison would be with a Rust where the only {unsafe} is in the standard library and generational_arena.
+Vale is a high-level language with zero `unsafe`, so an apples-to-apples comparison would be with a Rust where the only `unsafe` is in the standard library and generational_arena.
 
 
 Memory safety is never free, except for the most trivial of programs. Cyclone, Rust, ATS, Fortran, and every other language incurs _some_ overhead to ensure safety. This comes in the form of branching and cache miss costs, for example in:
@@ -230,7 +230,7 @@ Memory safety is never free, except for the most trivial of programs. Cyclone, R
 Or large memory costs, for example if objects are stored in vectors.
 
 
-Rust programs uses borrow references where they can, and otherwise use {Rc} or generational indices to get around the borrow checker, which incurs run-time overhead.
+Rust programs uses borrow references where they can, and otherwise use `Rc` or generational indices to get around the borrow checker, which incurs run-time overhead.
 
 
 Vale produces a similar result, but from a very different direction. Vale starts by using generation checks, but then removes the vast majority of them using static analysis and by strategically inserting ref-counting where it would eliminate even more generation checks.

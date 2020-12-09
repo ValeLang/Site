@@ -328,7 +328,7 @@ fn main() {
 <notes>
 #each: The each statement is syntactic sugar for the each method:
 
-`each (arr) (x){ println(x); }`
+`each arr (x){ println(x); }`
 
 is equivalent to
 

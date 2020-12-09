@@ -38,65 +38,65 @@ class Home extends React.Component {
                 <div className={ns("featuring-title")}>Featuring:</div>
                 <ul>
                   <li>
-                    <a href="/ref/intro" className={ns("feature-title")} onClick={e => scrollTo("statictyping")}>
+                    <a href="/guide/introduction" className={ns("feature-title")} onClick={e => scrollTo("statictyping")}>
                       Statically Typed
                     </a> with type inference.
                   </li>
                   <li>
-                    <a href="/ref/references" className={ns("feature-title")}>
+                    <a href="/guide/references" className={ns("feature-title")}>
                       Ownership
                     </a>, move semantics, and deterministic destruction.
                   </li>
                   <li>
-                    <a href="/ref/references#nonowning" className={ns("feature-title")} onClick={e => scrollTo("nonowning")}>
+                    <a href="/guide/references#nonowning" className={ns("feature-title")} onClick={e => scrollTo("nonowning")}>
                       Memory Safe
                     </a>, using constraint and weak references.
                   </li>
                   <li>
-                    <a href="/ref/regions" className={ns("feature-title")}>
+                    <a href="/guide/regions" className={ns("feature-title")}>
                       Regions
                     </a> for zero-cost references.
                   </li>
                   <li>
-                    <a href="/ref/references#inline" className={ns("feature-title")} onClick={e => scrollTo("inline")}>
+                    <a href="/guide/references#inline" className={ns("feature-title")} onClick={e => scrollTo("inline")}>
                       Inline References
                     </a> for optimization.
                   </li>
                   <li>
-                    <a href="/ref/generics" className={ns("feature-title")}>
+                    <a href="/guide/generics" className={ns("feature-title")}>
                       Generics
                     </a>, including virtual generics.
                   </li>
                   <li>
-                    <a href="/ref/interfaces#sealedconstructors" className={ns("feature-title")} onClick={e => scrollTo("sealedconstructors")}>
+                    <a href="/guide/interfaces#sealedconstructors" className={ns("feature-title")} onClick={e => scrollTo("sealedconstructors")}>
                       Interface Constructors
                     </a>
                   </li>
                   <li>
-                    <a href="/ref/intro#functions" className={ns("feature-title")} onClick={e => scrollTo("functions")}>
+                    <a href="/guide/introduction#functions" className={ns("feature-title")} onClick={e => scrollTo("functions")}>
                       Universal Function Call Syntax
                     </a>
                   </li>
                   <li>
-                    <a href="/ref/intro#functions" className={ns("feature-title")} onClick={e => scrollTo("functions")}>
+                    <a href="/guide/introduction#functions" className={ns("feature-title")} onClick={e => scrollTo("functions")}>
                       Polymorphic Lambdas
                     </a>
                   </li>
                   {/*<li>
-                    <a href="/ref/operators" className={ns("feature-title")}>Infix calling</a></l
+                    <a href="/guide/operators" className={ns("feature-title")}>Infix calling</a></l
                 i>*/}
                   <li>
-                    <a href="/ref/structs#mutability" className={ns("feature-title")} onClick={e => scrollTo("mutability")}>
+                    <a href="/guide/structs#mutability" className={ns("feature-title")} onClick={e => scrollTo("mutability")}>
                       Mutable and Immutable Objects
                     </a>
                   </li>
                   <li>
-                    <a href="/ref/patterns" className={ns("feature-title")}>
+                    <a href="/guide/patterns" className={ns("feature-title")}>
                       Patterns
                     </a>: Destructuring, Parameters, Extractors
                   </li>
                   <li>
-                    <a href="/ref/structs#shortcalling" className={ns("feature-title")} onClick={e => scrollTo("shortcalling")}>
+                    <a href="/guide/structs#shortcalling" className={ns("feature-title")} onClick={e => scrollTo("shortcalling")}>
                       Shortcalling Syntax
                     </a>
                   </li>
@@ -106,16 +106,20 @@ class Home extends React.Component {
               <div className={ns("wip")}>
                 Vale is approaching version 0.1, see the <a href="/roadmap">Roadmap</a> for what's next!
               </div>
+
+              <div className={ns("wip")}>
+                See our <a href="/contributors">team of contributors</a>!
+              </div>
 {/*
               <div className={ns("upcoming-title")}>Upcoming Features:</div>
               <ul>
-                <li><a href="/ref/interfaces#structural" className={ns("feature-title")}>Structural Interfaces</a>, using interface constructors.</li>
-                <li><a href="/ref/cross-compilation" className={ns("feature-title")}>Cross Compilation</a> to JVM and JS.</li>
-                <li><a href="/ref/operators#map" className={ns("feature-title")}>Map & FlatMap Operators</a></li>
-                <li><a href="/ref/errors" className={ns("feature-title")}>Errors</a></li>
-                <li><a href="/ref/variants" className={ns("feature-title")}>Variants</a></li>
-                <li><a href="/ref/variants#anonymous" className={ns("feature-title")}>Anonymous Variants</a></li>
-                <li><a href="/ref/variantindexing" className={ns("feature-title")}>Unified Array/Tuple</a></li>
+                <li><a href="/guide/interfaces#structural" className={ns("feature-title")}>Structural Interfaces</a>, using interface constructors.</li>
+                <li><a href="/guide/cross-compilation" className={ns("feature-title")}>Cross Compilation</a> to JVM and JS.</li>
+                <li><a href="/guide/operators#map" className={ns("feature-title")}>Map & FlatMap Operators</a></li>
+                <li><a href="/guide/errors" className={ns("feature-title")}>Errors</a></li>
+                <li><a href="/guide/variants" className={ns("feature-title")}>Variants</a></li>
+                <li><a href="/guide/variants#anonymous" className={ns("feature-title")}>Anonymous Variants</a></li>
+                <li><a href="/guide/variantindexing" className={ns("feature-title")}>Unified Array/Tuple</a></li>
               </ul>
 */}
             </div>
@@ -132,7 +136,8 @@ class Home extends React.Component {
             <div className={ns("recent-posts")}>
               <div className={ns("recent-posts-title")}>Recent posts:</div>
               <ul>
-                <li><a href="/blog/generational-references">Generational References</a> (Nov 24)</li>
+                <li><a href="/blog/generational-references">Generational References</a> (Nov 30)</li>
+                <li><a href="/blog/hybrid-generational-memory">Hybrid-Generational Memory</a> (Nov 24)</li>
                 <li><a href="/blog/zero-cost-refs-regions">Zero Cost References with Regions</a> (Jul 29)</li>
                 <li><a href="/blog/next-steps-raii">The Next Steps for Single Ownership and RAII</a> (Jul 15)</li>
                 <li><a href="https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/">Announcing Vale!</a> (Jul 11)</li>

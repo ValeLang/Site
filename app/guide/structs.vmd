@@ -150,7 +150,7 @@ fn main() {
 
 ## Moving
 
-A local can give up the owning reference with the `^` symbol. [# This serves the same purpose as C++'s `std::move`.] Afterwards, that local is gone, and we cannot use it. This is called a *move*.
+A local can give up the owning reference. Afterwards, that local is gone, and we cannot use it. This is called a *move*.
 
 This is used to influence when the struct is `drop`ped, to keep it alive for longer or destroy it sooner.
 
@@ -160,7 +160,7 @@ In this example, the `a` local is giving up the owning reference, and we're putt
 ```Vale
 fn main() {
   a = Spaceship(); «alocal»
-  b = ^a;
+  b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
   // Can't use a now.
 }
@@ -176,7 +176,9 @@ fn foo(b Spaceship) {
 }
 fn main() {
   a = Spaceship();
-  foo(^a);
+  // Move the Spaceship from a
+  // into foo's b
+  foo(a);
   // Can't use a now.
 }
 ```
@@ -208,7 +210,7 @@ fn main() {
 
   println(ship.name);
 
-  // implicit ^ship.drop().
+  // implicit ship^.drop().
 }
 
 // Implicit:

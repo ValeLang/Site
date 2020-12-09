@@ -25,6 +25,11 @@ if [ "$1" == "contributors" ] || [ "$1" == "all" ] ; then
   ~/Markvale/build/a.out app/contributors.vmd build/contributors ~/Vale/release-ubuntu/Valestrom.jar
 fi
 
+if [ "$1" == "download" ] || [ "$1" == "all" ] ; then
+  echo "Doing download"
+  ~/Markvale/build/a.out app/download.vmd build/download ~/Vale/release-ubuntu/Valestrom.jar
+fi
+
 if [ "$1" == "introduction" ] || [ "$1" == "all" ] ; then
   echo "Doing introduction"
   ~/Markvale/build/a.out app/guide/introduction.vmd build/guide/introduction ~/Vale/release-ubuntu/Valestrom.jar

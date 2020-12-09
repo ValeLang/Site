@@ -774,7 +774,7 @@ public:
                 </div>
 
                 <div className={ns("content")}>
-                  This isn't even the end of the single ownership saga! In the coming weeks, we'll explain how this consistent single ownership approach enables other unique capabilities in Vale, such as cross-compilation, the <a href="/ref/regions">region borrow checker</a>, and lightning fast memory management.
+                  This isn't even the end of the single ownership saga! In the coming weeks, we'll explain how this consistent single ownership approach enables other unique capabilities in Vale, such as cross-compilation, the <a href="/guide/regions">region borrow checker</a>, and lightning fast memory management.
                 </div>
 
                 <div className={ns("content cozy")}>                
@@ -1001,7 +1001,7 @@ public:
                   Constraint references have the safety of borrow references, and we can alias them as much as we want!
                 </div>
                 <div style={{marginTop: "8px"}}>
-                  And counter-intuitively, constraint references can sometimes be more efficient when you consider the program as a whole, especially when combined with <a href="/ref/regions">region borrow checking</a>. Keep reading to learn how!
+                  And counter-intuitively, constraint references can sometimes be more efficient when you consider the program as a whole, especially when combined with <a href="/guide/regions">region borrow checking</a>. Keep reading to learn how!
                 </div>
               </Note>
 
@@ -1090,7 +1090,7 @@ public:
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="immrb">
-                Vale's <a href="/ref/regions">region borrow checker</a> often lets us make an entire region of memory temporarily immutable, which completely eliminates counting overhead for references into that region.
+                Vale's <a href="/guide/regions">region borrow checker</a> often lets us make an entire region of memory temporarily immutable, which completely eliminates counting overhead for references into that region.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="sovsraii">
@@ -1152,7 +1152,7 @@ public:
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="rorc">
-                There are amazing recent advances in optimized ref-counting, such as in <a href="https://aardappel.github.io/lobster/memory_management.html">Lobster's algorithm</a> which optimizes away 95% of ref-counts. Vale also has <a href="/ref/regions">read-only regions</a> and <a href="/ref/regions">bump regions</a>, where ref-counting overhead is reduced to zero.
+                There are amazing recent advances in optimized ref-counting, such as in <a href="https://aardappel.github.io/lobster/memory_management.html">Lobster's algorithm</a> which optimizes away 95% of ref-counts. Vale also has <a href="/guide/regions">read-only regions</a> and <a href="/guide/regions">bump regions</a>, where ref-counting overhead is reduced to zero.
               </Note>
 
               <Note iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteSizeAndCustomIcon} name="409">

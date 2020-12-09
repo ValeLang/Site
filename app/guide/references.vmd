@@ -50,7 +50,7 @@ struct Vec3 imm {
 }
 fn main() {
   firstRef = Vec3(3, 4, 5);
-  otherRef = firstRef;
+  otherRef = &firstRef;
   // Can use both freely.
   println(firstRef.x + otherRef.y);
 }
@@ -63,7 +63,7 @@ fn main() {
 
 ## Moving
 
-A local can give up the owning reference with the `^` symbol. [# This serves the same purpose as C++'s `std::move`.] Afterwards, that local is gone, and we cannot use it. This is called a *move*.
+A local can give up the owning reference. Afterwards, that local is gone, and we cannot use it. This is called a *move*.
 
 This is used to influence when the struct is `drop`ped, to keep it alive for longer or destroy it sooner.
 
@@ -73,7 +73,7 @@ In this example, the `a` local is giving up the owning reference, and we're putt
 ```Vale
 fn main() {
   a = Spaceship(); «alocal»
-  b = ^a;
+  b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
   // Can't use a now.
 }
@@ -89,7 +89,7 @@ fn foo(b Spaceship) {
 }
 fn main() {
   a = Spaceship();
-  foo(^a);
+  foo(a); // Move a into foo's b
   // Can't use a now.
 }
 ```
@@ -146,7 +146,7 @@ fn foo(s &Spaceship) {
 }
 fn main() {
   ship = Spaceship("Serenity", 2);
-  foo(ship);
+  foo(&ship);
 }
 ```
 >>>>
@@ -179,10 +179,10 @@ fn main() {
   // ship contains an owning ref
   ship = Spaceship("Serenity", 2);
   // shipCRef contains a constraint ref
-  shipCRef = ship;
+  shipCRef = &ship;
 
   // Moves ship into function.
-  takeAndDestroy(^ship);
+  takeAndDestroy(ship);
 
   println("Wings: " + shipCRef.wings);
 }

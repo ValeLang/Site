@@ -120,7 +120,7 @@ fn main() {
   serenity = Firefly(...);
   ship =
     longerShip<Firefly>( «meh»
-      flametail, serenity);
+      &flametail, &serenity);
   // This works now!
   ship.crazyIvan(); 
 }

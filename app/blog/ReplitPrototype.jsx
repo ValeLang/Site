@@ -81,7 +81,7 @@ class Page extends React.Component {
         Vale's goal is to show the world that <b>speed and safety can be easy,</b> that we don't have to make the choice between fast languages and easy languages, we can have both!
       </div>
       <div className={ns("content cozy")}>
-        Vale has some fascinating syntactical designs (<a href="https://vale.dev/ref/structs#shortcalling">shortcalling</a>, <a href="https://vale.dev/ref/interfaces#sealedconstructors">interface constructors</a>, <a href="https://vale.dev/ref/references#inline">the inl keyword</a>, and more!) that will make life easier, but Vale's true power is underneath the surface, in the most important part of any programming language: <b>how it handles memory.</b>
+        Vale has some fascinating syntactical designs (<a href="https://vale.dev/guide/structs#shortcalling">shortcalling</a>, <a href="https://vale.dev/guide/interfaces#sealedconstructors">interface constructors</a>, <a href="https://vale.dev/guide/references#inline">the inl keyword</a>, and more!) that will make life easier, but Vale's true power is underneath the surface, in the most important part of any programming language: <b>how it handles memory.</b>
       </div>
     </div>
 
@@ -448,10 +448,10 @@ class Page extends React.Component {
           Regions, as described in <a href="https://vale.dev/blog/zero-cost-refs-regions">Zero-Cost References with Regions</a>.
         </li>
         <li className={ns()}>
-          <a href="https://vale.dev/ref/structs">shortcalling struct</a> and <a href="https://vale.dev/ref/interfaces">interface constructors</a> is unfinished.
+          <a href="https://vale.dev/guide/structs">shortcalling struct</a> and <a href="https://vale.dev/guide/interfaces">interface constructors</a> is unfinished.
         </li>
         <li className={ns()}>
-          <a href="https://vale.dev/ref/references">The inl keyword</a> is mostly implemented but not hooked up to all types yet.
+          <a href="https://vale.dev/guide/references">The inl keyword</a> is mostly implemented but not hooked up to all types yet.
         </li>
       </ul>
     </li>

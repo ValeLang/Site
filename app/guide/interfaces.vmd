@@ -41,7 +41,7 @@ fn skip(s &DarkElf) { ... }
 
 fn main() {
   wulfgar = Human(...);
-  hopscotch(wulfgar);
+  hopscotch(&wulfgar);
 }
 ```
 >>>>
@@ -80,9 +80,9 @@ impl DarkElf for Bipedal;
 
 fn main() {
   wulfgar = Human(...);
-  hopscotch(wulfgar);
+  hopscotch(&wulfgar);
   drizzt = DarkElf(...);
-  hopscotch(drizzt);
+  hopscotch(&drizzt);
 }
 ```
 >>>>
@@ -112,7 +112,7 @@ fn main() {
   // x is an unnamed substruct which
   // implements Bipedal.
 
-  hopscotch(x);
+  hopscotch(&x);
 }
 ```
 >>>>

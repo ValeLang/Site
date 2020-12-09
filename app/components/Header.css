@@ -66,6 +66,7 @@ a.header:hover {
 	margin-left: 12px;
 	position: relative;
 	top: 3px;
+	vertical-align: middle;
 }
 .header .vorb-container {
 	margin: 8px;
@@ -101,4 +102,24 @@ a.header:hover {
 }
 .header .explorations {
 	color: white;
+}
+.header .reddit,
+.header .github,
+.header .discord {
+	background-size: 100% 100%;
+	background-image: url('../images/reddit_share_circle_64.png');
+	width: 24px;
+	height: 24px;
+	color: transparent !important;
+	display: inline-block;
+	overflow: hidden;
+}
+.header .discord {
+	background-image: url('../images/Discord-Logo-Color.png');
+}
+.header .reddit {
+	background-image: url('../images/reddit_share_circle_64.png');
+}
+.header .github {
+	background-image: url('../images/GitHub-Mark-Light-64px.png');
 }
