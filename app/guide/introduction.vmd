@@ -23,7 +23,7 @@ Vale is still "in alpha", which means it's a preview; you can write programs in 
 # Hello world!
 
 <<<<
-Put the code to the right into a file named `hello.vale`, and then run `vale run hello.vale` to see it produce the output in the gray box. [# We can also make an executable with `vale build hello.vale`, which produces an executable `hello` (or `hello.exe` on windows). We can also specify the name with the `-o` flag.]
+Run the code to the right [#running] to see it produce the output in the gray box.
 ////
 ```Vale
 fn main() {
@@ -69,7 +69,11 @@ Hello Antarctica!
 ```
 >>>>
 
-<notes/>
+<notes>
+#running: You can put the code into e.g. `hello.vale` and invoke the compiler with `python3 valec.py build hello.vale`. (After 0.1, it will simply be `vale build hello.vale`.)
+
+That will produce an executable named `hello.exe` (on Windows) or `hello` (on Mac or Linux).
+</notes>
 
 
 # Static Typing & Inference

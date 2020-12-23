@@ -143,7 +143,8 @@ Here we're making a Flock struct that can hold multiple of the same ship.
 // Using above ISpaceship,
 // Firefly, Raza
 
-struct Flock//<T impl ISpaceship>
+struct Flock<T>
+rules(implements(T, ISpaceship)) «impl»
 {
   ships List<T>;
 }
@@ -161,3 +162,7 @@ fn main() {
 }
 ```
 >>>>
+
+<notes>
+#impl: In future versions, this can just be `struct Flock<T impl ISpaceship>`.
+</notes>

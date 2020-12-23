@@ -97,7 +97,7 @@ div.m-annotated.note-starter {
 .m-annotated.inline-code {
   font-family: Roboto Mono, Courier New, Courier;
   padding: 0 4px;
-  white-space: pre;
+  white-space: pre-wrap;
   font-size: 10pt;
 }
 

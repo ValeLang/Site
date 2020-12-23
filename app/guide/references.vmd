@@ -247,11 +247,11 @@ struct Spaceship {
   origin &&Base;
 }
 fn printShipBase(ship &Spaceship) {
-  //if ((o) = lock(ship.origin)) { «lock»«mat»
+  if ((o) = lock(ship.origin)) { «lock»«mat»
     println("Ship base: " + o.name);
-  //} else {
+  } else {
     println("Ship base unknown!");
-  //}
+  }
 }
 fn main() {
   base = Base("Zion");

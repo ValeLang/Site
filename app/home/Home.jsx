@@ -31,8 +31,13 @@ class Home extends React.Component {
             <div className={ns("left")}>
 
               <div className={ns("intro")}>
-                Vale is the fast, safe, and easy programming language. It uses single ownership with constraint references for memory safety without garbage collection, and an emphasis on modern, readable syntax.
+                Vale is fast, fearless, and flexible programming language.
               </div>
+              <ul>
+                <li><b>Fast:</b> Vale uses an entirely new approach to memory management: generational references, which have zero aliasing costs and no garbage collection pauses.</li>
+                <li><b>Fearless:</b> It is the safest native language in existence: zero `unsafe`, region isolation, extern boundaries, and dependency extern whitelisting.</li>
+                <li><b>Flexible:</b> Its emphasis on single ownership without needing a borrow checker makes it easy to use.</li>
+              </ul>
 
               <div className={ns("featuring")}>
                 <div className={ns("featuring-title")}>Featuring:</div>
