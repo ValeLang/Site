@@ -158,40 +158,6 @@ div.m-annotated.note-starter {
   margin-bottom: 0;
 }*/
 
-.m-annotated.split {
-  display: flex;
-  margin-bottom: 8px;
-}
-.m-annotated.split-left {
-  flex-grow: 1;
-  width: calc(50% - 8px);
-  margin-right: 16px;
-}
-.m-annotated.split-right {
-  width: calc(50% - 8px);
-  flex-grow: 1;
-}
-
-.m-annotated.split-left > section.m-annotated:last-child,
-.m-annotated.split-right > section.m-annotated:last-child {
-  margin-bottom: 0;
-}
-
-.m-annotated.width60 {
-  flex-grow: 1;
-  width: calc(60% - 8px);
-}
-.m-annotated.width40 {
-  flex-grow: 1;
-  width: calc(40% - 8px);
-}
-.m-annotated.width60 + .m-annotated.width40 {
-  margin-left: 16px;
-}
-.m-annotated.width40 + .m-annotated.width60 {
-  margin-left: 16px;
-}
-
 
 .m-annotated.intro-container {
   width: 616px;
@@ -240,41 +206,11 @@ div.m-annotated.note-starter {
   margin-bottom: 0;
 }
 
-.m-annotated h2 {
-  color: #0b5394;
-  margin-top: 4px;
-  margin-bottom: 16px;
-  font-size: 18pt;
-}
-
 .m-annotated.line {
   border-top: 2px solid #E0E0E0;
   margin: 16px 0;
 }
 
-.m-annotated h3 {
-  margin-top: 4px;
-  margin-bottom: 16px;
-  margin-right: 16px;
-  font-size: 14pt;
-}
-
-.m-annotated h4 {
-  margin-top: 4px;
-  margin-bottom: 16px;
-  margin-right: 16px;
-  font-size: 13pt;
-  color: #303030;
-}
-
-.m-annotated h5 {
-  margin-top: 4px;
-  margin-bottom: 16px;
-  margin-right: 16px;
-  font-size: 11pt;
-  color: #000000;
-  font-weight: bold;
-}
 
 .m-annotated.noline {
   border-top-width: 0;

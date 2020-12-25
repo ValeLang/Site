@@ -12,6 +12,7 @@ if [ "$1" == "webpack" ] || [ "$1" == "all" ] ; then
   mkdir build/components
   mkdir build/images
   mkdir build/guide
+  mkdir build/releases
 fi
 
 if [ "$1" == "generational-references" ] || [ "$1" == "all" ] ; then
@@ -27,6 +28,11 @@ fi
 if [ "$1" == "hgm-static-analysis-part-1" ] || [ "$1" == "all" ] ; then
   echo "Doing hgm-static-analysis-part-1"
   ~/Markvale/build/a.out app/blog/hgm-static-analysis-part-1.vmd build/blog/hgm-static-analysis-part-1 $2
+fi
+
+if [ "$1" == "fearless" ] || [ "$1" == "all" ] ; then
+  echo "Doing fearless"
+  ~/Markvale/build/a.out app/blog/fearless.vmd build/blog/fearless $2
 fi
 
 if [ "$1" == "contributors" ] || [ "$1" == "all" ] ; then
@@ -74,9 +80,21 @@ if [ "$1" == "regions" ] || [ "$1" == "all" ] ; then
   ~/Markvale/build/a.out app/guide/regions.vmd build/guide/regions $2
 fi
 
+if [ "$1" == "home" ] || [ "$1" == "all" ] ; then
+  echo "Doing home"
+  ~/Markvale/build/a.out app/home.vmd build/home $2
+  cp build/home build/index.html
+fi
+
+if [ "$1" == "contribute" ] || [ "$1" == "all" ] ; then
+  echo "Doing contribute"
+  ~/Markvale/build/a.out app/contribute.vmd build/contribute $2
+fi
+
 cp app/*.css build
 cp app/components/*.css build/components
 cp app/components/*.js build/components
 cp app/images/* build/images
+cp app/releases/* build/releases
 
 echo "Done!"

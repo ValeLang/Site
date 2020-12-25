@@ -67,12 +67,12 @@ h3.c-roadmap {
   filter: hue-rotate(120deg) saturate(150%);
 }
 
-.c-roadmap.v01 .c-roadmap.icon {
+.c-roadmap.todo .c-roadmap.icon {
   filter: hue-rotate(50deg) saturate(300%);
   
 }
 
-.c-roadmap.v02 .c-roadmap.icon {
+.c-roadmap.later .c-roadmap.icon {
   opacity: .5;
   filter: saturate(0%) brightness(120%);
 }

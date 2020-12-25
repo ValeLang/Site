@@ -7,9 +7,16 @@ layout: onecolumn
 
 ## Here be Dragons!
 
-The Vale compiler is version 0.0.9, still *just a prototype.*
+The Vale compiler is *version 0.1.0.*
 
-It works, we've made several-thousand line long programs in it, but there are rough edges:
+This means:
+
+ * It works!
+ * ...technically.
+ * It's *still just a prototype.*
+ * You can make any program in it, but you will probably need to work around some holes.
+
+We've made several-thousand line long programs in it, but there are rough edges:
 
  * Most problems in Vale code have nice compile errors, but not everything. There will be the occasional compiler crash.
  * It's not optimized yet. In these early phases, we're prioritizing ease of experimenting over compilation speed, and we're using Scala which is already rather slow.
@@ -20,9 +27,11 @@ Download at your own risk, and report any bugs to the github!
 
 ## Download
 
-Linux: [ValeCompiler-0.0.9.9-Linux.zip](releases/ValeCompiler-0.0.9.9-Linux.zip)
+Linux: [ValeCompiler-0.1.0.0-Linux.zip](releases/ValeCompiler-0.1.0.0-Linux.zip)
 
-Windows: [ValeCompiler-0.0.9.9-Win.zip](releases/ValeCompiler-0.0.9.9-Win.zip)
+Mac: [ValeCompiler-0.1.0.0-Mac.zip](releases/ValeCompiler-0.1.0.0-Mac.zip)
+
+Windows: [ValeCompiler-0.1.0.0-Win.zip](releases/ValeCompiler-0.1.0.0-Win.zip)
 
 
 The .zip includes:

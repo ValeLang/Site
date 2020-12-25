@@ -96,7 +96,7 @@ If a language could offer more flexibility on where objects reside and how they'
 
 ## The Safety Tradeoff
 
-Rust reaches a miraculous level of safety language compared to, say, C++. Its ability to be safe _and_ low-level is truly an achievement.
+Rust reaches a miraculous level of safety language compared to, say, C++. Its ability to be very safe _and_ low-level is truly an achievement.
 
 However, it's only a moderately safe language compared to other languages, for example Javascript. This is because of the `unsafe` keyword.
 
@@ -104,7 +104,13 @@ As said in the beginning, this article is assuming that we're not using any `uns
 
 This problem is exacerbated by the borrow checker, which makes `unsafe` very tempting for some developers. [# The experienced Rustacean knows that any program is technically expressible in idiomatic Rust, but not everyone that contributes to the ecosystem is so experienced.] A very widely used framework, Actix, had an [alarming amount of memory unsafety](https://deavid.wordpress.com/2020/01/18/actix-web-is-dead-about-unsafe-rust/). [#deps]
 
-If a language can achieve Rust's performance without dropping into `unsafe`, and make a few other adjustments, [#ffi] then this problem evaporates. I think such a thing is possible.
+Contrary to popular belief, not all memory unsafety happens inside `unsafe` blocks:
+
+ * Risky behavior inside an `unsafe` block can trigger memory unsafety outside, in safe Rust code.
+ * Bugs in safe Rust code can trigger memory unsafety inside `unsafe` blocks.
+
+
+If a language can achieve Rust's performance without dropping into `unsafe`, and make a few other adjustments, [#ffi] then this problem evaporates. I believe such a thing is possible.
 
 <notes>
 #deps: We shouldn't pretend that we can simply grep for `unsafe` in our dependencies and immediately see problems. It's not that simple; it's very easy for a bug in safe Rust to violate the assumptions in an `unsafe` block.

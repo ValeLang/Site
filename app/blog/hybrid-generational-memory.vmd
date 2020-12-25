@@ -1,7 +1,7 @@
 ---
 title: Vale's Hybrid-Generational Memory
 subtitle: For speed and simplicity!
-author: Evan Ovadia and Theo Watkins
+author: Theo Watkins and Evan Ovadia
 date: Nov 24 2020
 realm: blog
 path: blog/hybrid-generational-memory
@@ -10,10 +10,13 @@ namespace: c-blog m-annotated
 ---
 
 
-Vale's *hybrid-generational memory* is a new ground-breaking memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. [#resilient]
+Vale's *hybrid-generational memory* is a ground-breaking new memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. [#resilient]
 
 
 We'll be publishing a series of articles soon which explain the model much more fully and understandably. *This page is is a draft, here for those that want an early explanation.*
+
+
+Note that hybrid-generational-memory is *not* implemented yet, it's still just a design.
 
 
 *Warning:* We're packing several articles' worth of explanation into a very dense single page. Only read this if you're familiar with free-lists, generational indices, thread-local storage, borrow checking, atomicity, fat pointers, branch misprediction, and cache misses!
@@ -55,13 +58,15 @@ Resilient mode uses hybrid-generational memory.
 
 Next, we add in [Generational Malloc](/blog/generational-malloc).
 
- * Every heap allocation has a u48 generation number before the object. [#uint]
+ * Every heap allocation has a u48[#uint][#why48] generation number before the object.
  * Constraint references contain a raw pointer and a u48 "target generation" number.
  * Before dereferencing an object, assert that the target generation number matches the allocation's generation number.
 
 
 <notes>
 #uint: u48 means a 48-bit unsigned integer.
+
+#why48: We chose 48 bits, but we could push it as high as 60 bits if we adjusted the below inlining mechanisms. 48 bits is more than enough though.
 </notes>
 
 
@@ -73,128 +78,69 @@ Use static analysis to reduce the number of liveness checks as much as possible.
  * Automatically track this information through intermediate stores/loads from struct members, where possible.
  * Automatically track this information through function calls like an automtic borrow checker, where possible.
 
+This static analysis only works when a nearby local holds the owning reference. The scope tethering explained further below will make it work with non-owning locals too.
 
-## Hybridize Where Beneficial
-
-
-Add a u16 counter to every allocation, next to the u48 generation number.
-
- * When the object is allocated, the u16 RC will be 1.
- * When an owning reference disappears, only deallocate if the counter is 1 (branch predicting true).
- * *When the compiler can guarantee it to be a net benefit*, such as when we dereference a local reference >3 times, do one liveness check and turn that local into an owning reference, thus:
-    * Incrementing and decrementing the RC. [# Normally, this RCing incurs cache misses. Here, it's not a miss, because it's an object we're dereferencing anyway.]
-    * At scope end, deallocating if the counter is 1 (branch predicting false).
-    * Eliminating all liveness checks within the scope.
-
-
-<notes/>
+<notes />
 
 
 ## Stack Allocations
 
+So far, Vale already uses the regular stack for objects that it can guarantee don't need a generation, [# For example, an iterator might be owned by one local and never moved, and only hand out references that are guaranteed to not outlive the object, so we can guarantee it doesn't need a generation.] and everything else is put onto the heap.
 
-Now we'll introduce stack-allocated objects and the Local Generation Table:
+However, a lot of objects are in-between: they're only owned by a certain local, but generational references might escape. For these, we'll introduce the *generational stack*.
 
- * In every stack allocation, before the object, is a u47 index into a thread-global `vector<[u48, u16]>` called the Local Generation Table (LGT). [# `[u48, u16]` means a pair, with a u48 and a u16.]
-    * The u48 is the generation number for a stack object.
-    * The u16 is the RC for a stack object.
- * Deallocating a stack object will increment the u48 and use the u16 to add this "open space" to a free-list. [#freelist]
- * Stack allocated objects needn't check their RC before freeing. [# This is because the above RC incrs/decrs are tied to particular scopes.]
- * Add a u1 isHeap to each reference. If true, referred object is on the heap, else it's on the stack.
- * Add a u47 "LGT index" to each reference. If it's a stack object, it's used to hold the index into the LGT.
- * To get a generation from a reference:
-    * If isHeap true, look at the top of the allocation. Else, look in the LGT at the index contained in the u47.
-    * The above can be turned into multiply and add.
+Just like jemalloc and mimalloc have parallel heaps, the generational stack is actually made up of 10 parallel stacks. [# It will have one heap each for 8b, 16b, 24b, 32b, 40b, 48b, 64b, 80b, 96b, 128b. Larger objects will occupy multiple entries.]
 
+*Each stack uses a free-list.* [# It needs a free-list because we need to retire a slot in the stack once its u48 generation hits 0xFFFFFFFFFFFF.] Because of this, and stack-allocated objects' allocation pattern, it will have cache-friendliness similar to a regular stack.
 
-<notes>
-#freelist: The LGT's free-list has a touch of sorcery. The LGT is divided into 2^16-entry chunks. The u16 in each entry describes where in this chunk the next open space is. The first entry in this chunk is special; its u48 contains not a generation number but instead the index of the next chunk that's completely full of open spaces. In this way, the LGT has a free-list of free-lists.
-</notes>
+<notes />
 
 
 ## Inline Objects
 
-
-Now we'll support objects containing other objects inline. The only complication is that inline objects are not right after their allocation's generation.
+Now we'll support objects containing other objects inline. [# For example, in C, a struct can live inside another struct's memory, unless it's a pointer.] The only complication is that inline objects are not right after their allocation's generation, as previously assumed.
 
  * Add a u15 to the reference, an offset from the object's start to the allocation's generation.
+ * Change how we get a generation from a generational reference: instead of just dereferencing the object pointer, subtract the u15 offset from it first.
 
 
-## Reducing Reference Size
+## Add Scope Tethering
 
+The above static analysis only worked when a nearby local holds the owning reference. Now we'll make it work when a nearby local holds a non-owning reference too.
 
-Our references so far contain a pointer, a u48, a `u1`, a u47, and a u16, totalling to 176 bytes. Let's reduce that to 128 bytes. [# A reference being 128b might seem unusual, but this is the width of C++'s `std::unique_ptr<T>`, `std::shared_ptr<T>`, `std::weak_ptr<T>`, and the default size of `generational_arena`'s `Index`.] Start by keeping the `u1` isHeap.
+Add a u1 *"tethered"* bit to every allocation, next to the u48 generation number. A local with a non-owning reference can set this bit to 1 to keep its allocation alive. [# Someone letting go of the object's owning reference will still call its destructor, regardless of the tethered bit. If the tethered bit is 1, the destructor will not free the object. Instead, the last tethering local will free the object.] Inside the scope of the local, we can *skip all generation checks.*
 
- * If isHeap true, the reference contains the 64b pointer, the u48 (target generation), and the u15 offset.
- * If isHeap false, the reference contains a 32b pointer (relative to stack start), the u48 (target generation), and the u15 offset, and the 47b LGT index.
+ * When the object is allocated, the tethered bit will be 0.
+ * When a local wants to delay the object's destruction, it will:
+    * Do a generation check, to see if the object is still alive. If live, load the pointer to the object, otherwise load null. [# Loading from null is a memory safe operation: it's guaranteed to correctly seg-fault if we load from it.]
+    * Save the current generation of the object. This is the "old generation".
+    * Save the current value of the tethered bit. This is the "old tethered bit". [# The old tethered bit will usually be 0, but if another local is tethering the object, it could be 1 already.]
+    * Write a 1 to the tethered bit.
+ * When the local goes out of scope, it will:
+    * Write the old value back to the tethered bit.
+    * If the current generation != the old generation, and the old tethered bit is 0, free the object. [# This will call a recursive `free` method on the object.]
 
-
-## Pointer Bit-Sorcery
-
-
-Assuming these structs:
-
-```
-struct GenerationAndRc {
-  u48 gen;
-  u16 rc;
-};
-
-struct GenRef {
-  u48 targetGeneration;
-  u1 isHeap;
-  union {
-    struct { u15 offsetFromPtr; void* heapObjPtr; } whenHeap;
-    struct { u47 lgtIndex; u32 relativeAddrFromStack; } whenStack;
-  };
-};
-```
-
-
-We would get a reference's generation like so:
-
-```
-uint48_t getGeneration(GenRef ref) {
-  if (ref.isHeap) {
-    return ((GenerationAndRc*)(ref.obj - ref.offset))->gen;
-  } else {
-    return lgt[ref.lgtIndex].gen;
-  }
-}
-```
+Not every non-owning local will tether. Static analysis will make a non-owning tether when it's dereferenced several times. Otherwise, it will just allow the generation checks to happen.
 
 
 <notes/>
-
-
-However, that might incur some branching costs. We can instead do some adding and multiplying with the isHeap boolean: [#defeat]
-
-```
-uint48_t getGeneration(GenRef ref) {
-  return ref.isHeap * ((GenerationAndRc*)(ref.obj - ref.offset))->gen +
-    (!ref.isHeap) * lgt[ref.lgti].gen;
-}
-```
 
 
 That's basically it! There are some more things we could do to speed it up even more, using virtual memory, regions, or more static analysis, but we'll stop the explanation here.
 
 
-<notes>
-#defeat: This causes problems for the optimizer. We'll likely need to implement our own optimization pass to run after the other passes for this benefit to be realized.
-</notes>
+<notes/>
 
 
 # Minor Extra Details
 
 To address some frequently asked questions:
 
- * When we move something across thread boundaries, we must recurse through and:
-    * Increment all the generation numbers, effectively cutting off access to the rest of this thread.
-    * Assert the RC is zero; assert that there are no locals pointing at the object.
- * Objects from other threads must be annotated with the `mig`ratory keyword. Instead of freeing these objects, they're sent back to their original thread for deallocation, to avoid race conditions.
- * When a generation number hits the maximum, don't use that generation number anymore; the LGT shouldnt use it, and genFree shouldn't let it be reused. genFree can slice up the allocation into smaller ones that don't include the initial 8b.
-
+ * When we move something across thread boundaries, we must recurse through [# Similar to how Pony scans all incoming and outgoing objects.] and:
+    * Assert each tethered bit is zero; assert that there are no locals pointing at the object.
+    * Increment each generation number, effectively cutting off access to the rest of this thread.
+ * When a generation number hits the maximum, don't use that generation number anymore.
+    * genFree _could_ slice up the allocation into smaller ones that don't include the initial 8b.
 
 <notes/>
 
@@ -203,13 +149,10 @@ To address some frequently asked questions:
 
 Some potential weaknesses to explore:
 
- * Limits:
-    * Individual structs cannot be larger than 32kb.
-    * Limited to 2^95 stack allocations over the lifetime of the thread (a 5ghz processor would take at least 268 million years to hit this limit).
-       * Note: we could increase the struct size limit if we lower the stack allocations limit.
- * The pointer magic might prevent some LLVM optimizations, in which case we'll need our own optimization pass.
  * Storing the generation number at the top of a <=64b allocation means a liveness check won't incur an extra cache miss since we're about to dereference the object anyway, and the entire object is on one cache line. However, for larger objects, it does incur an extra cache miss. Most objects are small, but programs with an unusually large proportion of medium sized objects not in an array could suffer a small performance hit.
- * Having a separate heap per size class could increase fragmentation. This might be mitigating by using the regular malloc() and free() for large structs.
+ * We might be accessing "zombie objects" whose destructors have run, though we haven't freed their memory yet. This is memory safe, but could result in interesting logic bugs.
+    * Assist mode can help developers find these logic bugs. Constraint references would halt the program before this happens.
+ * Adding the offset to the 
 
 
 <notes/>
@@ -217,46 +160,85 @@ Some potential weaknesses to explore:
 
 # How might it compare to Rust?
 
+Vale is a high-level language with zero `unsafe`, so an apples-to-apples comparison would be with a Rust where the only `unsafe` is in the standard library.
 
-Vale is a high-level language with zero `unsafe`, so an apples-to-apples comparison would be with a Rust where the only `unsafe` is in the standard library and generational_arena.
+Memory safety is never free, except for the most trivial of programs. Cyclone, Rust, ATS, Fortran, and every other language incurs _some_ overhead to ensure safety. This usually comes in the form of branching, cache misses, and extra memory usage, see [Beyond Rust](Beyond Rust: Innovations in Safety, Speed, and Flexibility) for more.
 
-
-Memory safety is never free, except for the most trivial of programs. Cyclone, Rust, ATS, Fortran, and every other language incurs _some_ overhead to ensure safety. This comes in the form of branching and cache miss costs, for example in:
-
- * Array bounds checks.
- * Check if something's still alive, e.g. with booleans or generation liveness checks.
- * Reference count increments/decrements.
-
-Or large memory costs, for example if objects are stored in vectors.
+<notes />
 
 
-Rust programs uses borrow references where they can, and otherwise use `Rc` or generational indices to get around the borrow checker, which incurs run-time overhead.
+## Speed
+
+Rust programs uses borrow references where they can. Where the borrow checker gets in their way, they incur costs:
+
+ * From generational indices:
+    * Bounds checking, to make sure the index is in bounds,
+    * Reallocation when we need to add more objects, [# This is often amortized, but often not, if a generational array is temporary.]
+    * Branching, to check the generation matches.
+    * Possible cache missing, if the generation isn't in the same cache line as the object.
+ * From `Rc`:
+    * Incrementing and decrementing costs,
+    * Branching, to check if the counter is zero.
+    * Possible cache missing if the counter isn't in the same cache line.
+    * Possible cache missing if we never dereference the object's members.
+ * From `RefCell`:
+    * Branching, to check if someone else has locked it.
+    * Possible cache missing, if the lock bit isn't in the same cache line as the object or we don't dereference the object at all.
+
+<notes/>
 
 
-Vale produces a similar result, but from a very different direction. Vale starts by using generation checks, but then removes the vast majority of them using static analysis and by strategically inserting ref-counting where it would eliminate even more generation checks.
+Hybrid-generational memory also has some speed costs:
 
-In the end, this results in most references being borrow references, with a few remaining Rc operations and generation checks, which looks surprisingly like hand-written Rust code.
+ * From generational references:
+    * Branching, to check the generation matches.
+    * Possible cache missing, if the generation isn't in the same cache line as the object.
+ * From scope tethering:
+    * Cost of setting the bit and loading the generation,
+    * Branching, to check if the bit is zero and the generation still matches.
+    * Possible cache missing if the bit and generation isn't in the same cache line.
+
+
+Note that not all Rust code uses `Rc` or `RefCell` or generational indices. Sometimes, a piece of code's requirements are such that they can use `Cell` (which is free) or just `Vec`s (which still have bounds checking).
+
+<notes/>
+
+
+## Memory
+
+The borrow checker tends to force Rust code to overuse `Vec`s (even when `Vec`s iteration benefits don't apply [# Iterating over `Vec`s is very fast, if the Vec is large enough for the CPU to pre-fetch the next elements from the cache, which happens after ~50 elements.]), which incur rather massive memory costs; a `Vec` will use up to 2x as much memory as the _most elements the Vec has ever had_.
+
+Hybrid-generational memory doesn't rely on expanding arrays. However, the generational stack does keep ten stacks, each which contains the maximum amount of memory it's ever had.
+
+`Rc`, `RefCell`, and generational indices all use 8b per object. Hybrid-generational memory uses 8b per object. Though once again, it should be noted that not all Rust code uses `Rc` or `RefCell` or generational indices.
+
+
+## Immutability, Arenas, Pools
+
+Rust has its borrow checker and Vale has its [region borrow checker](https://vale.dev/blog/zero-cost-refs-regions). Both allow the language to know when something's immutable, to optimize away redundant loads.
+
+Rust's borrow checker often forces us to use `Vec`s, and Vale's regions allow us to use pool or arena allocation. Both enable incredibly fast allocation. Vale's regions can apply it to any type, whereas in Rust we need to specifically add and keep track of every `Vec`, and some Rust allocations can't be put into `Vec`s. [# For example, `Rc`d objects are put on the heap.]
+
+Regions make hybrid-generational memory even faster, because inside a pool or arena region, an object doesn't need a generation at all.
+
+Rust's borrow checker is more difficult [# Rust's borrow checker enforces mutability xor aliasability, while Vale's region borrow checker doesn't need that rule.]. Rust also forces the user to use the borrow checker uniformly across the entire program, whereas Vale's region borrow checking is opt-in.
+
+In the end, this could mean:
+
+ * Vale programs could be faster, because it takes so little effort to use pool and arena regions.
+ * Rust programs could be faster, because a Vale programmer will stop once they get it working, whereas Rust doesn't allow the program to work until it is also fast.
+ * They could be the same; a Vale program could take half the time to write, giving extra time for optimizing the hot path with regions, equalling the Rust program in the end.
 
 
 <notes/>
 
 
-In practice, Rust programs make heavy use of arenas and pools. Hybrid-generational memory doesn't force the programmer one way or the other, but Vale separately offers regions to accomplish the same thing.
+## Conclusion
 
+Hybrid-generational memory looks very promising, and could have Rust-like speed, while being much easier to learn and use.
 
-<notes/>
+Of course, this is all just theories until we see some benchmarking. Unfortunately, it's impossible to get a meaningful benchmark yet, firstly because hybrid-generational memory isn't implemented yet, and because Rust has ten years of unrelated optimizations that would confound a meaningful comparison.
 
-
-There are other differences between Rust and Vale which could factor into a comparison:
-
- * Rust objects often require wrapping in RefCell to address mutability, which incurs some branching cost. Vale doesn't have this particular cost.
- * The borrow checker knows exactly when something can be mutated. Vale's read-only references and static analysis accomplish much of the same thing, but the borrow checker is more accurate and might optimize more.
- * Rust has various tricks (such as Cell) which, while not being universally applicable, can be used in certain situations to reduce cost.
- * It would be much easier in Vale to use a bump or pool allocator for all allocations in a scope. Rust also makes some heap allocations which can't be tied to a given allocator.
- * Rust's Rc uses the heap, whereas Vale's objects and counts are always in the current region.
-
-
-<notes/>
-
+Once we implement hybrid-generational memory fully, we'll benchmark it against Rust, and then optimize until it catches up.
 
 Time will tell how hybrid-generational memory compares with the borrow checker!
