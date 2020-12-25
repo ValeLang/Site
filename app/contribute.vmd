@@ -1,0 +1,40 @@
+---
+title: Download
+path: download
+layout: onecolumn
+title: How to Contribute
+---
+
+## How to Contribute
+
+The world needs a language that is <b>easy, fast, and safe,</b> and with your help, we can make it happen!
+
+If you'd like to join us and contribute, post in the [r/Vale](http://reddit.com/r/vale) subreddit or come by the [Vale discord](https://discord.gg/SNB8yGH)!
+
+Any contributions are welcome, and if you're looking for some ideas, here's some interesting things Vale needs!
+
+Projects involving writing Vale code:
+
+ * Add to the Vale standard library! (sets, hash maps, lists, futures, etc.)
+ * Implement Vale programs for benchmarking (k-nucleotide, mandelbrot, etc.)
+
+Compiler projects (not requiring in-depth knowledge of the Vale compiler):
+
+ * A new parser, to replace our current combinator-based one!
+ * Implement the bump allocator for bump calling!
+ * VIR-to-Swift, VIR-to-JVM, or VIR-to-JS cross-compilers, to run Vale on iOS/JVM/Web!
+ * Compile-time ref-counting!
+
+Tooling projects:
+
+ * Syntax highlighters! (VSCode, Sublime, Vim, Emacs, etc)
+ * Linters!
+ * Auto-formatters!
+
+Language design projects:
+
+ * Region borrow checker
+ * Concurrency strategy (green threads vs async/await, etc)
+ * Metaprogramming functions and constructs
+
+If you'd like to join us and contribute, post in the [r/Vale](http://reddit.com/r/vale) subreddit or come by the [Vale discord](https://discord.gg/SNB8yGH)!

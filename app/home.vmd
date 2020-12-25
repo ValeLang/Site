@@ -1,0 +1,81 @@
+---
+path: 
+layout: onecolumn
+namespace: home
+realm: home
+path: home
+---
+
+
+# Vale is the fast, fearless, and flexible programming language.
+
+
+<<<<
+
+
+Vale's goal is to show the world that speed and safety can be easy. Vale is:
+
+ * *Fast:* Vale uses an entirely new approach to memory management: [generational references](/blog/generational-references), which have zero aliasing costs and no garbage collection pauses.
+ * *Fearless:* It is the [safest native language](/blog/fearless): zero `unsafe`, region isolation, extern boundaries, and dependency extern whitelisting.
+ * *Flexible:* Its emphasis on single ownership without needing a borrow checker makes it easy to use.
+
+
+*Featuring*:
+
+ * [Statically Typed](/guide/introduction) with type inference.
+ * [Ownership](/guide/references), move semantics, and deterministic destruction.
+ * [Memory Safe](/guide/references#nonowning), using constraint and weak references.
+ * [Regions](/guide/regions) for zero-cost references.
+ * [Inline References](/guide/references#inline) for optimization.
+ * [Generics](/guide/generics), including virtual generics.
+ * [Interface Constructors](/guide/interfaces#sealedconstructors)
+ * [Universal Function Call Syntax](/guide/introduction#functions)
+ * [Polymorphic Lambdas](/guide/introduction#functions)
+ * [Mutable and Immutable Objects](/guide/structs#mutability)
+ * [Patterns](/guide/patterns): Destructuring, Parameters, Extractors
+ * [Shortcalling Syntax](/guide/structs#shortcalling)
+
+
+////
+
+*Recent posts:*
+
+ * [Generational References](/blog/generational-references) (Nov 30)
+ * [Hybrid-Generational Memory](/blog/hybrid-generational-memory) (Nov 24)
+ * [Zero Cost References with Regions](/blog/zero-cost-refs-regions) (Jul 29)
+ * [The Next Steps for Single Ownership and RAII](/blog/next-steps-raii) (Jul 15)
+ * [Announcing Vale!](https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/) (Jul 11)
+
+
+```Vale
+fn main() {
+  println("Hello world!");
+}
+```
+```stdout
+Hello world!
+```
+
+
+```Vale
+fn main() {
+  planets = ["Venus", "Earth", "Mars"];
+  each planets (planet){
+    println("Hello " + planet + "!");
+  }
+}
+```
+```stdout
+Hello Venus!
+Hello Earth!
+Hello Mars!
+```
+
+
+Vale is at version 0.1, see the [Roadmap](/roadmap) for what's next!
+
+Vale is [open for contributions](/contribute), thank you to our team of [contributors](/contributors)!
+
+
+>>>>
+

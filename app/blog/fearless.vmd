@@ -1,0 +1,65 @@
+---
+title: Maximum Safety with Vale
+author: Evan Ovadia
+date: Wolf 77, 2020
+realm: blog
+path: blog/fearless
+layout: annotated
+namespace: c-blog m-annotated
+---
+
+Vale brings a lot of innovations to the table to make coding safe.
+
+ * Hybrid-generational memory is 100% safe, allowing zero `unsafe`ty in any Vale code.
+ * Vale makes sure no two threads can reach an object at the same time.
+ * With extern isolation, calling into C cannot cause Vale code to crash.
+ * Constraint references help us detect logic bugs.
+
+
+# 100% Safety
+
+All of today's native languages have some unsafety in them. For example, in C, you can bring in a library that causes mysterious crashes in other parts of your program, because there are no protections in C.
+
+Rust does especially well here, though its guarantees are violated by its `unsafe` keyword. Most think that memory unsafety can only happen inside `unsafe` blocks, but unfortunately, it can cause memory unsafety outside, in safe Rust as well.
+
+Vale uses [hybrid-generational memory](/blog/hybrid-geerational-memory), which doesn't require any unsafe, even in its standard library.
+
+Vale goes even further, by not allowing *any* unsafe code. Even if we call into C, there's no way to trigger memory unsafety in Vale.
+
+
+# Safe Concurrency
+
+Vale conceptually destroys and recreates any object that we send to another thread. [# This isn't as expensive as one might think. We use a combination of assertions and generation increments to guarantee no further accesses from the source thread.]
+
+When the programmer doesn't want to conceptually destroy and recreate an object, they can use a mutex, and have the [region borrow checker](/blog/zero-cost-refs-regions) to guarantee safe handling.
+
+
+# Safe Externs
+
+Vale can call into C code (and vice versa). So how does it maintain its safety guarantees? By using what we're calling *extern isolation*.
+
+The behavior when sending an object into C depends on the object's mutability. [# As described in [Structs / Mutability](/guide/structs#mutability), a struct can either be mutable or immutable.]
+
+ * When we send a *mutable* struct (or interface) into C code, we only send a handle. We can then give that handle into functions to get or set any fields.
+    * When coming back from C, the receiving thread does an O(1) check to make sure it's still alive and it still belongs to this thread.
+ * When we send an *immutable* struct (or interface) into C code (or receive it from C code), we deeply copy it, right then.
+    * If this is too expensive, one can wrap it in a mutable struct and have the C code interact through that instead.
+
+
+# Dependency Extern Whitelisting
+
+When Vale's package manager is ready, the user will have to whitelist every single dependency that wants to call into extern code.
+
+This way, we can be more certain that none of our dependencies are making surprising extern calls.
+
+
+# Constraint References
+
+Often memory safety comes at a cost:
+
+ * In garbage collection, we risk leaks, where e.g. a hash map accidentally retains a reference to an entire sub-graph of objects, keeping them alive.
+ * With reference counting, we risk leaks via cycles.
+ * With borrow checking, we turn memory bugs into logic bugs, for example index out-of-bounds errors.
+
+With Vale, we weren't content with these tradeoffs, so we augment single ownership with *constraint references*, which make sure we don't destroy an object that someone still expects to be alive. See [The Next Steps for Single Ownership and RAII](/blog/next-steps-raii) for more on these.
+
