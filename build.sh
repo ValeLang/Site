@@ -20,6 +20,16 @@ if [ "$1" == "raii-next-steps" ] || [ "$1" == "all" ] ; then
   ~/Markvale/build/a.out app/blog/raii-next-steps.vmd build/blog/raii-next-steps $2
 fi
 
+if [ "$1" == "cross-platform-core" ] || [ "$1" == "all" ] ; then
+  echo "Doing cross-platform-core"
+  ~/Markvale/build/a.out app/blog/cross-platform-core.vmd build/blog/cross-platform-core $2
+fi
+
+if [ "$1" == "zero-cost-refs-regions" ] || [ "$1" == "all" ] ; then
+  echo "Doing zero-cost-refs-regions"
+  ~/Markvale/build/a.out app/blog/zero-cost-refs-regions.vmd build/blog/zero-cost-refs-regions $2
+fi
+
 if [ "$1" == "generational-references" ] || [ "$1" == "all" ] ; then
   echo "Doing generational-references"
   ~/Markvale/build/a.out app/blog/generational-references.vmd build/blog/generational-references $2
