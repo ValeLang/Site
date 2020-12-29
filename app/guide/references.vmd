@@ -21,7 +21,7 @@ An owning reference keeps an object alive. When a struct has no owning reference
 Every mutable struct has exactly one owning reference pointing to it. [#ownership]
 ////
 ```Vale
-fn main() {
+fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
 
@@ -48,7 +48,7 @@ struct Vec3 imm {
   y float;
   z float;
 }
-fn main() {
+fn main() export {
   firstRef = Vec3(3, 4, 5);
   otherRef = &firstRef;
   // Can use both freely.
@@ -71,7 +71,7 @@ This is used to influence when the struct is `drop`ped, to keep it alive for lon
 In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
 ////
 ```Vale
-fn main() {
+fn main() export {
   a = Spaceship(); «alocal»
   b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
@@ -87,7 +87,7 @@ It works the same way when passing an owning reference to a function.
 fn foo(b Spaceship) {
   println(b.name);
 }
-fn main() {
+fn main() export {
   a = Spaceship();
   foo(a); // Move a into foo's b
   // Can't use a now.
@@ -96,7 +96,7 @@ fn main() {
 >>>>
 
 
-<notes>
+<slice>
 #ownership: Ownership is also found in C++ (`unique_ptr`), Rust, and Cyclone.
 
 C also has "conceptual" ownership, in that we must track ownership without the language's help, to know when to free an object.
@@ -108,7 +108,7 @@ Vale's references has the flexibility of C++'s `unique_ptr` while guaranteeing m
 #alocal: Rather than thinking "`a` is an owning reference", think instead that `a` is a *local* that *currently contains* an owning reference.
 
 On the next line, `a` is destroyed, but the owning reference that it contained still lives on (inside `b`).
-</notes>
+</slice>
 
 
 # Non-Owning References
@@ -122,7 +122,7 @@ These are explained in more detail below.
 
 Note that there are no shared-ownership references [# Like C++'s `shared_ptr` or Rust's `Rc` or all references in Java and Python.] in Vale, except for immutable structs.
 
-<notes />
+<slice />
 
 
 ## Constraint References
@@ -144,7 +144,7 @@ struct Spaceship {
 fn foo(s &Spaceship) {
   println(s.name);
 }
-fn main() {
+fn main() export {
   ship = Spaceship("Serenity", 2);
   foo(&ship);
 }
@@ -175,7 +175,7 @@ fn takeAndDestroy(ship Spaceship) {
   // Ship destroyed here, so
   // constraint violated here.
 }
-fn main() {
+fn main() export {
   // ship contains an owning ref
   ship = Spaceship("Serenity", 2);
   // shipCRef contains a constraint ref
@@ -198,7 +198,7 @@ Continue? [y,N]
 ```
 >>>>
 
-<notes />
+<slice />
 
 
 ### Constraint Modes
@@ -216,9 +216,9 @@ Different modes will be useful at different times.
  * Most apps will want to release in resilient mode, but develop and test in assist mode to reduce their risk of *halts*.
  * Games (for example) will release in unsafe mode, but develop and test in assist mode to reduce their risk of *memory unsafety*. [#betterthancpp]
 
-<notes>
+<slice>
 #betterthancpp: This is safer than C++, because we can do our testing in assist mode, giving us more confidence that we aren't even _making_ any pointers dangle, which makes us even more confident that we wouldn't accidentally _dereference_ any dangling pointers.
-</notes>
+</slice>
 
 
 ## Weak References
@@ -253,7 +253,7 @@ fn printShipBase(ship &Spaceship) {
     println("Ship base unknown!");
   }
 }
-fn main() {
+fn main() export {
   base = Base("Zion");
   ship = Spaceship("Neb", &&base);
 
@@ -270,7 +270,7 @@ Ship base unknown!
 ```
 >>>>
 
-<notes>
+<slice>
 #lock: Locking a weak reference gives us a `?&Spaceship`, also known as an `Opt<&Spaceship>`. This has two possible subclasses: `None<&Spaceship>` which is empty and `Some<&Spaceship>` which contains a `&Spaceship`.
 
 This line is checking if that `?&Spaceship` is the one-member subclass `Some<&Spaceship>` and if so, assigns its member to `o`.
@@ -278,7 +278,7 @@ This line is checking if that `?&Spaceship` is the one-member subclass `Some<&Sp
 This is a conditional destructure, see [Pattern Matching](/guide/patterns) for more.
 
 #mat: We could also use a `mat` (match statement) here to check whether the `?&Spaceship` contained anything.
-</notes>
+</slice>
 
 
 # Pointers vs Values ("Inlining") [# Planned feature; see [Roadmap](/roadmap)!]
@@ -295,7 +295,7 @@ struct Spaceship {
   name str;
   numWings int;
 }
-fn main() {
+fn main() export {
   ship = inl Spaceship();
   println(ship.name);
 }
@@ -323,7 +323,7 @@ struct Spaceship {
   name str;
   engine inl Engine;
 }
-fn main() {
+fn main() export {
   ship = Spaceship(
       "Serenity",
       inl Engine("TCB", 10));
@@ -332,4 +332,4 @@ fn main() {
 ```
 >>>>
 
-<notes/>
+<slice/>

@@ -662,7 +662,7 @@ To dereference a GenRef, we:
                 </div>
 
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

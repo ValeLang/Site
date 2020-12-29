@@ -228,7 +228,7 @@ mySS.root.astronauts.0.planet =
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="reverting"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

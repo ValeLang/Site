@@ -197,7 +197,7 @@ doutln diff(snapshot1, mySS);`}
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="comparing"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

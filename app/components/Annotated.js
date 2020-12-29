@@ -10,7 +10,7 @@ const urlParams = new URLSearchParams(window.location.search);
 function relayoutNotes() {
   // Grab all the elements first, so we don't need to trigger any re-layouts.
   const page = document.querySelectorAll(".m-annotated.page")[0];
-  const allMarginDenizens = document.querySelectorAll(".m-annotated.area-notes > *");
+  const allMarginDenizens = document.querySelectorAll(".m-annotated.slice-notes > *");
   const header = document.querySelectorAll(".m-annotated.notes-header")[0];
   const notes = document.querySelectorAll(".m-annotated.note");
   const newMargin = document.querySelectorAll(".m-annotated.page-right")[0];

@@ -28,7 +28,7 @@ The pattern on the left receives incoming data from the expression on the right.
 To the left of this `=` is a pattern that stores the incoming data into a local named a.
 ////
 ```Vale
-fn main() {
+fn main() export {
   a = 3 + 4;
 }
 ```
@@ -50,7 +50,7 @@ struct Vec3 imm {
 }
 fn makeVec() { Vec3(3, 4, 5) }
 
-fn main() {
+fn main() export {
   // Without destructure pattern:
   tempVec = makeVec();
   a = tempVec.x;
@@ -109,7 +109,7 @@ Here, we're using a match statement to check what the user entered.
 In patterns, `_` matches any incoming data and discards it.
 ////
 ```
-fn main() {
+fn main() export {
   mat inputInt() {
     1 { println("One!"); }
     2 { println("Two!"); }
@@ -133,7 +133,7 @@ impl ISpaceship for Firefly;
 struct Raza { name str; fuel int; }
 impl ISpaceship for Raza;
 
-fn main() {
+fn main() export {
   serenity = Firefly("Serenity", 2);
 
   mat serenity {

@@ -30,7 +30,7 @@
   </half>
   <half>
     <vale>
-fn main() {
+fn main() export {
   a = 3;
   b = 5;
   c = a + b;
@@ -39,7 +39,7 @@ fn main() {
     </vale>
     <br />
     <vale>
-fn main() {
+fn main() export {
   x str = "world!";
   println("Hello " + x);
 }
@@ -51,7 +51,7 @@ struct Spaceship {
   numWings Int;
 }
 
-fn main() {
+fn main() export {
   ship = Spaceship("Serenity", 2);
   println(ship.name);
 }

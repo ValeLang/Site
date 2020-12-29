@@ -237,7 +237,7 @@ class Page extends React.Component {
                     <Snippet>
 {``}<div className={ns("comment")}>{`// Server
 `}</div>{`
-fn main() {
+fn main() export {
   let mySS =
     MySuperstructure(
      SolarSystem(
@@ -279,7 +279,7 @@ fn main() {
                     <Snippet>
 {``}<div className={ns("comment")}>{`// Client
 `}</div>{`
-fn main() {
+fn main() export {
 `}<div className={ns("comment")}>{`  // Make the client.
 `}</div>{`  let sssc =
     SimpleSuperstructureClient(
@@ -335,7 +335,7 @@ fn main() {
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="intro"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

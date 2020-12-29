@@ -39,7 +39,7 @@ Generational malloc would normally be an adjustment to mimalloc or jemalloc, but
 You can find our experimental implementation in [genHeap.c](https://github.com/ValeLang/Vale/blob/master/Midas/src/valestd/genHeap.c).
 
 
-<notes>
+<slice>
 #resilient: Vale has three release modes:
 
  * Resilient mode, which is fast and memory safe; it will halt the program when we try to dereference a freed object.
@@ -50,7 +50,7 @@ Resilient mode uses hybrid-generational memory.
 
 
 #virtfree: Our experimental implementation doesn't release memory back to the operating system. In the final version, once there are no more objects in a page, we would release the page back to the operating system and map that virtual page to a read-only one containing all 0xFF.
-</notes>
+</slice>
 
 
 # Generational Reference: More than just a pointer!
@@ -64,7 +64,7 @@ Vale's references are *generational references*. A generational reference has tw
 To create a reference to an object, we get its allocation's generation number, and include it in the reference.
 
 
-<notes/>
+<slice/>
 
 
 ## Dereferencing
@@ -89,12 +89,12 @@ or instead:
 > *"Yes! That is me. Which of my fields would you like to access?"*
 
 
-<notes>
+<slice>
 #genind: This is similar to the "generational indices" technique from C++ and Rust, but applied to the entire world instead of just a specific vector.
 
 
 #whatthen: This will safely halt the program, unless the user is explicitly checking whether something is alive (such as for a weak reference).
-</notes>
+</slice>
 
 
 # Speed
@@ -141,14 +141,14 @@ For this experiment, we benchmarked [#program] [#rustandc] three flavors of Vale
 </table>
 
 
-<notes>
+<slice>
 #program: We used the [BenchmarkRL](https://github.com/ValeLang/Vale/tree/master/benchmarks/BenchmarkRL/vale) terrain generator to gather these numbers, with different values for the `--region-override` flag: `unsafe-fast`, `naive-rc`, and `resilient-v3` respectively.
 
 
 #rustandc: Here, we benchmarked against other flavors of Vale, to isolate the differences between unsafe, reference-counting, and generational references.
 
 Once we implement full hybrid-generational memory, we'll be benchmarking against C++ and Rust, stay tuned!
-</notes>
+</slice>
 
 
 Generational references add only 10.84% to the run time of a program, *less than half the cost of reference counting!* These are very promising results, and suggest that full hybrid-generational memory could be incredibly fast.
@@ -157,7 +157,7 @@ Generational references add only 10.84% to the run time of a program, *less than
 Try it out! In the Vale release, you can find a benchmark folder with scripts to run the benchmarks. You can find the source code for the various approaches [here](https://github.com/ValeLang/Vale/tree/master/Midas/src/c-compiler/region) (feel free to swing by the [discord server](https://discord.gg/SNB8yGH) and we can point you to the right files).
 
 
-<notes/>
+<slice/>
 
 
 *Note these caveats!* To isolate the difference between generational references and the other approaches:
@@ -168,9 +168,9 @@ Try it out! In the Vale release, you can find a benchmark folder with scripts to
 Once we address these limitations, we can get more precise benchmarks against the other approaches.
 
 
-<notes>
+<slice>
 #lgt: Implementing this efficiently is part of the larger hybrid-generational memory approach, see [Hybrid-Generational Memory](/blog/hybrid-generational-memory) for more.
-</notes>
+</slice>
 
 
 # Why is this so fast?
@@ -185,7 +185,7 @@ Generational references are much easier for the CPU to handle than reference-cou
 We explain these two differences more below.
 
 
-<notes/>
+<slice/>
 
 
 ## No Aliasing Costs
@@ -220,7 +220,7 @@ fn launchShip(ships &Map<int, &Spaceship>, id int, armada &List<&Spaceship>) {
 As you can see, reference counting incurs a cost whenever we alias or dealias. *Generational references don't have that cost.* The above snippet would have zero overhead if it used generational references.
 
 
-<notes/>
+<slice/>
 
 
 Instead, generational references incur a cost whenever we dereference an object:
@@ -252,7 +252,7 @@ In our reference-counted `launchShip` example, the `ship.__ref_count++` could ta
 In the `getShipName` example however, the cache cost for `ship` is already being paid, because we're already bringing it into cache to read its `name`. Since the generation is included in the object's allocation, we get it for free. [# This is true for the vast majority of objects, which fit in the cache line. For any objects larger than a cache line, reading the generation sometimes incurs a cache miss.]
 
 
-<notes>
+<slice>
 #somany: Half of these million are aliasings and half are dealiasings. Aliasing happens whenever we access a member (e.g. `person.name`) or make a new reference (e.g. `&person`).
 
 
@@ -260,7 +260,7 @@ In the `getShipName` example however, the cache cost for `ship` is already being
 
 
 #caching: See [Understanding CPU caching and performance](https://arstechnica.com/gadgets/2002/07/caching/) and [Approximate cost to access various caches and main memory](https://stackoverflow.com/questions/4087280/approximate-cost-to-access-various-caches-and-main-memory).
-</notes>
+</slice>
 
 
 # Memory Usage
@@ -285,7 +285,7 @@ Generational malloc also has 8 more bytes at the top of the allocation, to store
 Vale programs in extremely memory-constrained environments might want to use a different mode [#modes], but we predict that for the vast majority of programs, generational references will be a very good tradeoff.
 
 
-<notes>
+<slice>
 #freesafety: Memory safety is never free, except for the most trivial of programs. Cyclone, Rust, ATS, Fortran, and every other language incurs _some_ overhead to ensure safety. This comes in the form of branching and cache miss costs, for example in:
 
  * Array bounds checks.
@@ -298,7 +298,7 @@ Or large memory costs, for example if objects are stored in vectors.
 #modes: Extremely memory-constrained applications probably want to use unsafe mode, but develop and test with assist mode (which is like a super-powered valgrind or asan).
 
 Such memory-constrained applications might also take a look at C, C++, or unsafe Rust (safe Rust requires heap allocations, in the form of `Rc` or `Vec`s).
-</notes>
+</slice>
 
 
 # What's Next?
@@ -313,4 +313,4 @@ We're excited about this, because it gives us raw speed with zero unsafety, whil
 See [Hybrid-Generational Memory](/blog/hybrid-generational-memory) to learn more, and feel free to swing by the [discord server](https://discord.gg/SNB8yGH) with any questions or ideas!
 
 
-<notes/>
+<slice/>

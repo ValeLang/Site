@@ -61,7 +61,7 @@ fn honk(f &Firefly) { ... }
 fn crazyIvan(f &Firefly) { ... }
 impl ISpaceship for Firefly;
 
-fn main() {
+fn main() export {
   flametail = Firefly(...);
   serenity = Firefly(...);
   ship = longerShip(
@@ -73,7 +73,7 @@ fn main() {
 ```
 >>>>
 
-<notes/>
+<slice/>
 
 
 # Using Generics
@@ -115,7 +115,7 @@ fn honk(f &Firefly) { ... }
 fn crazyIvan(f &Firefly) { ... }
 impl ISpaceship for Firefly;
 
-fn main() {
+fn main() export {
   flametail = Firefly(...);
   serenity = Firefly(...);
   ship =
@@ -127,9 +127,9 @@ fn main() {
 ```
 >>>>
 
-<notes>
+<slice>
 #meh: We can actually leave off the `<Firefly>` here, the compiler can figure it out from the arguments we passed in.
-</notes>
+</slice>
 
 
 # Generic Structs
@@ -149,7 +149,7 @@ rules(implements(T, ISpaceship)) «impl»
   ships List<T>;
 }
 
-fn main() {
+fn main() export {
   f = Flock<Firefly>(List<Firefly>());
   f.ships.add(Firefly(...));
   f.ships.add(Firefly(...));
@@ -163,6 +163,6 @@ fn main() {
 ```
 >>>>
 
-<notes>
+<slice>
 #impl: In future versions, this can just be `struct Flock<T impl ISpaceship>`.
-</notes>
+</slice>

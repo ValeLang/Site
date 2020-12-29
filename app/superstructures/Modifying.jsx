@@ -185,7 +185,7 @@ mut saturn.name! = "Flamscrankle";`}
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="modifying"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

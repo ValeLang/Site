@@ -39,7 +39,7 @@ struct DarkElf { ... }
 fn hop(s &DarkElf) { ... }
 fn skip(s &DarkElf) { ... }
 
-fn main() {
+fn main() export {
   wulfgar = Human(...);
   hopscotch(&wulfgar);
 }
@@ -78,7 +78,7 @@ fn hop(s &DarkElf) { ... }
 fn skip(s &DarkElf) { ... }
 impl DarkElf for Bipedal;
 
-fn main() {
+fn main() export {
   wulfgar = Human(...);
   hopscotch(&wulfgar);
   drizzt = DarkElf(...);
@@ -87,7 +87,7 @@ fn main() {
 ```
 >>>>
 
-<notes/>
+<slice/>
 
 
 ## Open Interface Constructors
@@ -105,7 +105,7 @@ In this example, we're giving it a lambda for its `hop` method, and another lamb
 // Using above Bipedal interface
 // and hopscotch function
 
-fn main() {
+fn main() export {
   x = Bipedal(
     { println("Hop!"); },
     { println("Skip!"); });
@@ -117,7 +117,7 @@ fn main() {
 ```
 >>>>
 
-<notes/>
+<slice/>
 
 
 # Sealed Interfaces [# Planned feature; see [Roadmap](/roadmap)!]
@@ -146,9 +146,9 @@ Because the compiler knows all the implementing structs up-front, it:
  * Checks that `mat` statements consider all substructs.
  * Generates sealed interface constructors.
 
-<notes>
+<slice>
 #inlsealed: Locals and members can inline sealed interfaces. The compiler will figure out the size of the largest substruct, and reserve that much memory in the stack (if an inl local) or the containing struct (if an inl member), and use that memory for the substruct. (This is the equivalent of a C/C++ union or Rust enum)
-</notes>
+</slice>
 
 
 ## Sealed Interface Constructors
@@ -161,7 +161,7 @@ In this example, when we call `MaybeInt(7)`, the compiler finds that the `SomeIn
 ```Vale
 // Using above MaybeInt/NoInt/SomeInt
 
-fn main() {
+fn main() export {
   x = MaybeInt(7);
   // x is of type SomeInt.
 
@@ -173,7 +173,7 @@ fn main() {
 
 A sealed interface constructor also allows us to make substructs via *shortcalling*. [# See [Structs](/guide/structs) for more on shortcalling.]
 
-<notes/>
+<slice/>
 
 
 ## Shortcalling Sealed Interface Constructors
@@ -184,7 +184,7 @@ We normally call a function by name, such as the `MaybeInt(7)` above. However, i
 ```Vale
 // Using above MaybeInt/NoInt/SomeInt
 
-fn main() {
+fn main() export {
   // These statements are equivalent:
   x MaybeInt = MaybeInt(7);
   x MaybeInt = (7);
@@ -200,7 +200,7 @@ This saves a lot of typing when calling functions.
 
 fn foo(m MaybeInt) { ... }
 
-fn main() {
+fn main() export {
   foo(SomeInt(7));
   // Equivalent, calling sealed
   // interface constructor:

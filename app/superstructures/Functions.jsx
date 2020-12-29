@@ -411,7 +411,7 @@ addMoonWithRandomMass(
                     <Snippet>
 {``}<div className={ns("comment")}>{`// Server
 `}</div>{`
-fn main() {
+fn main() export {
   let charSS =
     ChatModel(Room(List()))));
 
@@ -447,7 +447,7 @@ fn main() {
                     <Snippet>
 {``}<div className={ns("comment")}>{`// Client
 `}</div>{`
-fn main() {
+fn main() export {
 `}<div className={ns("comment")}>{`  // Make the client.
 `}</div>{`  let sssc =
     SimpleSuperstructureClient(
@@ -513,7 +513,7 @@ fn main() {
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="functions"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

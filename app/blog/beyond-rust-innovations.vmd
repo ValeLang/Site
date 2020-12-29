@@ -23,7 +23,7 @@ Some assumptions up-front:
  * This article assumes we're not using any `unsafe`, except indirectly the `unsafe` in the standard library.
  * This article also assumes we're not using any `Rc` because it's widely regarded as un-idiomatic [# See [this article](https://raphlinus.github.io/personal/2018/05/08/ecs-ui.html) for this perspective.], but also because it slows Rust down enough to make this article moot. This article is about achieving perfect safety with maximum performance.
 
-<notes />
+<slice />
 
 
 # Rust's Tradeoffs
@@ -62,11 +62,11 @@ Memory safety is never free. Memory safe languages *alway* incur run-time overhe
 
 There are other safe and fast memory models with different tradeoffs (covered further below) and more are being discovered every year! It's an exciting time for language design.
 
-<notes>
+<slice>
 #sunder: We could also sunder our `Vec<Spaceship>` into a parallel Vec<int> for health, and Vec<int> for weapons. But at that point, we'd unwittingly have been forced into an ECS framework, which is sometimes [not the best choice of architecture](https://www.reddit.com/r/roguelikedev/comments/i3xekn/ec_vs_ecs_for_roguelikes/).
 
 #reject: It rejects it because it can't guarantee that shipAIndex != shipBIndex.
-</notes>
+</slice>
 
 
 ### Vecs and Indexing In General
@@ -82,7 +82,7 @@ Not only does indexing into them require bounds checks, but expanding them is ve
 
 If one is using generational indices, looking up an element will incur a branch when checking that the generations match.
 
-<notes />
+<slice />
 
 
 ## The Memory Tradeoff
@@ -112,11 +112,11 @@ Contrary to popular belief, not all memory unsafety happens inside `unsafe` bloc
 
 If a language can achieve Rust's performance without dropping into `unsafe`, and make a few other adjustments, [#ffi] then this problem evaporates. I believe such a thing is possible.
 
-<notes>
+<slice>
 #deps: We shouldn't pretend that we can simply grep for `unsafe` in our dependencies and immediately see problems. It's not that simple; it's very easy for a bug in safe Rust to violate the assumptions in an `unsafe` block.
 
 #ffi: It's important to note that offering FFI (a foreign function interface) is just as bad as `unsafe` blocks, so any language that wishes to improve upon this will need to address FFI's potential unsafety as well.
-</notes>
+</slice>
 
 
 ## The Flexibility Tradeoff
@@ -150,7 +150,7 @@ Because Rust is so inflexible, it takes longer to use, even after the initial le
 That development time is valuable, because it can be spent on optimizing the code that matters. If a hypothetical language was half as time-consuming as Rust, then that extra time could be spent optimizing the hot path, [# It's often said that a program spends 95% of its time in 10% of the code. The "hot path" refers to that 10%.] which could result in a more efficient program in the end than the Rust one.
 
 
-<notes />
+<slice />
 
 
 # Where can we go from here?

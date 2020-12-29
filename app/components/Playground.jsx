@@ -26,7 +26,7 @@ class Playground extends React.Component {
 
 // Adds Earth, then Saturn, then reverts to when
 // we just had Earth.
-fn main() {
+fn main() export {
   let ss = MySuperstructure(SolarSystem(List()));
   ss.planets.add(Planet("Earth", List(Moon("Luna", 1737))));
 

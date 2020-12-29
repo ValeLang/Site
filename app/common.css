@@ -103,22 +103,23 @@ p:last-child {
   margin-bottom: 8px;
 }
 
-.area-contents {
+.slice-contents {
 	width: 100%;
+  padding-right: 8px;
 }
 
-.area-contents ul,
-.area-contents ol {
+.slice-contents ul,
+.slice-contents ol {
   margin: 0 0 8px 0;
 }
 
 
-.area-contents li {
+.slice-contents li {
   margin-top: 8px;
   margin-bottom: 8px;
 }
 
-.area-contents li > ul {
+.slice-contents li > ul {
   margin-top: 8px;
 }
 

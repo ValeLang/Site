@@ -57,7 +57,7 @@ Str {
   ret biggest.name;
 }
 
-fn main() {
+fn main() export {
   allShips = List(
     Ship("Serenity", 9),
     Ship("Raza", 7));
@@ -111,7 +111,7 @@ fn makeGame() Game {
   ret Game(bases, ships);
 }
 
-fn main() {
+fn main() export {
   mutex = Mutex('a makeGame());
 
   // Open for reading
@@ -137,7 +137,7 @@ One region cannot "open" another to gain access to it. Rather, we make a new reg
 
 Even in the above example, when we opened the mutex (using `rlock` or `rwlock`, we were creating a temporary new region.
 
-<notes />
+<slice />
 
 
 # Moving Objects Across Regions
@@ -206,14 +206,14 @@ fn segmentifyAndSend<'a, 'b>(
 ```
 >>>>
 
-<notes>
+<slice>
 #costly: The cost depends on various factors:
 
  * Faster if the objects are already in the CPU cache.
  * Faster for structs, slower for interfaces.
  * Slower for immutables that are shared.
  * Free for atomic immutables.
-</notes>
+</slice>
 
 
 ## Avoiding Secede Costs

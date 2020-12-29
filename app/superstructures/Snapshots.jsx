@@ -183,7 +183,7 @@ List(Moon#6("Raine", 898))`}
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="snapshots"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

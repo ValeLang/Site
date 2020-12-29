@@ -26,7 +26,7 @@ struct Spaceship {
   numWings int;
 }
 
-fn main() {
+fn main() export {
   ship = Spaceship("Serenity", 2);
   println(ship.name);
 }
@@ -53,14 +53,14 @@ fn Spaceship() {
   Spaceship("Serenity", 2)
 }
 
-fn main() {
+fn main() export {
   ship = Spaceship();
   println(ship.name);
 }
 ```
 >>>>
 
-<notes/>
+<slice/>
 
 
 # Shortcalling Constructors [# Planned feature; see [Roadmap](/roadmap)!]
@@ -71,7 +71,7 @@ We normally call a function by name, such as the `Spaceship("Serenity", 2)` abov
 ```Vale
 // Using above Spaceship struct
 
-fn main() {
+fn main() export {
   // These statements are equivalent:
   x Spaceship = Spaceship("Raza", 2);
   x Spaceship = ("Raza", 2);
@@ -87,7 +87,7 @@ This saves a lot of typing when calling functions.
 
 fn foo(s Spaceship) { ... }
 
-fn main() {
+fn main() export {
   // These statements are equivalent:
   foo(Spaceship("Raza", 2));
   foo(("Raza", 2));
@@ -95,7 +95,7 @@ fn main() {
 ```
 >>>>
 
-<notes/>
+<slice/>
 
 
 
@@ -108,7 +108,7 @@ Every mutable struct has exactly one owning reference at any given time. [# Ther
 When we create a mutable struct, we get the owning reference to it. When the owning reference disappears, the struct is automatically deallocated (via `drop`, explained below).
 ////
 ```Vale
-fn main() {
+fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
 
@@ -119,13 +119,13 @@ fn main() {
 ```
 >>>>
 
-<notes>
+<slice>
 #ownership: Ownership is also found in C++ (`unique_ptr`), Rust, and Cyclone.
 
 C also has "conceptual" ownership, in that we must track ownership without the language's help, to know when to `free` a struct.
 
 Vale's ownership has the flexibility of C++'s `unique_ptr` without the mutability and aliasing restrictions of Rust and Cyclone, see [References](/guide/references) to learn how.
-</notes>
+</slice>
 
 
 ## Lending
@@ -138,14 +138,14 @@ When we make another reference to a struct, it will be a non-owning reference. [
 In this example, the type of `owningRef` is `Spaceship`, and the type of `nonOwningRef` is `&Spaceship`.
 ////
 ```Vale
-fn main() {
+fn main() export {
   owningRef = Spaceship();
   nonOwningRef = owningRef;
 }
 ```
 >>>>
 
-<notes/>
+<slice/>
 
 
 ## Moving
@@ -158,7 +158,7 @@ This is used to influence when the struct is `drop`ped, to keep it alive for lon
 In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
 ////
 ```Vale
-fn main() {
+fn main() export {
   a = Spaceship(); «alocal»
   b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
@@ -174,7 +174,7 @@ It works the same way when passing an owning reference to a function.
 fn foo(b Spaceship) {
   println(b.name);
 }
-fn main() {
+fn main() export {
   a = Spaceship();
   // Move the Spaceship from a
   // into foo's b
@@ -185,11 +185,11 @@ fn main() {
 >>>>
 
 
-<notes>
+<slice>
 #alocal: Rather than thinking "`a` is an owning reference", think instead that `a` is a *local* that *currently contains* an owning reference.
 
 On the next line, `a` is destroyed, but the owning reference that it contained still lives on (inside `b`).
-</notes>
+</slice>
 
 
 ## Drop
@@ -204,7 +204,7 @@ Here we can see where the implicit call to `drop` is.
 `drop` is called when the owning reference goes away, which in this case is `ship`.
 ////
 ```Vale
-fn main() {
+fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
 
@@ -228,13 +228,13 @@ We can specify our own `drop` function. A custom drop could be used to:
 
 Rule of thumb: if something must happen at some point in the future, put it in a drop function. Vale will make sure that it's not forgotten. [#raii]
 
-<notes>
+<slice>
 #drop: Drop functions also appear in C++ ("destructors") and Rust. Vale's drop functions are like those but more flexible: they can return values and even take extra parameters. In those cases, they must be called manually. See [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for more!
 
 #destruct: The destruct keyword is syntactic sugar for a "move destructure" pattern, see [Pattern Matching](/guide/patterns) for more.
 
 #raii: This is an incredibly powerful pattern, see [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for more.
-</notes>
+</slice>
 
 
 # Mutability
@@ -256,7 +256,7 @@ struct Spaceship imm {
   numWings int;
 }
 
-fn main() {
+fn main() export {
   ship = Spaceship("Serenity", 2);
   println(ship);
 }
@@ -266,6 +266,6 @@ Spaceship("Serenity", 2)
 ```
 >>>>
 
-<notes>
+<slice>
 #small:  Small immutable structs (32b or less) are copied and passed by-value. Larger objects use *SNRC* (strategic nonatomic reference counting) to free themselves.
-</notes>
+</slice>

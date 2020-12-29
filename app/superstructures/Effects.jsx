@@ -276,7 +276,7 @@ ListAppendEffect:Planet(2, 12)`}
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="effects"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

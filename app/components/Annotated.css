@@ -1,6 +1,6 @@
 
 
-.m-annotated.area {
+.m-annotated.slice {
   display: flex;
   flex-direction: row;
 }
@@ -16,21 +16,20 @@
 .m-annotated.page.isomargined .m-annotated.page-left {
   width: 896px;
 }
-.m-annotated.page.isomargined .m-annotated.area-contents {
+.m-annotated.page.isomargined .m-annotated.slice-contents {
   width: 632px;
   padding-right: 8px;
   box-sizing: border-box;
 }
 .m-annotated.page.unimargined .m-annotated.page-left {
   width: 632px;
-  padding-right: 8px;
   box-sizing: border-box;
 }
-.m-annotated.note .m-annotated.area-contents {
+.m-annotated.note .m-annotated.slice-contents {
   padding-right: 0;
 }
 
-.m-annotated.page.isomargined .m-annotated.area-notes {
+.m-annotated.page.isomargined .m-annotated.slice-notes {
   width: 264px;
   background-color: #E8F0FF;
 }
@@ -101,7 +100,7 @@ div.m-annotated.note-starter {
   font-size: 10pt;
 }
 
-.m-annotated.area-contents .m-annotated.inline-code {
+.m-annotated.slice-contents .m-annotated.inline-code {
   border: 1px solid #E0E0E0;
   background-color: #F0F0F0;
 }
@@ -114,9 +113,8 @@ div.m-annotated.note-starter {
 .m-annotated.afterword,
 .m-annotated.plans {
   background-color: #F0F0FF;
-  padding: 16px 16px 1px 16px;
-  border-right: 2px solid #E8E8FF;
-  margin-top: 32px;
+  padding: 0 16px;
+  margin-right: 8px;
 }
 
 .m-annotated.plans .m-annotated.inline-code,

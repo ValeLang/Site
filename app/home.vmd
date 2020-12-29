@@ -48,7 +48,7 @@ Vale's goal is to show the world that speed and safety can be easy. Vale is:
 
 
 ```Vale
-fn main() {
+fn main() export {
   println("Hello world!");
 }
 ```
@@ -58,7 +58,7 @@ Hello world!
 
 
 ```Vale
-fn main() {
+fn main() export {
   planets = ["Venus", "Earth", "Mars"];
   each planets (planet){
     println("Hello " + planet + "!");

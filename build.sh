@@ -15,6 +15,11 @@ if [ "$1" == "webpack" ] || [ "$1" == "all" ] ; then
   mkdir build/releases
 fi
 
+if [ "$1" == "raii-next-steps" ] || [ "$1" == "all" ] ; then
+  echo "Doing raii-next-steps"
+  ~/Markvale/build/a.out app/blog/raii-next-steps.vmd build/blog/raii-next-steps $2
+fi
+
 if [ "$1" == "generational-references" ] || [ "$1" == "all" ] ; then
   echo "Doing generational-references"
   ~/Markvale/build/a.out app/blog/generational-references.vmd build/blog/generational-references $2
@@ -28,6 +33,11 @@ fi
 if [ "$1" == "hgm-static-analysis-part-1" ] || [ "$1" == "all" ] ; then
   echo "Doing hgm-static-analysis-part-1"
   ~/Markvale/build/a.out app/blog/hgm-static-analysis-part-1.vmd build/blog/hgm-static-analysis-part-1 $2
+fi
+
+if [ "$1" == "beyond-rust-innovations" ] || [ "$1" == "all" ] ; then
+  echo "Doing beyond-rust-innovations"
+  ~/Markvale/build/a.out app/blog/beyond-rust-innovations.vmd build/blog/beyond-rust-innovations $2
 fi
 
 if [ "$1" == "fearless" ] || [ "$1" == "all" ] ; then
@@ -96,5 +106,6 @@ cp app/components/*.css build/components
 cp app/components/*.js build/components
 cp app/images/* build/images
 cp app/releases/* build/releases
+cp app/blog/*.svg build/blog
 
 echo "Done!"

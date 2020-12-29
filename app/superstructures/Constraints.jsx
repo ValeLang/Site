@@ -237,7 +237,7 @@ doutln succeeded;`}
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="constraints"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 
