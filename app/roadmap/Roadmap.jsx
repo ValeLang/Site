@@ -44,7 +44,7 @@ class Roadmap extends React.Component {
                 <li className={ns("later")}><span className={ns("icon")}></span> Expect</li>
                 <li className={ns("later")}><span className={ns("icon")}></span> Optional Sugar</li>
                 <li className={ns("later")}><span className={ns("icon")}></span> Inlining</li>
-                <li className={ns("todo")}><span className={ns("icon")}></span> Varying/Final</li>
+                <li className={ns("done")}><span className={ns("icon")}></span> Varying/Final</li>
               </ul>
               <h3 className={ns()}>Functions</h3>
               <ul className={ns()}>
@@ -115,10 +115,10 @@ class Roadmap extends React.Component {
                 <li className={ns("done")}><span className={ns("icon")}></span> While</li>
                 <li className={ns("done")}><span className={ns("icon")}></span> Each</li>
                 <li className={ns("todo")}><span className={ns("icon")}></span> Match</li>
-                <li className={ns("later")}><span className={ns("icon")}></span> EachI</li>
-                <li className={ns("later")}><span className={ns("icon")}></span> If Let</li>
-                <li className={ns("later")}><span className={ns("icon")}></span> If Let Else</li>
-                <li className={ns("todo")}><span className={ns("icon")}></span> Break, Continue</li>
+                <li className={ns("done")}><span className={ns("icon")}></span> EachI</li>
+                <li className={ns("todo")}><span className={ns("icon")}></span> If Let</li>
+                <li className={ns("todo")}><span className={ns("icon")}></span> If Let Else</li>
+                <li className={ns("later")}><span className={ns("icon")}></span> Break, Continue</li>
 
               </ul>
               <h3 className={ns()}>Patterns</h3>
@@ -165,8 +165,9 @@ class Roadmap extends React.Component {
               </ul>
               <h3 className={ns()}>Optimization</h3>
               <ul className={ns()}>
-                <li className={ns("todo")}><span className={ns("icon")}></span> Gen-check Elim</li>
-                <li className={ns("todo")}><span className={ns("icon")}></span> HGM</li>
+                <li className={ns("done")}><span className={ns("icon")}></span> Generational Memory</li>
+                <li className={ns("todo")}><span className={ns("icon")}></span> Gen-check Elimination</li>
+                <li className={ns("todo")}><span className={ns("icon")}></span> Hybrid-Generational Memory</li>
               </ul>
               <h3 className={ns()}>Ergonomics</h3>
               <ul className={ns()}>
