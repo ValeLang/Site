@@ -1,9 +1,9 @@
 ---
 title: Comparing Vale, Javascript, C++, and Rust
 author: Evan Ovadia
-date: Wolf 77, 2020
+date: Jan 1, 2021
 realm: blog
-path: blog/comparisons-vale-js-cpp-rust
+path: blog/comparisons
 layout: annotated
 namespace: c-blog m-annotated
 ---
@@ -60,8 +60,8 @@ Note that Vale is *not finished*, it's only at v0.1. We make it clear in the asi
 Keep in mind, this article is written with love; I picked these three languages because they're my favorite in some way:
 
  * C++ has the feeling of raw power and freedom!
- * Javascript is like a soft autumn breeze, easy and refreshing. [# (I hope this isn't quoted on PCJ)]
- * Programming in Rust feels like an addictive puzzle game!
+ * Javascript is like a soft autumn breeze, easy and refreshing. [# (I hope this isn't quoted on PCJ!)]
+ * Programming in Rust feels like an addictive puzzle game! [# It's fun to push the borrow checker's boundaries, especially when traits and closures are involved!]
 
 This post is not meant to be a hit piece, just an honest comparison. Also note that these are just my opinions, and not objective truths!
 

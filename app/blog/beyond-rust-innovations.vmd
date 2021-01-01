@@ -14,7 +14,7 @@ In this article, I'm going to show you that:
  * While Rust is today's gold standard of speed and safety, *it's not perfect*; the borrow checker's safety guarantees incur both *speed and memory overhead.*
  * There are a lot of new projects and ideas that are improving on these drawbacks, to make *faster and safer languages.*
 
-I'm a big fan of Rust, and think it's a huge leap forward in language design. Rust has showed us a lot of techniques that work really well.
+I'm a big fan of Rust, and think it's a huge leap forward in language design. Rust has shown us a lot of techniques that work really well.
 
 This isn't a hit piece, this is an honest criticism of Rust. [# Rust is what ignited my passion for programming language development in the first place! So it's rather ironic that I'm writing an article about what might come after Rust.] Still, those that identify heavily with it might want to stop reading here. Keep in mind that I'm comparing with Rust only because, as mentioned before, Rust is the gold standard for safety and speed.
 
