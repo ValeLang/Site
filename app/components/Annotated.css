@@ -1,47 +1,7 @@
 
-
-.m-annotated.slice {
-  display: flex;
-  flex-direction: row;
-}
-
-
-.m-annotated.page.unimargined .m-annotated.note {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.m-annotated.page.isomargined .m-annotated.page-left {
-  width: 896px;
-}
-.m-annotated.page.isomargined .m-annotated.slice-contents {
-  width: 632px;
-  padding-right: 8px;
-  box-sizing: border-box;
-}
-.m-annotated.page.unimargined .m-annotated.page-left {
-  width: 632px;
-  box-sizing: border-box;
-}
-.m-annotated.note .m-annotated.slice-contents {
-  padding-right: 0;
-}
-
-.m-annotated.page.isomargined .m-annotated.slice-notes {
-  width: 264px;
-  background-color: #E8F0FF;
-}
-
-.m-annotated.page.unimargined .m-annotated.page-right {
-  position: relative;
-  width: 264px;
-  background-color: #E8F0FF;
-}
-
 a.m-annotated.note-anchor,
-div.m-annotated.note-starter {
+span.m-annotated.note-starter,
+span.m-annotated.note-preview {
   margin: -1px;
   border-width: 1px;
   border-style: solid;
@@ -49,18 +9,20 @@ div.m-annotated.note-starter {
   text-align: center;
   font-weight: normal;
 }
-a.m-annotated.note-anchor {
+a.m-annotated.note-anchor,
+span.m-annotated.note-preview {
   margin-left: 0px;
   margin-right: 0px;
   display: inline-block;
   font-size: 9.5pt;
 }
-div.m-annotated.note-starter {
+span.m-annotated.note-starter {
   margin-left: 2px;
   margin-right: 4px;
   padding: 0px 2px;
   float: left;
 }
+
 .m-annotated.note-color0 {
   background-color: #D0F0D0;
   border-color: #70E070;
@@ -123,10 +85,6 @@ div.m-annotated.note-starter {
   background-color: white;
 }
 
-.m-annotated.page.unimargined .columns {
-  display: flex;
-  flex-direction: row;
-}
 
 .m-annotated.note ul {
   margin: 0 0 8px 0;
@@ -167,13 +125,6 @@ div.m-annotated.note-starter {
 }
 .m-annotated.page.unimargined .m-annotated.toc-container {
   position: absolute;
-}
-
-.m-annotated.notes-header {
-  opacity: .5;
-  font-style: italic;
-  text-align: center;
-  margin-top: 4px;
 }
 
 
@@ -253,3 +204,20 @@ div.m-annotated.note-starter {
 .m-annotated.note {
   padding: 8px;
 }
+
+.m-annotated.note .m-annotated.slice-contents {
+  padding-right: 0;
+}
+
+
+
+.m-annotated.notes-header {
+  margin-top: 4px;
+  display: block;
+  padding: 8px;
+}
+
+.m-annotated.notes-header-text {
+  opacity: .5;
+}
+

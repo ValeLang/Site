@@ -9,6 +9,9 @@ layout: annotated
 namespace: c-blog m-annotated
 ---
 
+! Note: This article was published before we changed resilient mode to use [HGM](/blog/hybrid-generational-memory) instead of RC. Now, read-only regions eliminate gen-checks, rather than RC overhead.
+
+
 Vale is rapidly approaching v0.1, [# Check out the [Roadmap](/roadmap) for progress and plans!] and now that we've proven the foundations solid, we can finally share our plans for making Vale *extremely fast.*
 
 The fastest language currently is C++. [#fastest] It is an _incredibly_ high bar, but we hope to go even faster (or at least come close in the attempt!)
@@ -27,7 +30,7 @@ However, in the real world, we don't have unlimited time; we might only have a f
 Vale is aiming at the *optimal balance:* make it easy to make fast code by default, and give the developer powerful tools to optimize the hot path even further.
 
 
-The challenge here is that memory safety has a run-time cost, no matter what language you're in. [# See [The Next Steps for Single Ownership and RAII](https://vale.dev/blog/raii-next-steps) for how every memory safety strategy has run-time costs.]
+The challenge here is that memory safety has a run-time cost, no matter what language you're in. [# See [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for how every memory safety strategy has run-time costs.]
 
 
 To overcome that, Vale can use its unique mix of single ownership and regions to: [#otherplans]
@@ -47,7 +50,7 @@ To set the stage, let's talk about the safety overhead first.
 <slice>
 #fastest: See [Benchmarks Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/cpp.html). Fortran, C, and Rust are also close to C++'s performance.
 
-#hopefully: One usually uses Assist Mode's very conservative checks to gain confidence that Fast Mode won't crash. See [The Next Steps for Single Ownership and RAII](https://vale.dev/blog/raii-next-steps) for more on how this works.
+#hopefully: One usually uses Assist Mode's very conservative checks to gain confidence that Fast Mode won't crash. See [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for more on how this works.
 
 #otherplans: Vale has some other tricks up its sleeve too:
 
@@ -73,7 +76,7 @@ Now let's look at the overhead of the remaining 5%. Reference counting has what 
 
 The first weakness of RC is that it can form cycles, causing memory leaks. Vale doesn't have this problem because every object has one owning reference, which controls when the object is deallocated.
 
-For the difference between owning, constraint, and weak references, see [The Next Steps for Single Ownership and RAII](https://vale.dev/blog/raii-next-steps).
+For the difference between owning, constraint, and weak references, see [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps).
 
 
 ## Atomicity
@@ -128,7 +131,7 @@ If we add *region annotations* to our *pure* function, Vale will *implicitly loc
 
 Below, we use region annotations to tell the compiler which references point to the outside world.
 
-Let's see it in action! Let's say we have a turn-based game, which runs in Unity. Whenever the player unit acts, each of the enemy units takes a turn to act too.
+Let's see it in action! Let's say we have a turn-based game, which runs in Unity. Whenever the player unit acts, each of the enemy units uses the below code to act too.
 
 
 <<<<
@@ -253,6 +256,7 @@ The Vale compiler itself has a great example of when we'd want explicit locking.
 
 One of those is the "Templar" stage, which reads the `inAst` and builds the `outAst`. We can put the `inAst` in a Mutex, and the `outAst` in another Mutex. The Templar gets *read-only* access to the `inAstMutex`, while it uses it's *read-write* access to the `outAstMutex` to build it up.
 
+In the below code, we have an example.
 
 <<<<
 
@@ -454,7 +458,7 @@ However, like any approach, it also has drawbacks:
 
  * A doubly linked list, or any other architecture involving back-references.
  * Attaching an observer to a button, which modifies outside state without permanently freezing it for everyone else, making it useless.
- * The ["component" pattern](https://vale.dev/blog/next-steps-raii#safehandlingofaliases), where subcomponents of a struct have references to each other.
+ * The ["component" pattern](/blog/next-steps-raii#safehandlingofaliases), where subcomponents of a struct have references to each other.
 
 #references: If you translate a program from C++ or C# to Rust for example, you'll find that the borrow checker rejects most of your references and pointers, and you'll have to use indices or `Rc<RefCell<T>>`.
 

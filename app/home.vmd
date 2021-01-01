@@ -17,7 +17,10 @@ Vale's goal is to show the world that speed and safety can be easy. Vale is:
 
  * *Fast:* Vale uses an entirely new approach to memory management: [generational references](/blog/generational-references), which have zero aliasing costs and no garbage collection pauses.
  * *Fearless:* It is the [safest native language](/blog/fearless): zero `unsafe`, region isolation, extern boundaries, and dependency extern whitelisting.
- * *Flexible:* Its emphasis on single ownership without needing a borrow checker makes it easy to use.
+ * *Flexible:* Its new take on [regions](/guide/regions) enables alternate memory management and allocation strategies, with the [region borrow checker](/blog/zero-cost-refs-regions) enabling seamless, fast, and _easy_ interop between them.
+
+
+Read comparisons with [C++, Javascript, and Rust](/blog/comparisons)!
 
 
 *Featuring*:
@@ -25,26 +28,24 @@ Vale's goal is to show the world that speed and safety can be easy. Vale is:
  * [Statically Typed](/guide/introduction) with type inference.
  * [Ownership](/guide/references), move semantics, and deterministic destruction.
  * [Memory Safe](/guide/references#nonowning), using constraint and weak references.
- * [Regions](/guide/regions) for zero-cost references.
+ * [Regions](/guide/regions) for different allocation strategies.
  * [Inline References](/guide/references#inline) for optimization.
  * [Generics](/guide/generics), including virtual generics.
  * [Interface Constructors](/guide/interfaces#sealedconstructors)
  * [Universal Function Call Syntax](/guide/introduction#functions)
- * [Polymorphic Lambdas](/guide/introduction#functions)
  * [Mutable and Immutable Objects](/guide/structs#mutability)
  * [Patterns](/guide/patterns): Destructuring, Parameters, Extractors
- * [Shortcalling Syntax](/guide/structs#shortcalling)
 
 
 ////
 
 *Recent posts:*
 
- * [Generational References](/blog/generational-references) (Nov 30)
- * [Hybrid-Generational Memory](/blog/hybrid-generational-memory) (Nov 24)
- * [Zero Cost References with Regions](/blog/zero-cost-refs-regions) (Jul 29)
- * [The Next Steps for Single Ownership and RAII](/blog/next-steps-raii) (Jul 15)
- * [Announcing Vale!](https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/) (Jul 11)
+ * [Generational References](/blog/generational-references) (Jan 2)
+ * [Hybrid-Generational Memory](/blog/hybrid-generational-memory) (Jan 2)
+ * [Zero Cost References with Regions](/blog/zero-cost-refs-regions) (Jul 29 2020)
+ * [Next Steps for Single Ownership and RAII](/blog/next-steps-raii) (Jul 15 2020)
+ * [Announcing Vale!](https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/) (Jul 11 2020)
 
 
 ```Vale

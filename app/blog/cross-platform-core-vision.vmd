@@ -165,7 +165,7 @@ Now we'll show what this could look like. Keep in mind, this is still very theor
 Here we're using 'core to refer to the native side and 'host to refer to the JVM side, these are defined by the user elsewhere.
 
 <<<<
-This is a function that will run on the JVM.
+This snippet has a function that will run on the JVM.
 
  * `spaceship` is compiled to a long, which is an index into the global Native Constraint Ref Table.
  * `e` is a regular Java click event.
@@ -199,7 +199,7 @@ fn launch(
 >>>>
 
 <<<<
-This code is compiled to native assembly.
+This snippet is compiled to native assembly.
 
  * `spaceship` is a normal native constraint ref.
  * `loc` is a normal native Loc.

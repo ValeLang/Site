@@ -6,12 +6,13 @@ if [ "$2" == "" ] ; then
   echo "Second arg should be path to Valestrom.jar"
 fi
 
-if [ "$1" == "webpack" ] || [ "$1" == "all" ] ; then
+if [ "$1" == "clean" ] || [ "$1" == "all" ] ; then
   rm -rf build
-  npm run build
+  mkdir build
   mkdir build/components
   mkdir build/images
   mkdir build/guide
+  mkdir build/blog
   mkdir build/releases
 fi
 
@@ -20,9 +21,9 @@ if [ "$1" == "raii-next-steps" ] || [ "$1" == "all" ] ; then
   ~/Markvale/build/a.out app/blog/raii-next-steps.vmd build/blog/raii-next-steps $2
 fi
 
-if [ "$1" == "cross-platform-core" ] || [ "$1" == "all" ] ; then
-  echo "Doing cross-platform-core"
-  ~/Markvale/build/a.out app/blog/cross-platform-core.vmd build/blog/cross-platform-core $2
+if [ "$1" == "cross-platform-core-vision" ] || [ "$1" == "all" ] ; then
+  echo "Doing cross-platform-core-vision"
+  ~/Markvale/build/a.out app/blog/cross-platform-core-vision.vmd build/blog/cross-platform-core-vision $2
 fi
 
 if [ "$1" == "zero-cost-refs-regions" ] || [ "$1" == "all" ] ; then
@@ -48,6 +49,11 @@ fi
 if [ "$1" == "beyond-rust-innovations" ] || [ "$1" == "all" ] ; then
   echo "Doing beyond-rust-innovations"
   ~/Markvale/build/a.out app/blog/beyond-rust-innovations.vmd build/blog/beyond-rust-innovations $2
+fi
+
+if [ "$1" == "comparisons" ] || [ "$1" == "all" ] ; then
+  echo "Doing comparisons"
+  ~/Markvale/build/a.out app/blog/comparisons.vmd build/blog/comparisons $2
 fi
 
 if [ "$1" == "fearless" ] || [ "$1" == "all" ] ; then
@@ -111,9 +117,16 @@ if [ "$1" == "contribute" ] || [ "$1" == "all" ] ; then
   ~/Markvale/build/a.out app/contribute.vmd build/contribute $2
 fi
 
+if [ "$1" == "roadmap" ] || [ "$1" == "all" ] ; then
+  echo "Doing roadmap"
+  ~/Markvale/build/a.out app/roadmap/roadmap.vmd build/roadmap $2
+  cp app/roadmap/*.css build
+fi
+
 cp app/*.css build
 cp app/components/*.css build/components
 cp app/components/*.js build/components
+cp app/components/*.png build/components
 cp app/images/* build/images
 cp app/releases/* build/releases
 cp app/blog/*.svg build/blog

@@ -1,0 +1,55 @@
+
+.note {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.m-annotated.slice-notes {
+  width: 100%;
+  background-color: #E8F0FF;
+}
+
+.m-annotated.notes-first-header {
+  display: none;
+}
+
+
+
+
+.m-annotated.notes-container {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.m-annotated.notes-header:hover {
+  cursor: pointer;
+}
+.m-annotated.notes-contents {
+  height: 0;
+  overflow: hidden;
+  /* move it to the top of the notes-container so when we click on an anchor,
+  and it moves the screen to the contained note, we see the whole notes container. */
+  position: absolute;
+  left: 0;
+  top: -8px;
+}
+.m-annotated.toggle {
+  display: none;
+}
+.m-annotated.toggle:checked ~ .m-annotated.notes-contents {
+  height: auto;
+  position: relative;
+  top: 0;
+}
+label .m-annotated.when-expanded {
+  display: none;
+}
+label .m-annotated.when-collapsed {
+  display: inline-block;
+}
+.m-annotated.toggle:checked ~ label .m-annotated.when-expanded {
+  display: inline-block;
+}
+.m-annotated.toggle:checked ~ label .m-annotated.when-collapsed {
+  display: none;
+}

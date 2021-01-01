@@ -2,7 +2,7 @@
 title: Vale's Hybrid-Generational Memory
 subtitle: For speed and simplicity!
 author: Theo Watkins and Evan Ovadia
-date: Nov 24 2020
+date: Jan 2 2021
 realm: blog
 path: blog/hybrid-generational-memory
 layout: annotated
@@ -12,34 +12,23 @@ namespace: c-blog m-annotated
 
 Vale's *hybrid-generational memory* is a ground-breaking new memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. [#resilient]
 
-
-We'll be publishing a series of articles soon which explain the model much more fully and understandably. *This page is is a draft, here for those that want an early explanation.*
-
-
 Note that hybrid-generational-memory is *not* implemented yet, it's still just a design.
 
 
-*Warning:* We're packing several articles' worth of explanation into a very dense single page. Only read this if you're familiar with free-lists, generational indices, thread-local storage, borrow checking, atomicity, fat pointers, branch misprediction, and cache misses!
+There are three ingredients to make hybrid-generational memory work:
+
+ * Generational references!
+ * Static analysis (sometimes referred to as the "automatic borrow checker") that can eliminate generation checks when it knows an object is alive.
+ * Scope tethering, to keep an object from getting freed when a local has a reference into it.
 
 
-If you have any questions, feel free to come by the [discord server](https://discord.gg/SNB8yGH) and we'll be happy to explain the model fully.
+# Start with Generational References
 
+Hybrid-generational memory is built upon [generational references](/blog/generational-references). Recall:
 
-# Explaining HGM
-
-
-For the purpose of explanation, we'll start with something inefficient and simple, and add in more and more optimizations.
-
-
-## Setting the Stage
-
-
-We'll start with Vale's unsafe-fast mode. Recall:
-
- * Every object is owned by an owning reference (like `unique_ptr`). When the owning reference goes away, the object is freed.
- * We can have non-owning references ("constraint references") to an object as well.
- * For now, every allocation is on the heap, nothing on the stack yet.
- * Each thread's memory (like Rust and Lobster) is isolated; any given object is only visible to one thread at a time.
+ * Every heap allocation has a u48[#uint][#why48] generation number before the object.
+ * Non-owning references contain a raw pointer and a u48 "target generation" number. [# And a u16 offset to know where the generation is relative to the object, see [generational references](/blog/generational-references).]
+ * Before dereferencing an object, assert that the target generation number matches the allocation's generation number.
 
 
 <slice>
@@ -50,31 +39,18 @@ We'll start with Vale's unsafe-fast mode. Recall:
  * Unsafe mode, which turns off all safety.
 
 Resilient mode uses hybrid-generational memory.
-</slice>
 
-
-## Adding Generational Malloc.
-
-
-Next, we add in [Generational Malloc](/blog/generational-malloc).
-
- * Every heap allocation has a u48[#uint][#why48] generation number before the object.
- * Constraint references contain a raw pointer and a u48 "target generation" number.
- * Before dereferencing an object, assert that the target generation number matches the allocation's generation number.
-
-
-<slice>
 #uint: u48 means a 48-bit unsigned integer.
 
 #why48: We chose 48 bits, but we could push it as high as 60 bits if we adjusted the below inlining mechanisms. 48 bits is more than enough though.
 </slice>
 
 
-## Eliminate Most Liveness Checks
+# Static Analysis: Eliminate Most Liveness Checks
 
 Use static analysis to reduce the number of liveness checks as much as possible. For example:
 
- * For each dereference, figure out if an in-scope local indirectly owns it. If so, skip the liveness check.
+ * For each dereference, figure out if an in-scope local indirectly owns it. If so, skip the liveness check. For more on this, see [HGM Static Analysis, Part 1](/blog/hgm-static-analysis-part-1).
  * Automatically track this information through intermediate stores/loads from struct members, where possible.
  * Automatically track this information through function calls like an automtic borrow checker, where possible.
 
@@ -83,32 +59,11 @@ This static analysis only works when a nearby local holds the owning reference. 
 <slice />
 
 
-## Stack Allocations
-
-So far, Vale already uses the regular stack for objects that it can guarantee don't need a generation, [# For example, an iterator might be owned by one local and never moved, and only hand out references that are guaranteed to not outlive the object, so we can guarantee it doesn't need a generation.] and everything else is put onto the heap.
-
-However, a lot of objects are in-between: they're only owned by a certain local, but generational references might escape. For these, we'll introduce the *generational stack*.
-
-Just like jemalloc and mimalloc have parallel heaps, the generational stack is actually made up of 10 parallel stacks. [# It will have one heap each for 8b, 16b, 24b, 32b, 40b, 48b, 64b, 80b, 96b, 128b. Larger objects will occupy multiple entries.]
-
-*Each stack uses a free-list.* [# It needs a free-list because we need to retire a slot in the stack once its u48 generation hits 0xFFFFFFFFFFFF.] Because of this, and stack-allocated objects' allocation pattern, it will have cache-friendliness similar to a regular stack.
-
-<slice />
-
-
-## Inline Objects
-
-Now we'll support objects containing other objects inline. [# For example, in C, a struct can live inside another struct's memory, unless it's a pointer.] The only complication is that inline objects are not right after their allocation's generation, as previously assumed.
-
- * Add a u15 to the reference, an offset from the object's start to the allocation's generation.
- * Change how we get a generation from a generational reference: instead of just dereferencing the object pointer, subtract the u15 offset from it first.
-
-
-## Add Scope Tethering
+# Add Scope Tethering
 
 The above static analysis only worked when a nearby local holds the owning reference. Now we'll make it work when a nearby local holds a non-owning reference too.
 
-Add a u1 *"tethered"* bit to every allocation, next to the u48 generation number. A local with a non-owning reference can set this bit to 1 to keep its allocation alive. [# Someone letting go of the object's owning reference will still call its destructor, regardless of the tethered bit. If the tethered bit is 1, the destructor will not free the object. Instead, the last tethering local will free the object.] Inside the scope of the local, we can *skip all generation checks.*
+We'll add a u1 *"tethered"* bit to every allocation, next to the u48 generation number. A local with a non-owning reference can set this bit to 1 to keep its allocation alive. [# Someone letting go of the object's owning reference will still call its destructor, regardless of the tethered bit. If the tethered bit is 1, the destructor will not free the object. Instead, the last tethering local will free the object.] Inside the scope of the local, we can *skip all generation checks.*
 
  * When the object is allocated, the tethered bit will be 0.
  * When a local wants to delay the object's destruction, it will:
@@ -117,7 +72,7 @@ Add a u1 *"tethered"* bit to every allocation, next to the u48 generation number
     * Write a 1 to the tethered bit.
  * When the local goes out of scope, it will:
     * Write the old value back to the tethered bit.
- * When the object is deallocated, we'll assert the tethered bit is 0. [# This is similar to how Rust's `RefCell` works, but without the mutability restrictions.] [# We could make a variant of HGM which instead keeps the object alive until the last tether is done.]
+ * When the object is deallocated, if the tethered bit is 1, we'll add it to a queue to check later. [# Specifically, every time we allocate, we check the front of the queue to see if something's tether has expired, and if so, reuse that object. If not, move it to the back of the queue and ask generational malloc instead. Similar to a free-list!]
 
 Not every non-owning local will tether. Static analysis will make a non-owning tether when it's dereferenced several times. Otherwise, it will just allow the generation checks to happen.
 
@@ -170,19 +125,19 @@ Memory safety is never free, except for the most trivial of programs. Cyclone, R
 
 Rust programs uses borrow references where they can. Where the borrow checker gets in their way, they incur costs:
 
- * From generational indices:
-    * Bounds checking, to make sure the index is in bounds,
-    * Reallocation when we need to add more objects, [# This is often amortized, but often not, if a generational array is temporary.]
-    * Branching, to check the generation matches.
-    * Possible cache missing, if the generation isn't in the same cache line as the object.
+ * From `RefCell`:
+    * Branching, to check if someone else has locked it.
+    * Possible cache missing, if the lock bit isn't in the same cache line as the object or we don't dereference the object at all.
  * From `Rc`:
     * Incrementing and decrementing costs,
     * Branching, to check if the counter is zero.
     * Possible cache missing if the counter isn't in the same cache line.
     * Possible cache missing if we never dereference the object's members.
- * From `RefCell`:
-    * Branching, to check if someone else has locked it.
-    * Possible cache missing, if the lock bit isn't in the same cache line as the object or we don't dereference the object at all.
+ * From generational indices:
+    * Bounds checking, to make sure the index is in bounds,
+    * Reallocation when we need to add more objects, [# This is often amortized, but often not, if a generational array is temporary.]
+    * Branching, to check the generation matches.
+    * Possible cache missing, if the generation isn't in the same cache line as the object.
 
 <slice/>
 
@@ -216,7 +171,7 @@ Hybrid-generational memory doesn't rely on expanding arrays. However, the genera
 
 ## Immutability, Arenas, Pools
 
-Rust has its borrow checker and Vale has its [region borrow checker](https://vale.dev/blog/zero-cost-refs-regions). Both allow the language to know when something's immutable, to optimize away redundant loads.
+Rust has its borrow checker and Vale has its [region borrow checker](/blog/zero-cost-refs-regions). Both allow the language to know when something's immutable, to optimize away redundant loads.
 
 Rust's borrow checker often forces us to use `Vec`s, and Vale's regions allow us to use pool or arena allocation. Both enable incredibly fast allocation. Vale's regions can apply it to any type, whereas in Rust we need to specifically add and keep track of every `Vec`, and some Rust allocations can't be put into `Vec`s. [# For example, `Rc`d objects are put on the heap.]
 

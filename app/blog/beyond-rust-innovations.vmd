@@ -192,7 +192,7 @@ With this, Vale makes it so that a function call (and any functions it indirectl
 
 It keeps these separate by tracking which region every reference is pointing into.
 
-You can read more about this at [Zero-Cost References with Regions](https://vale.dev/blog/zero-cost-refs-regions).
+You can read more about this at [Zero-Cost References with Regions](/blog/zero-cost-refs-regions).
 
 This is particularly exciting because:
 
@@ -204,9 +204,9 @@ This is particularly exciting because:
 
 Recently, the Vale team invented a new memory management paradigm, an alternative to borrow checking or reference counting or garbage collection, called *generational memory*. In generational memory, every allocation has an "actual generation" number at the top, [# This requires that our malloc uses size classes (like jemalloc and mimalloc) in a heap specifically for these "generationed allocations" so we can be certain nothing will overwrite them.] which represents "I am the *n*th inhabitant to occupy this location in RAM." Every (non-owning, non-borrow) reference is made of a pointer and a "target generation" number, so before each dereference, it checks that the allocation's actual generation still matches the reference's target generation, effectively checking if the target object is still alive.
 
-Generational memory is 2.5x as fast as reference counting [# This is comparing _naive_ generational memory to _naive_ reference counting. In other words, there are no optimizations on top of either.] so this is particularly promising. You can read more about this at [Generational References](https://vale.dev/blog/generational-references).
+Generational memory is 2.5x as fast as reference counting [# This is comparing _naive_ generational memory to _naive_ reference counting. In other words, there are no optimizations on top of either.] so this is particularly promising. You can read more about this at [Generational References](/blog/generational-references).
 
-Vale's next goal is to build on generational memory to make *hybrid-generational memory*, which blends in scope tethering [# This means that locals can share ownership of an object by marking its "tethered" bit, preventing it from disappearing and allowing more aggressive static analysis.] to enable automatic borrow checking in a way similar to an experienced Rust programmer, but without the difficulties of the borrow checker. You can get a sneak peak at the design at [Hybrid-Generational Memory](https://vale.dev/blog/hybrid-generational-memory).
+Vale's next goal is to build on generational memory to make *hybrid-generational memory*, which blends in scope tethering [# This means that locals can share ownership of an object by marking its "tethered" bit, preventing it from disappearing and allowing more aggressive static analysis.] to enable automatic borrow checking in a way similar to an experienced Rust programmer, but without the difficulties of the borrow checker. You can get a sneak peak at the design at [Hybrid-Generational Memory](/blog/hybrid-generational-memory).
 
 
 ## Constraint References
@@ -215,7 +215,7 @@ Vale's next goal is to build on generational memory to make *hybrid-generational
 
 *Constraint references* go one step further than address sanitizer; instead of waiting until you _dereference_ a dangling pointer, a constraint reference can detect when a pointer _becomes dangling_. [# If the user intends for a reference to dangle, then they can use a weak reference instead of a constraint reference.] With this, a program can detect risky pointers before they're even dereferenced, similar to how SQL's foreign key constraints work (hence the name).
 
-This was first implemented by Adam Dingle and David Bacon in an experimental language named [Gel](https://researcher.watson.ibm.com/researcher/files/us-bacon/Dingle07Ownership.pdf). We experimented with this in Vale and were wonderfully surprised at how easy they were to learn and use, and how few constraint halts we encountered (only two in a 1,500 line program, both which actually found legitimate mishandling). We decided to keep it in the language as Assist mode, and an additional Unsafe mode to turn off all protections if one deemed their testing with Assist mode was sufficient. You can read more about this at [The Next Steps for Single Ownership and RAII](https://vale.dev/blog/next-steps-raii).
+This was first implemented by Adam Dingle and David Bacon in an experimental language named [Gel](https://researcher.watson.ibm.com/researcher/files/us-bacon/Dingle07Ownership.pdf). We experimented with this in Vale and were wonderfully surprised at how easy they were to learn and use, and how few constraint halts we encountered (only two in a 1,500 line program, both which actually found legitimate mishandling). We decided to keep it in the language as Assist mode, and an additional Unsafe mode to turn off all protections if one deemed their testing with Assist mode was sufficient. You can read more about this at [The Next Steps for Single Ownership and RAII](/blog/next-steps-raii).
 
 This is particularly exciting because, given a good test suite, it's conservative enough to give high confidence in safety, [# Keep in mind, Rust programs (especially those with dependencies) still have to worry about memory unsafety too, because of `unsafe`.] with *zero memory or speed overhead*, which will be the best choice for a vast number of programs.
 

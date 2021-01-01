@@ -9,7 +9,7 @@ namespace: c-blog m-annotated
 ---
 
 
-Most of [Hybrid Generational Memory](https://vale.dev/blog/hybrid-generational-memory)’s (HGM’s) overhead is caused by *generation checks* [# Generation checks are also known as *liveness checks*.] that occur when a pointer to an object is dereferenced: to see if an object is still alive, HGM checks the generation number at the top of the object’s allocation to ensure that it matches the target generation number stored with the pointer. [# See [Generational References](https://vale.dev/blog/generational-references) for more on how this works!]
+Most of [Hybrid Generational Memory](/blog/hybrid-generational-memory)’s (HGM’s) overhead is caused by *generation checks* [# Generation checks are also known as *liveness checks*.] that occur when a pointer to an object is dereferenced: to see if an object is still alive, HGM checks the generation number at the top of the object’s allocation to ensure that it matches the target generation number stored with the pointer. [# See [Generational References](/blog/generational-references) for more on how this works!]
 
 This is how HGM guarantees memory safety, but getting the generation number at the top of the object’s allocation is often expensive because it incurs a cache miss on the CPU.  To combat this slow down, HGM uses static analysis at compile time to eliminate as many of these generation checks as possible.  
 
@@ -45,7 +45,7 @@ fn main() int {
  * In this case, the spaceship referenced by ‘b’ is clearly still alive because the spaceship’s owning reference [#own] (`s`) was created in the scope of ‘main’ and therefore will not be destroyed until after ‘main’s return statement is evaluated.  
 
 <slice>
-#own: Vale has a couple different types of references.  Objects are tied to the lifetime of their owning reference,  usually the first reference that points to the object.  Read more about single ownership and references at [References](vale.dev/guide/references).
+#own: Vale has a couple different types of references.  Objects are tied to the lifetime of their owning reference,  usually the first reference that points to the object.  Read more about single ownership and references at [References](/guide/references).
 </slice>
 
 

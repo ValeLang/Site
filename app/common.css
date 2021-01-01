@@ -1,10 +1,11 @@
 
 .page {
-  width: 896px;
-  box-sizing: border-box;
   margin: auto;
   position: relative;
-  padding-top: 16px;
+}
+
+.page-inner {
+  margin: 16px 16px 0 16px;
 }
 
 .subtitle {
@@ -53,10 +54,6 @@ p:last-child {
 
 
 
-.home.page {
-  padding-top: 24px;
-}
-
 .quote {
   margin: 0 0 8px 0;
   border-left: 4px #E0E0FF solid;
@@ -98,6 +95,15 @@ p:last-child {
 }
 
 
+
+ul.blank {
+  list-style-type: none;
+  padding-left: 24px;
+}
+
+ul.blank > li {
+  margin: 0;
+}
 
 .cozy {
   margin-bottom: 8px;
@@ -175,4 +181,11 @@ h5 {
   font-size: 11pt;
   color: #000000;
   font-weight: bold;
+}
+
+.callout {
+  margin: 0 0 8px 0;
+  background-color: #FFF0E0;
+  padding: 8px;
+  border: 2px solid #FFE0C0;
 }

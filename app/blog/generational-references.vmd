@@ -2,7 +2,7 @@
 title: Vale's Generational References
 subtitle: For raw speed and power!
 author: Evan Ovadia
-date: Nov 24 2020
+date: Jan 2 2021
 realm: blog
 path: blog/generational-references
 layout: annotated
@@ -12,8 +12,7 @@ namespace: c-blog m-annotated
 
 Vale's *hybrid-generational memory* is a new ground-breaking memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. [#resilient] [# See [Hybrid-Generational Memory](/blog/hybrid-generational-memory) for a full explanation (and some comparison with Rust!)]
 
-
-The *generational reference* is the keystone of the entire approach, the lynchpin that make it all work. Keep reading to learn how it works!
+The *generational reference* is the keystone of the entire approach, the lynchpin that makes it all work. Keep reading to learn how it works!
 
 
 Note that hybrid-generational memory is *still in development*. We have some very promising early results, so we're sharing the idea to show you where Vale is headed. If you want to be part of this and bring hybrid-generational memory into the world, come [join us](/contribute) and help make it happen!
@@ -21,7 +20,7 @@ Note that hybrid-generational memory is *still in development*. We have some ver
 
 # Generational Malloc and the Sacred Integer
 
-In this scheme, we use *generational malloc*, which is like regular malloc, except at the top of every allocation is a *generation number*, which tracks how many objects have previously been at this memory location.
+Generational references use *generational malloc*, which is like regular malloc, except at the top of every allocation is a *generation number*, which tracks how many objects have previously been at this memory location.
 
 One could also think of it as describing "I am the *n*th inhabitant of this memory location".
 
@@ -36,7 +35,7 @@ Generational malloc would normally be an adjustment to mimalloc or jemalloc, but
  * `genFree` increments the generation number, and instead of calling `free` [#virtfree], caches the allocation in a free-list. There's a free-list for every size class (16b, 24b, 32b, <=48b, <=64b, <=128b, etc).
  * `genMalloc` pulls from a free-list if possible. If it's empty, it calls `malloc` and initializes the generation number to 1.
 
-You can find our experimental implementation in [genHeap.c](https://github.com/ValeLang/Vale/blob/master/Midas/src/valestd/genHeap.c).
+You can find our experimental implementation in [genHeap.c](https://github.com/ValeLang/Vale/blob/master/Midas/src/builtins/genHeap.c).
 
 
 <slice>
@@ -49,7 +48,7 @@ You can find our experimental implementation in [genHeap.c](https://github.com/V
 Resilient mode uses hybrid-generational memory.
 
 
-#virtfree: Our experimental implementation doesn't release memory back to the operating system. In the final version, once there are no more objects in a page, we would release the page back to the operating system and map that virtual page to a read-only one containing all 0xFF.
+#virtfree: Our experimental implementation doesn't release memory back to the operating system, but in the final version, once there are no more objects in a page, we would release the page back to the operating system and map that virtual page to a read-only one containing all 0xFF.
 </slice>
 
 
@@ -151,7 +150,7 @@ Once we implement full hybrid-generational memory, we'll be benchmarking against
 </slice>
 
 
-Generational references add only 10.84% to the run time of a program, *less than half the cost of reference counting!* These are very promising results, and suggest that full hybrid-generational memory could be incredibly fast.
+Generational references have only 10.84% overhead, *less than half the cost of reference counting!* These are very promising results, and suggest that full hybrid-generational memory could be incredibly fast.
 
 
 Try it out! In the Vale release, you can find a benchmark folder with scripts to run the benchmarks. You can find the source code for the various approaches [here](https://github.com/ValeLang/Vale/tree/master/Midas/src/c-compiler/region) (feel free to swing by the [discord server](https://discord.gg/SNB8yGH) and we can point you to the right files).
@@ -162,15 +161,13 @@ Try it out! In the Vale release, you can find a benchmark folder with scripts to
 
 *Note these caveats!* To isolate the difference between generational references and the other approaches:
 
- * In all flavors, we only allocate objects on the heap, except for primitives. Future versions will add stack allocations, and a "local generation table" to store generation numbers for them. [#lgt]
+ * In all flavors, we only allocate objects on the heap, except for primitives. Future versions will add stack allocations.
  * We used genHeap.c for all versions, though only GM ever touches the generation number, the other versions ignore it. Future versions will integrate generational malloc into jemalloc or mimalloc directly.
 
 Once we address these limitations, we can get more precise benchmarks against the other approaches.
 
 
-<slice>
-#lgt: Implementing this efficiently is part of the larger hybrid-generational memory approach, see [Hybrid-Generational Memory](/blog/hybrid-generational-memory) for more.
-</slice>
+<slice/>
 
 
 # Why is this so fast?
@@ -178,8 +175,9 @@ Once we address these limitations, we can get more precise benchmarks against th
 
 Generational references are much easier for the CPU to handle than reference-counted references, because:
 
- * Generational references cause overhead on dereference, rather than on aliasing and dealiasing.
- * Generational references don't cause needless cache misses.
+ * Generational references have no aliasing/dealiasing overhead, just on dereference.
+ * Generational references cause less cache misses.
+ * Liveness checks' branching is easier to predict than RC decrements' branching.
 
 
 We explain these two differences more below.
@@ -241,19 +239,19 @@ This is cheaper because *programs dereference less than they alias and dealias:*
 
 ## More Cache Friendly
 
-
-Generational references are much more cache-friendly than reference-counting. "Cache friendly" means it the CPU doesn't spend unnecessary time bringing data from RAM into its cache.
-
-Adding and subtracting are basically free on modern CPUs. The real bottleneck in modern programs is how _far_ the data is: if it's been recently accessed, it's in the nearby cache, and only takes a few CPU cycles to fetch. Otherwise the CPU will "cache miss" and have to bring it in all the way from RAM, which could take *hundreds* of cycles. [#caching]
-
+Reference counting is not very "cache friendly". Adding and subtracting integers is basically free on modern CPUs, but the real bottleneck in modern programs is how _far_ those integers are: if it's been recently accessed, it's in the nearby cache, and only takes a few CPU cycles to fetch. Otherwise the CPU will "cache miss" and have to bring it in all the way from RAM, which could take *hundreds* of cycles. [#caching]
 
 In our reference-counted `launchShip` example, the `ship.__ref_count++` could take a few cycles if `ship` is already in the cache, or hundreds of cycles if it's not.
 
-In the `getShipName` example however, the cache cost for `ship` is already being paid, because we're already bringing it into cache to read its `name`. Since the generation is included in the object's allocation, we get it for free. [# This is true for the vast majority of objects, which fit in the cache line. For any objects larger than a cache line, reading the generation sometimes incurs a cache miss.]
+
+Generational references are more cache friendly:
+
+ * When a generational reference goes away, we don't need to reach into memory (unlike RC, where we have to decrement a counter).
+ * We don't need to increment when aliasing (see previous section); we don't need to reach into memory to increment.
 
 
 <slice>
-#somany: Half of these million are aliasings and half are dealiasings. Aliasing happens whenever we access a member (e.g. `person.name`) or make a new reference (e.g. `&person`).
+#somany: Half of these are aliasings and half are dealiasings. Aliasing happens whenever we access a member (e.g. `person.name`) or make a new reference (e.g. `&person`).
 
 
 #noopt: Many languages are able to skip a lot of the adjustments, using static analysis. For example, Lobster can remove up to 95%. Our experiment doesn't have those optimizations; it compares naive RC to naive generational references.
@@ -263,10 +261,21 @@ In the `getShipName` example however, the cache cost for `ship` is already being
 </slice>
 
 
+## Better Branch Prediction
+
+For a given if-statement, CPUs will predict whether we'll go down the "then" branch or the "else" branch. This is called [branch prediction](https://en.wikipedia.org/wiki/Branch_predictor). It guesses based on various factors.
+
+When we do a liveness check, we can hint to the CPU that we assume it will succeed; it doesn't have to guess.
+
+However, in RC, when we check if a counter is zero (to know whether to free the object), we don't know what to tell the CPU to expect. It has to guess. If it's wrong, then it has to back up, throw away any effects it's done in the meantime, and go down the correct branch.
+
+<slice/>
+
+
 # Memory Usage
 
 
-No approach gets memory safety for free [#freesafety], and the same is true here; generational references use more memory.
+No approach gets memory safety for free [#freesafety], and the same is true here; generational references use some memory.
 
 In Vale, owning references would still just be pointers, only 64 bits. Non-owning references are generational references, which are larger (128 bits).
 
@@ -289,7 +298,7 @@ Vale programs in extremely memory-constrained environments might want to use a d
 #freesafety: Memory safety is never free, except for the most trivial of programs. Cyclone, Rust, ATS, Fortran, and every other language incurs _some_ overhead to ensure safety. This comes in the form of branching and cache miss costs, for example in:
 
  * Array bounds checks.
- * Check if something's still alive, e.g. with booleans or generation liveness checks.
+ * Check if something's still alive, e.g. with booleans or generational indices.
  * Reference count increments/decrements.
 
 Or large memory costs, for example if objects are stored in vectors.
@@ -303,12 +312,39 @@ Such memory-constrained applications might also take a look at C, C++, or unsafe
 
 # What's Next?
 
+## Stack Allocations
+
+If an object is never moved [# ...or moved only to child calls, and in some cases, only moved to parent calls.] then we can put it on a stack.
+
+Generational memory will have multiple "generational stacks", one for each size class, just like jemalloc and mimalloc have parallel heaps. [# We'll have a stack each for 8b, 16b, 24b, 32b, 48b, 64b, etc. Larger objects will occupy multiple entries.] [# Each stack will use a free-list because we need to retire a slot in the stack once its u48 generation hits 0xFFFFFFFFFFFF.] Because of this, and stack-allocated objects' allocation pattern, it will have cache-friendliness similar to a regular stack.
+
+Additionally, when we identify objects that don't need a generation, they can go on the regular stack, not these generational stacks. [# For example, an iterator might be owned by one local and never moved, and only hand out references that are guaranteed to not outlive the object, so we can guarantee it doesn't need a generation.]
+
+<slice/>
+
+
+## Inline Objects
+
+We can support objects containing other objects inline. [# For example, in C, a struct can live inside another struct's memory, unless it's a pointer.] The only complication is that inline objects are not right after their allocation's generation, as previously assumed. So, we'll:
+
+ * Add a u16 to the reference, an offset from the object's start to the allocation's generation.
+ * Change how we get a generation: instead of just dereferencing the object pointer, subtract the u16 offset from it first.
+
+<slice />
+
+
+## Hybrid-Generational Memory
 
 The generational reference is only the first step towards hybrid-generational memory, and it already beats reference counting.
 
-When hybrid-generational memory is fully realized, we expect it will be as fast as Rust, and almost as fast as C++. [# See [Hybrid-Generational Memory](/blog/hybrid-generational-memory#header11) for some comparison with Rust!]
+Hybrid-generational memory adds two layers of optimization:
 
-We're excited about this, because it gives us raw speed with zero unsafety, while keeping the language easy to learn and use.
+ * Static analysis, to skip liveness checks.
+ * Scope tethering, to keep an object alive longer.
+
+When hybrid-generational memory is fully realized, we expect it will be as fast as Rust, and almost as fast as C++. [# See [Hybrid-Generational Memory](/blog/hybrid-generational-memory) for some comparison with Rust!]
+
+We're excited about this, because it gives us raw speed with zero unsafety, and keeps the language easy to learn and use.
 
 See [Hybrid-Generational Memory](/blog/hybrid-generational-memory) to learn more, and feel free to swing by the [discord server](https://discord.gg/SNB8yGH) with any questions or ideas!
 

@@ -1,59 +1,6 @@
 
-.c-roadmap.columns {
-  display: flex;
-}
-.c-roadmap.column1 {
-  width: 25%;
-  flex-grow: 1;
-  margin: 0 8px 8px 0;
-}
-.c-roadmap.column2 {
-  width: 25%;
-  flex-grow: 1;
-  margin: 0 0 8px 8px;
-}
-.c-roadmap.column3 {
-  width: 25%;
-  flex-grow: 1;
-  margin: 0 0 8px 8px;
-}
-.c-roadmap.column4 {
-  width: 25%;
-  flex-grow: 1;
-  margin: 0 0 8px 8px;
-}
-
-ul.c-roadmap {
-  margin: 0;
-  padding-left: 1.5em;
-  list-style-type: none;
-}
-
-h3.c-roadmap {
-  margin-top: 16px;
-  padding-top: 0;
-  margin-bottom: 0;
-  margin-right: 0;
-  font-size: 12pt;
-}
-
-.c-roadmap.v01 {
-  font-weight: bold;
-}
-
-.c-roadmap.intro {
-  width: 60%;
-  margin-bottom: 16px;
-}
-.c-roadmap.legend {
-  width: 40%;
-  margin-bottom: 16px;
-}
-
-
-
-.c-roadmap.icon {
-  background-image: url("../components/Sphere144-128-Red.png");
+.roadmap .icon {
+  background-image: url("components/Sphere144-128-Red.png");
   background-size: 14px 14px;
   width: 14px;
   height: 14px;
@@ -63,17 +10,15 @@ h3.c-roadmap {
   margin-bottom: -1px;
 }
 
-.c-roadmap.done .c-roadmap.icon {
+.roadmap .icon.done {
   filter: hue-rotate(120deg) saturate(150%);
 }
 
-.c-roadmap.todo .c-roadmap.icon {
-  filter: hue-rotate(50deg) saturate(300%);
-  
+.roadmap .icon.todo {
+  filter: hue-rotate(50deg) saturate(300%);  
 }
 
-.c-roadmap.later .c-roadmap.icon {
-  opacity: .5;
+.roadmap .icon.later {
   filter: saturate(0%) brightness(120%);
 }
 
