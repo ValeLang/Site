@@ -1,0 +1,278 @@
+---
+title: Regions
+path: guide/regions
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: [Structs](/guide/structs)
+series-entry: [References](/guide/references)
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: [Generics](/guide/generics)
+series-entry: [Patterns](/guide/patterns)
+series-entry: []()
+---
+
+We can divide our program's memory into *regions*, for *safer* and *faster* code. [# Planned feature; see [Roadmap](/roadmap)!]
+
+Every function has its *current* region, but can access other regions as well.
+
+We often call `main`'s region the *main region*.
+
+
+# Read-only Region
+
+<<<<
+A common pattern is for a function to regard all of its parameters as coming from a read-only region.
+
+Notice the `<'a ro>`. The `'` means region, followed by its name (`a`), followed by its permission (`ro` which means read-only).
+
+When main passes in `allShips` from the main region into the `'a &List<Ship>` parameter, `biggestShipName`:
+
+ * Refers to the main region by the name `'a`.
+ * Can't modify anything in that region, because of the `ro` permission.
+ * Makes its own region, to be its current region.
+
+This *locks down the entire main region. Nobody can modify it.*
+
+Because of this, the compiler is free to do much more powerful optimizations. [# Making constraint references and weak references into read-only regions are completely free; the compiler optimizes them into raw pointers.]
+
+The compiler also keeps track of all references' regions, and makes sure that no reference outlive their region.
+////
+```Vale
+struct Ship {
+  name str;
+  size int;
+}
+
+fn biggestShipName<'a ro>(
+  ships 'a &List<Ship>)
+Str {
+  biggest! = ships.0;
+  each ships (ship){
+    if (ship.size > biggest.size) {
+      mut biggest = ship;
+    }
+  }
+  ret biggest.name;
+}
+
+fn main() export {
+  allShips = List(
+    Ship("Serenity", 9),
+    Ship("Raza", 7));
+
+  n = biggestShipName(allShips);
+
+  println(n);
+}
+```
+```stdout
+Serenity
+```
+>>>>
+
+
+# Mutexed Region
+
+A mutex is a special wrapper around a region that can be opened by someone for reading and writing, or opened by multiple people for only reading.
+
+<<<<
+We can make a mutexed region with the `Mutex` function.
+
+It accepts a *regioned object*. A regioned object is an object where all of its (directly or indirectly) owned objects refer only to each other and are referred to only by each other.
+
+Here, we're making an regioned object with a region call, the `'a makeGame()`.
+
+`Mutex` will take the regioned object, and wrap it in a `Mutex` object.
+
+We can open the mutex for reading via its `rlock` method, which will return a `RLock` object, which contains a read-only reference to our regioned object.
+
+There's a corresponding `rwlock` method for `read-write` access.
+
+The compiler keeps track of all references' regions, and makes sure that no references outlive their lock.
+////
+```Vale
+struct Game {
+  bases List<Base>;
+  ships List<Ship>;
+}
+struct Base { ... }
+struct Ship {
+  name str;
+  from &Base;
+}
+
+fn makeGame() Game {
+  bases List<Base> = ...;
+  ships = List(
+    Ship("Serenity", bases.0),
+    Ship("Raza", bases.1));
+  ret Game(bases, ships);
+}
+
+fn main() export {
+  mutex = Mutex('a makeGame());
+
+  // Open for reading
+  roLock = mutex.rlock();
+  roGame = lock.root;
+  println(roGame.ships.0.name);
+  drop(roLock);
+
+  // Open for writing
+  rwLock = mutex.rwlock();
+  rwGame = lock.root;
+  mut rwGame.ships.0.from =
+    rwGame.bases.0;
+  drop(rwLock);
+}
+```
+>>>>
+
+
+# Regions are Hierarchical
+
+One region cannot "open" another to gain access to it. Rather, we make a new region that has access to them both.
+
+Even in the above example, when we opened the mutex (using `rlock` or `rwlock`, we were creating a temporary new region.
+
+<slice />
+
+
+# Moving Objects Across Regions
+
+We can move an object to another region by putting the destination region's lifetime annotation (`'a`) in front of the data.
+
+We call this *transmigrating*.
+
+<<<<
+Here we're transmigrating a Drawable from region `'a` to region `'b`.
+
+Notice how we put the destination region `'b` in front of the object `baseInA`.
+
+Transmigrating has a cost though: Vale must turn the object into a regioned object first!
+
+To turn an object into a regioned object, it must *secede*, which means it must sever any references between things it indirectly owns ("descendants"), and everything outside ("outsiders").
+
+Specifically, it:
+
+ * Nullifies descendants' weak references to outsiders.
+ * Nullifies outsiders' weak references to descendants.
+ * Halts on descendants' constraint references to outsiders.
+ * Halts on outsiders' constraint references to descendants.
+ * Copying any immutable descendants that are shared with outsiders.
+
+This can be costly. [#costly]
+
+Luckily, we can avoid this cost!
+////
+```Vale
+struct Vec2 { x float; y float; }
+// Represents a quadratic curve
+struct Curve {
+  origin Vec2;
+  scale Vec2;
+}
+fn getYForX(curve &Curve, x float) {
+  origin.y + scale.y * pow(
+    x * scale.x + origin.x, 2)
+}
+
+struct Drawable {
+  segments List<Vec2>;
+}
+fn segmentify(curve &Curve) Drawable {
+  results = List<Vec2>();
+  each range(0, 10) (x){
+    y = curve.getYForX(x);
+    results.add(Vec2(x, y));
+  }
+  ret Drawable(results);
+}
+
+fn segmentifyAndSend<'a, 'b>(
+    curve 'a &Curve,
+    drawables 'b &List<Drawable>) {
+  // Assembles Drawable
+  drawableInA = segmentify(curve);
+
+  // Transmigrate it to region 'b
+  drawableInB = 'b drawableInA;
+
+  // Can now add it to drawables
+  drawables.add(drawableInB);
+}
+```
+>>>>
+
+<slice>
+#costly: The cost depends on various factors:
+
+ * Faster if the objects are already in the CPU cache.
+ * Faster for structs, slower for interfaces.
+ * Slower for immutables that are shared.
+ * Free for atomic immutables.
+</slice>
+
+
+## Avoiding Secede Costs
+
+There are three ways to avoid secede costs:
+
+ * Use atomic immutables, which aren't copied when seceding.
+ * Avoid the move. Functions can operate on two regions at once, so we might not need to combine data into one region.
+ * Restructure the code such that the object is already a regioned object, so it doesn't have to secede.
+
+<<<<
+To illustrate that last point, we can change `segmentify`.
+
+Notice how `segmentify` now accepts its parameter from a different region `'a`.
+
+Because of this, `segmentify` gets its own region. It's making its `Vec2`s and `Drawable` in this new region.
+
+Because the return isn't `'a`, the compiler knows that `Drawable` is a regioned object.
+
+Now, `segmentifyAndSend` doesn't cause a secede!
+////
+```Vale
+fn segmentify<'a>(
+    curve 'a &Curve) Drawable {
+  results = List<Vec2>();
+  each range(0, 10) (x){
+    y = curve.getYForX(x);
+    results.add(Vec2(x, y));
+  }
+  ret Drawable(results);
+}
+
+fn segmentifyAndSend<'a, 'b>(
+    curve 'a &Curve,
+    drawables 'b &List<Drawable>) {
+  // Assembles Drawable
+  drawableInA = segmentify(curve);
+
+  // No secede, because drawableInA
+  // is a regioned object.
+  drawableInB = 'b drawableInA;
+
+  // Can now add it to drawables
+  drawables.add(drawableInB);
+}
+```
+>>>>
+
+
+# Bump Calling
+
+With the bump keyword on a region declaration, all the region's allocations will use a bump allocator. This is especially useful for calling pure functions which have short lifetimes. [# More explanation soon, stay tuned or swing by our discord for more information!]
+
+
+# Regions in Practice
+
+Regions are useful in many situations:
+
+ * We can speed up the program by making the main region read-only.
+ * A mutex shares a regioned object between multiple threads.
+ * We send regioned objects between threads, through channels.
+ * We can use a mutex to drastically speed up a single thread, by only rwlocking for modification, and rlocking for fast access everywhere else.

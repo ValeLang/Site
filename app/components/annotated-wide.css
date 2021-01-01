@@ -1,0 +1,52 @@
+
+.m-annotated.notes-first-header {
+  text-align: center;
+  opacity: .5;
+}
+.m-annotated.notes-header {
+  display: none;
+}
+.m-annotated.toggle {
+  display: none;
+}
+.m-annotated.slice-contents {
+  width: 632px;
+  padding-right: 8px;
+  box-sizing: border-box;
+}
+.m-annotated.slice-notes {
+  width: 264px;
+  background-color: #E8F0FF;
+  position: relative;
+}
+
+
+.page.m-annotated.nojs label .m-annotated.when-expanded {
+  display: none;
+}
+.page.m-annotated.nojs label .m-annotated.when-collapsed {
+  display: inline-block;
+}
+.page.m-annotated.nojs .m-annotated.toggle:checked ~ label .m-annotated.when-expanded {
+  display: inline-block;
+}
+.page.m-annotated.nojs .m-annotated.toggle:checked ~ label .m-annotated.when-collapsed {
+  display: none;
+}
+
+
+.page.m-annotated.jsmargined .m-annotated.note {
+  position: absolute;
+  /* So it can be above the backgrounds of other sections, if it has to be
+  moved down partially over the next section. */
+  z-index: 1;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+}
+.page.m-annotated.jsmargined label .m-annotated.when-expanded {
+  display: none;
+}
+.page.m-annotated.jsmargined label .m-annotated.when-collapsed {
+  display: none;
+}

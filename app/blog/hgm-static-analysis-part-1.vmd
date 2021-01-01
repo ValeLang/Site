@@ -1,0 +1,117 @@
+---
+title: HGM Static Analysis, Part 1
+author: Theo Watkins
+date: Dec 8 2020
+realm: blog
+path: blog/hgm-static-analysis-part-1
+layout: annotated
+namespace: c-blog m-annotated
+---
+
+
+Most of [Hybrid Generational Memory](/blog/hybrid-generational-memory)’s (HGM’s) overhead is caused by *generation checks* [# Generation checks are also known as *liveness checks*.] that occur when a pointer to an object is dereferenced: to see if an object is still alive, HGM checks the generation number at the top of the object’s allocation to ensure that it matches the target generation number stored with the pointer. [# See [Generational References](/blog/generational-references) for more on how this works!]
+
+This is how HGM guarantees memory safety, but getting the generation number at the top of the object’s allocation is often expensive because it incurs a cache miss on the CPU.  To combat this slow down, HGM uses static analysis at compile time to eliminate as many of these generation checks as possible.  
+
+ * HGM’s static analysis is implemented by the second stage of the Vale compiler, a Java program called Catalyst.  
+ * The first stage of the Vale compiler (Valestrom) creates a JSON formatted AST representing the Vale program.
+ * Catalyst parses and modifies this AST to eliminate generation checks before handing the modified AST to the third and final stage of the Vale compiler (Midas).  
+
+
+# In-Scope Objects
+
+<<<<
+When an object is created, its allocated memory is guaranteed to be safe until its owning reference (here, `s`) is destroyed via a call to `drop` (i.e. `drop(s)`).  This call is usually implicit when the owning reference goes out of scope.
+
+HGM leverages this to eliminate generation checks for references to objects who’s owning reference is still available.
+////
+```Vale
+struct Spaceship {
+  fuel int;
+}
+
+fn main() int {
+  s = Spaceship(10);
+  b = &s;
+  ret b.fuel;
+  // s goes out of scope here,
+  // so there's an implicit drop(s),
+  // freeing the Spaceship.
+}
+```
+>>>>
+
+ * HGM requires a generation check for the return statement in `main` to ensure that the Spaceship referenced by `b` is still alive.
+ * In this case, the spaceship referenced by ‘b’ is clearly still alive because the spaceship’s owning reference [#own] (`s`) was created in the scope of ‘main’ and therefore will not be destroyed until after ‘main’s return statement is evaluated.  
+
+<slice>
+#own: Vale has a couple different types of references.  Objects are tied to the lifetime of their owning reference,  usually the first reference that points to the object.  Read more about single ownership and references at [References](/guide/references).
+</slice>
+
+
+# Static Analysis Implementation
+
+## The AST
+
+Information about the type of reference and a unique identifier for each local is stored in the AST.  
+
+The AST node that dereferences a pointer contains a ‘knownLive’ field. 
+
+This field contains a boolean specifying whether the Object pointed to by the reference is known to be alive (meaning the generation check can be skipped).
+
+Prior to Catalyst’s modifications, all ‘knownLive’ fields are false.  
+
+
+## Catalyst
+
+Catalyst uses 2 separate hashmaps for each scope within a program, one for mapping objects to liveness information, and one for mapping references to objects.  
+
+Catalyst’s tables in Vale syntax:
+
+```
+Objects = HashMap<str, bool>();
+Variables = HashMap<str, str>();
+```
+
+Using the example from the previous section, Catalyst’s tables after each line in main would read as follows (assuming that each reference’s unique identifier is the variable name):
+
+```Vale
+struct Spaceship {
+    fuel int;
+}
+
+fn main() int {
+  s = Spaceship(10);
+  // Objects = {‘s’->true}
+  // Variables = {}
+  // s is an owning reference, so it is added to the Objects table; and
+  // because it has just been initialized, its value is set to true.
+
+  b = &s;
+  // Objects = {‘s’->true}
+  // Variables = {‘b’->’s’}
+  // b is a non-owning reference, so it is added to the Variables table;
+  // and because it references the object owned by s, its value is set to s
+
+  ret b.fuel; // Requires liveness check
+  // implicit drop(s) here, so:
+  // Objects = {‘s’->false}
+  // Variables = {}
+  // When s is dropped, Catalyst sets the value of s to false in Objects
+  // and removes all references to s from Variables
+}
+```
+
+How Catalyst parses the AST node(s) corresponding to the final line of `main`:
+
+ * Finds the owning reference of the object referenced by ‘b’ in the ‘Objects’ table.  
+ * If the owning reference exists in ‘Objects’ and its value is true; Catalyst sets the ‘knownLive’ field of the AST node associated with the dereference to true.  
+
+Once Catalyst has made all its modifications, it passes the new AST to Midas.  
+
+When the program is run, the generation check caused by ‘main’s return statement will be skipped because ‘knownLive’ will be true.  
+
+
+# Just the Beginning
+
+This is a basic algorithm showing what happens when we make a non-owning reference from an owning reference [# Remember that owning references never require generation checks because as long as the owning reference is available, its object is alive.] and then immediately dereference it. This pattern is very simple and rarely seen in real Vale code, but it serves as the foundation for the next steps in Catalyst, where we'll improve the algorithm to track objects through function calls and struct members.  

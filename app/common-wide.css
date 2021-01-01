@@ -1,0 +1,9 @@
+
+.page {
+  width: 928px;
+}
+
+.slice {
+  display: flex;
+  flex-direction: row;
+}

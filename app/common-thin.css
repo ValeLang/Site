@@ -1,0 +1,27 @@
+
+.page {
+  width: 100%;
+  max-width: 623px;
+}
+
+.page-left {
+  width: 100%;
+  box-sizing: border-box;
+}
+.page-right {
+  display: none;
+}
+.slice-contents {
+  width: 100%;
+  padding-right: 8px;
+  box-sizing: border-box;
+}
+
+.page-right {
+  width: 100%;
+  background-color: #E8F0FF;
+}
+
+.c-toc.root {
+  display: none;
+}

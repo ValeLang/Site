@@ -1,16 +1,15 @@
 
-.header.title {
-	font-size: 26pt;
-	font-weight: bold;
+.header.root {
+  color: white;
+  background-color: #20232a;
+  overflow: hidden;
+}
+.header .contents {
+  height: 100%;
+  margin: auto;
   position: relative;
-  top: -1px;
-  right: 3px;
-  color: #D0D0D0;
 }
-.header.small .header.title {
-	font-size: 16pt;
-  top: 0px;
-}
+
 a.header:hover {
 	text-decoration: none;
 }
@@ -20,85 +19,71 @@ a.header:hover {
 	/*text-shadow: 0 0 5px rgba(255, 255, 255, .3);*/
 }
 
-.header.root {
-	color: white;
-	background-color: #20232a;
-	width: 100%;
-	min-width: 896px;
-	overflow: hidden;
-	height: 68px;
-}
-.header.small.root {
-	height: 38px;
-}
-.header .contents {
-	margin: auto;
-	width: 896px;
-	height: 64px;
-	position: relative;
-	display: flex;
-	align-items: center;
-}
-.header.small .contents {
-	height: 32px;
-}
+
+
 .header .text {
+	height: 100%;
+	width: 100%;
 	display: flex;
+	position: relative;
 	align-items: center;
-	margin-left: 8px;
 }
-.header.small .text {
-	line-height: 36px;
+.header.title {
+	font-size: 26pt;
 	font-weight: bold;
-	margin-left: 4px;
+  color: #D0D0D0;
+  position: relative;
+  top: -1px;
 }
-.header .links {
-	position: absolute;
-	top: 0;
-	right: 0;
-	line-height: 64px;
+.header.title > * {
 }
-.header.small .links {
+.header.explorations .header.title {
+	font-size: 16pt;
+  top: 0px;
+}
+.header.explorations .links {
 	line-height: 32px;
 }
 .header .links > a {
 	color: white;
-	margin-left: 12px;
-	position: relative;
-	top: 3px;
+	vertical-align: middle;
 }
 .header .vorb-container {
-	margin: 8px;
-	width: 48px;
-	height: 48px;
-	position: relative;
-}
-.header.small .vorb-container {
-	margin: 8px;
-	width: 24px;
-	height: 24px;
-	position: relative;
+	position: absolute;
 }
 .header .vorb {
-	height: 76px;
+	background-image: url('../images/SphereVG96Size152.png');
+	/*height: 76px;
 	width: 76px;
 	position: absolute;
 	top: -14px;
 	right: -14px;
-	background-image: url('../images/SphereVG96Size152.png');
 	background-size: 76px 76px;
 	background-repeat: no-repeat;
 	background-position-x: left;
-	background-position-y: top;
+	background-position-y: top;*/
 }
-.header.small .vorb {
-	height: 38px;
-	width: 38px;
-	position: absolute;
-	top: -6px;
-	right: 0px;
-	background-size: 38px 38px;
-}
+
 .header .explorations {
 	color: white;
+}
+.header .reddit,
+.header .github,
+.header .discord {
+	background-size: 100% 100%;
+	background-image: url('../images/reddit_share_circle_64.png');
+	width: 24px;
+	height: 24px;
+	color: transparent !important;
+	display: inline-block;
+	overflow: hidden;
+}
+.header .discord {
+	background-image: url('../images/Discord-Logo-Color.png');
+}
+.header .reddit {
+	background-image: url('../images/reddit_share_circle_64.png');
+}
+.header .github {
+	background-image: url('../images/GitHub-Mark-Light-64px.png');
 }

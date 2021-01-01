@@ -56,7 +56,7 @@ class Page extends React.Component {
                 <div className={ns("content splitter")}>
                   <div className={ns("half")}>
 
-  <div className={ns("code")}>
+  <Snippet>
 {`superstructure MySuperstructure {
   root struct SolarSystem {
     planets: List:Planet;
@@ -75,11 +75,11 @@ class Page extends React.Component {
     planet: &Planet;
   }
 }`}
-  </div>
+  </Snippet>
                   </div>
                   <div className={ns("half")}>
 
-  <div className={ns("code")}>
+  <Snippet>
 {`let mySS =
   MySuperstructure(
     SolarSystem(
@@ -100,7 +100,7 @@ mySS.root.astronauts.add(
     "Raynor",
     &mySS.root.planets.1));
  `}
-  </div>
+  </Snippet>
                   </div>
                 </div>
 
@@ -114,14 +114,14 @@ mySS.root.astronauts.add(
                     </div>
 
                     <div className={ns("half")} style={{float: "right", clear: "both"}}>
-  <div className={ns("code")}>
+  <Snippet>
 {`superstructure MySuperstructure {
   @History(Linear);`} {this.noteAnchor("note0")} <NoteAnchor iconsAndPositions={this.state.noteIconsAndPositions} update={this.updateNoteAnchorPosition} name="note0.5"/>{`
   @Revertible(true);
 
   root struct SolarSystem {
 ...`}
-  </div>
+  </Snippet>
                     </div>
                   </div>
                 </div>
@@ -141,9 +141,9 @@ mySS.root.astronauts.add(
                     </div>
 
                     <div className={ns("half")} style={{float: "right", clear: "both"}}>
-  <div className={ns("code")}>
+  <Snippet>
 {`let firstVersion = v.version(mySS);`}
-  </div>
+  </Snippet>
                     </div>
                   </div>
 
@@ -153,7 +153,7 @@ mySS.root.astronauts.add(
                     </div>
 
                     <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`mySS.root.planets.add(
   Planet(
     "Pluto",
@@ -163,7 +163,7 @@ mySS.root.astronauts.add(
 mySS.root.astronauts.0.planet =
   &mySS.root.planets.2;
 `}
-  </div>
+  </Snippet>
                     </div>
                   </div>
 
@@ -172,9 +172,9 @@ mySS.root.astronauts.0.planet =
                       Then, let's revert the entire superstructure back to the previous version, using {incode("v.revert")}.
                     </div>
                     <div className={ns("half")}>
-  <div className={ns("code")}>
+  <Snippet>
 {`v.revert(mySS, firstVersion);`} {this.noteAnchor("note2")}
-  </div>
+  </Snippet>
                     </div>
                   </div>
                 </div>
@@ -228,7 +228,7 @@ mySS.root.astronauts.0.planet =
               <div className={ns("toc-container")}>
                 <SuperstructuresTOC page="reverting"/>
                 <div className={ns("notes-header")}>
-                  <NotesHeader update={this.updateNotesHeaderRect}/>
+                  <sliceHeader update={this.updateNotesHeaderRect}/>
                 </div>
               </div>
 

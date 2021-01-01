@@ -1,0 +1,159 @@
+---
+title: Roadmap
+path: roadmap
+layout: onecolumn
+css: roadmap.css
+namespace: roadmap
+---
+
+<<<<
+Vale is currently version 0.1: it's now a working prototype.
+
+We're currently 10% of the way to version 0.2!
+////
+ . <span class="icon done"></span> Done
+ . <span class="icon todo"></span> Planned for v0.2
+ . <span class="icon later"></span> Planned for Later
+>>>>
+
+<<<<
+*References*
+
+ . <span class="icon done"></span> Immutables' Refs
+ . <span class="icon done"></span> Owning Refs
+ . <span class="icon done"></span> Moving
+ . <span class="icon done"></span> Constraint Refs
+ . <span class="icon done"></span> Weak Refs
+ . <span class="icon later"></span> Expect
+ . <span class="icon later"></span> Optional Sugar
+ . <span class="icon later"></span> Inlining
+ . <span class="icon done"></span> Varying/Final
+
+*Functions*
+
+ . <span class="icon done"></span> UFCS
+ . <span class="icon done"></span> Infix Calling
+ . <span class="icon done"></span> Lambdas
+ . <span class="icon done"></span> Magic Params
+ . <span class="icon done"></span> Abstract Functions
+ . <span class="icon done"></span> Virtual Functions
+ . <span class="icon done"></span> Extern Calls
+ . <span class="icon done"></span> Overloads
+ . <span class="icon later"></span> Must-use
+
+*Generics*
+
+ . <span class="icon done"></span> Functions
+ . <span class="icon done"></span> Structs/Interfaces
+ . <span class="icon done"></span> Virtual Generics
+ . <span class="icon done"></span> Const Generics
+ . <span class="icon later"></span> Static Eaching
+ . <span class="icon later"></span> Metaprogramming
+ . <span class="icon later"></span> Concepts
+
+////
+
+*Arrays*
+
+ . <span class="icon done"></span> Mutability
+ . <span class="icon done"></span> Known-size
+ . <span class="icon done"></span> Unknown-size
+ . <span class="icon later"></span> Asterisk for Arrays
+
+*ADTs*
+
+ . <span class="icon done"></span> Tuples
+ . <span class="icon later"></span> Variants
+ . <span class="icon later"></span> Variant Indexing
+ . <span class="icon later"></span> Errors
+
+*Structs*
+
+ . <span class="icon done"></span> Mutability
+ . <span class="icon done"></span> Auto-drop
+ . <span class="icon done"></span> Member constructing
+ . <span class="icon later"></span> Explicit auto-drop
+ . <span class="icon later"></span> constructor&lt;T&gt;
+ . <span class="icon later"></span> Destructor Parameters
+ . <span class="icon later"></span> Shortcalling
+
+*Interfaces*
+
+ . <span class="icon done"></span> Mutability
+ . <span class="icon done"></span> Open Constructors
+ . <span class="icon later"></span> Open Shortcalling
+ . <span class="icon later"></span> Sealed Constructors
+ . <span class="icon later"></span> Sealed Shortcalling
+
+////
+
+*Constructs*
+
+ . <span class="icon done"></span> If
+ . <span class="icon done"></span> While
+ . <span class="icon done"></span> Each
+ . <span class="icon todo"></span> Match
+ . <span class="icon done"></span> EachI
+ . <span class="icon todo"></span> If Let
+ . <span class="icon todo"></span> If Let Else
+ . <span class="icon later"></span> Break, Continue
+
+*Patterns*
+
+ . <span class="icon done"></span> Locals
+ . <span class="icon done"></span> Destructuring
+ . <span class="icon later"></span> Equating
+ . <span class="icon later"></span> Extractors
+
+*Operators*
+
+ . <span class="icon done"></span> Short-circuiting
+ . <span class="icon todo"></span> Map, FlatMap
+ . <span class="icon later"></span> Bail
+
+*Standard Library*
+
+ . <span class="icon done"></span> Optional
+ . <span class="icon done"></span> List
+ . <span class="icon done"></span> HashMap
+ . <span class="icon todo"></span> Set
+ . <span class="icon done"></span> HashSet
+ . <span class="icon later"></span> Bunch
+
+////
+
+*LLVM Codegen*
+
+ . <span class="icon done"></span> Native Executables
+ . <span class="icon done"></span> Resilient Mode
+ . <span class="icon todo"></span> Continue on panic
+ . <span class="icon done"></span> Constraint Modes
+ . <span class="icon later"></span> Threading
+ . <span class="icon later"></span> Replayability
+
+*Regions*
+
+ . <span class="icon later"></span> Basics
+ . <span class="icon later"></span> Read-only Regions
+ . <span class="icon later"></span> Mutexes
+ . <span class="icon later"></span> Transmigrating
+ . <span class="icon later"></span> Seceding
+
+*Optimization*
+
+ . <span class="icon done"></span> Generational Memory
+ . <span class="icon todo"></span> Gen-check Elimination
+ . <span class="icon todo"></span> Hybrid-Generational Memory
+
+*Ergonomics*
+
+ . <span class="icon done"></span> Compile Errors
+ . <span class="icon later"></span> Syntax Highlighting
+
+*Possibilities*
+
+ . <span class="icon later"></span> Self-Hosting
+ . <span class="icon later"></span> JVM/CLR Backend
+ . <span class="icon later"></span> VS/IDEA Plugins
+
+>>>>

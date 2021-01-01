@@ -1,0 +1,17 @@
+
+.split {
+  display: flex;
+  margin-bottom: 8px;
+}
+.split-column {
+  flex-grow: 1;
+  width: calc(50% - 8px);
+  margin-right: 16px;
+}
+.split-column:last-child {
+  margin-right: 0;
+}
+
+.split-column > section:last-child {
+  margin-bottom: 0;
+}
