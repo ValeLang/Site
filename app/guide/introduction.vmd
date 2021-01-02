@@ -55,7 +55,7 @@ Hello world!
 >>>>
 
 <<<<
-We can make a *varying* local with the `!` symbol[# Vale's `x` and `x!` are like Java's `final int x` and `int x`.], and change it later with the `mut` keyword. [# `mut x` does *not* declare a local named x. It changes an _existing_ local's value.]
+We can make a *varying* local with the `!` symbol[# Vale's `x` and `x!` are like Java's `final String x` and `String x`.], and change it later with the `mut` keyword. [# `mut x` does *not* declare a local named x. It changes an _existing_ local's value.]
 ////
 ```Vale
 fn main() export {
@@ -70,7 +70,7 @@ Hello Antarctica!
 >>>>
 
 <slice>
-#running: You can put the code into e.g. `hello.vale` and invoke the compiler with `python3 valec.py build hello.vale`. (After 0.1, it will simply be `vale build hello.vale`.)
+#running: You can put the code into e.g. `hello.vale` and invoke the compiler with `python3 valec.py hello.vale`. (After 0.1, it will simply be `vale build hello.vale`.)
 
 That will produce an executable named `hello.exe` (on Windows) or `hello` (on Mac or Linux).
 </slice>
@@ -122,7 +122,7 @@ Half-Life 3
 If we use the `infer-ret` keyword, Vale will automatically figure out the return type of the function. [# `infer-ret` should be used sparingly, as it increases compile times.]
 ////
 ```Vale
-fn add2(x Int) infer-ret {
+fn add2(x int) infer-ret {
   ret x + 2;
 }
 ```
@@ -132,7 +132,7 @@ fn add2(x Int) infer-ret {
 If a block has only one line, we can leave off the `ret` and the semicolon.
 ////
 ```Vale
-fn add2(x Int) int { x + 2 }
+fn add2(x int) int { x + 2 }
 ```
 >>>>
 
