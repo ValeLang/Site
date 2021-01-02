@@ -84,7 +84,7 @@ Vale is a [statically typed](https://stackoverflow.com/questions/1517582/what-is
 <<<<
 In this example, `a` is a `str`. We can even specify it after the local's name.
 
-...though we usually leave it out, because Vale uses type inference to figure out the type of `x` for us.
+...though we usually leave it out, because Vale uses type inference to figure out the type of `a` for us.
 ////
 ```Vale
 fn main() export {
