@@ -139,7 +139,7 @@ In this example, the type of `owningRef` is `Spaceship`, and the type of `nonOwn
 ////
 ```Vale
 fn main() export {
-  owningRef = Spaceship();
+  owningRef = Spaceship("Serenity", 2);
   nonOwningRef = owningRef;
 }
 ```
@@ -159,7 +159,7 @@ In this example, the `a` local is giving up the owning reference, and we're putt
 ////
 ```Vale
 fn main() export {
-  a = Spaceship(); «alocal»
+  a = Spaceship("Serenity", 2); «alocal»
   b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
   // Can't use a now.
@@ -175,7 +175,7 @@ fn foo(b Spaceship) {
   println(b.name);
 }
 fn main() export {
-  a = Spaceship();
+  a = Spaceship("Serenity", 2);
   // Move the Spaceship from a
   // into foo's b
   foo(a);
@@ -258,7 +258,7 @@ struct Spaceship imm {
 
 fn main() export {
   ship = Spaceship("Serenity", 2);
-  println(ship);
+  println(ship.numWings);
 }
 ```
 ```stdout
