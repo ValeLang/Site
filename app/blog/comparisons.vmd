@@ -21,40 +21,42 @@ This article will dive into the details and compare these languages.
 Note that Vale is *not finished*, it's only at v0.1. We make it clear in the asides when we're talking about the design, rather than the implementation.
 
 ////
-<table class="comparison" width="100%">
-  <thead>
-    <th></th>
-    <th>Easy</th>
-    <th>Safe</th>
-    <th>Fast</th>
-  </thead>
-  <tbody>
-    <tr>
-      <th>C++</th>
-      <td class="bad">No</td>
-      <td class="bad">No</td>
-      <td class="good">Yes</td>
-    </tr>
-    <tr>
-      <th>Javascript</th>
-      <td class="good">Yes</td>
-      <td class="good">Yes</td>
-      <td class="bad">No</td>
-    </tr>
-    <tr>
-      <th>Rust</th>
-      <td class="bad">No</td>
-      <td class="na">Mostly</td>
-      <td class="good">Yes</td>
-    </tr>
-    <tr>
-      <th>Vale</th>
-      <td class="good">Yes</td>
-      <td class="good">Yes</td>
-      <td class="good">Yes</td>
-    </tr>
-  </tbody>
-</table>
+<div class="comparison">
+  <table width="100%">
+    <thead>
+      <th></th>
+      <th>Easy</th>
+      <th>Safe</th>
+      <th>Fast</th>
+    </thead>
+    <tbody>
+      <tr>
+        <th>C++</th>
+        <td class="bad">No</td>
+        <td class="bad">No</td>
+        <td class="good">Yes</td>
+      </tr>
+      <tr>
+        <th>Javascript</th>
+        <td class="good">Yes</td>
+        <td class="good">Yes</td>
+        <td class="bad">No</td>
+      </tr>
+      <tr>
+        <th>Rust</th>
+        <td class="bad">No</td>
+        <td class="na">Mostly</td>
+        <td class="good">Yes</td>
+      </tr>
+      <tr>
+        <th>Vale</th>
+        <td class="good">Yes</td>
+        <td class="good">Yes</td>
+        <td class="good">Yes</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 >>>>
 
 Keep in mind, this article is written with love; I picked these three languages because they're my favorite in some way:
@@ -80,7 +82,7 @@ To get a sense of what easy means:
 
 Vale is 100% safe, which removes most of C++'s difficulties.
 
-Vale also doesn't have a borrow checker, which removes all of Rust's difficulties.
+Vale's region borrow checker doesn't have the mutability xor aliasability restriction, which which is the source of Rust's difficulties.
 
 Vale makes a few concessions here:
 
@@ -98,8 +100,8 @@ In the end, Vale is almost as easy as Javascript, and _much_ easier than Rust an
 Vale is 100% safe, like Javascript, and much safer than Rust and C++.
 
  * C++ is completely unsafe. By default, the code you write will risk a lot of memory unsafety. There are ways to mitigate it (the aforementioned smart pointers, valgrind, asan), but most C++ code will be unsafe.
- * Javascript is entirely sandboxed, and has no way to do FFI or unsafe code. [# This isn't counting Node, which can do FFI.] You can largely trust Javascript code that someone else wrote. We do it all the time, with our browsers.
- * Rust is about halfway between. It's safe by default, except:
+ * Javascript is entirely sandboxed, and never shares memory with unsafe code. [# Specifically, Javascript can use FFI into other languages with webassembly, but it doesn't share memory with them, it only sends immutable values back and forth.] You can largely trust Javascript code that someone else wrote. We do it all the time, with our browsers.
+ * Rust is somewhere between. It's safe by default, except:
     * It has `unsafe` code which allow unsafe operations.
     * It allows bugs in `unsafe` code (and FFI [# This stands for Foreign Function Interface, and refers to how Rust can call into C code.]) to trigger memory unsafety in safe Rust code.
     * A Rust program will bring a lot of `unsafe` code in via dependencies.
@@ -111,7 +113,7 @@ Vale has no `unsafe`, and uses extern isolation to make it so bugs in C code can
 
 # Fast
 
-Vale aims to be as fast as Rust, almost as fast as C++, and much faster than Javascript.
+Vale aims to be as fast as Rust, almost as fast as C++, and much faster than Javascript. [# Until we finish [HGM](/blog/hybrid-generational-memory) and have benchmarks, this is a goal, not a claim.]
 
  * Javascript uses dynamic typing and garbage collection, which both cause some overhead.
  * Rust is very fast. The borrow checker indirectly incurs only a little run-time overhead. [# See [Beyond Rust: Innovations in Safety, Speed, and Flexibility](/blog/beyond-rust-innovations) for more on the borrow checker's indirect run-time overhead.]
@@ -128,6 +130,24 @@ In practice, Vale could be:
  * About the same!
 
 For more thoughts on Rust and Vale (and other languages), check out [Beyond Rust: Innovations in Safety, Speed, and Flexibility](/blog/beyond-rust-innovations)!
+
+
+# Intended Use Cases
+
+It's important to keep in mind that Vale, C++, Rust, and JS have different strengths which makes them suitable for different use cases.
+
+Compared to Vale:
+
+ * *Javascript* is very simple: dynamically typed and garbage collected. This makes it better than Vale for scripting, prototyping, and UI.
+ * *Rust* imposes a lot of extra complexity on the programmer, but makes memory handling more explicit. This is better for things like embedded development or other overly-memory-constrained environments.
+ * C++'s strength is in the freedom it gives the programmer, to get maximum speed. Vale has constraint references and an unsafe mode with zero overhead to get equivalent speed. However, C++ allows low-level unsafe operations where Vale does not, so it would be better than Vale for cases that need unsafe low-level operations. [# Vale instead uses FFI to call into another language (such as C, C++, or Rust) to do the low-level operations for it.]
+
+Vale's combination of speed, safety, and ease are universally useful, but it will particularly shine for:
+
+ * Servers. Servers handle a lot of untrusted input, so 100% safety is critical. Vale aims to be the fastest 100%-safe language.
+ * Games, because it's extremely fast, with memory safety to prevent odd bugs, while still being easy and flexible enough to allow quick iterating and innovating.
+    * When a game needs maximum performance and cares less about safety, one can switch to unsafe mode, to get C++'s speed. [# With [regions](/blog/zero-cost-refs-regions), it could be faster than C++ in some cases.]
+ * Web/Android/iOS apps, because of its cross-compilability and easy interop with host environments. [# See [Seamless Speed, Safety, and Reuse Without Frameworks](cross-platform-core-vision) for more on the apps case.]
 
 
 I hope you enjoyed this article, and as always, feel free to leave any comments in the [r/vale](http://reddit.com/r/vale) subreddit or swing by our [discord server](https://discord.gg/SNB8yGH)!

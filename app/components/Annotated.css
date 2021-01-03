@@ -75,6 +75,18 @@ span.m-annotated.note-starter {
 .m-annotated.afterword,
 .m-annotated.plans {
   background-color: #F0F0FF;
+}
+
+
+.m-annotated.networking .m-annotated.slice-notes,
+.m-annotated.afterword .m-annotated.slice-notes,
+.m-annotated.plans .m-annotated.slice-notes {
+  background-color: #E0E0FF;
+}
+
+.m-annotated.networking .slice-contents,
+.m-annotated.afterword .slice-contents,
+.m-annotated.plans .slice-contents {
   padding: 0 16px;
   margin-right: 8px;
 }
@@ -176,6 +188,10 @@ span.m-annotated.note-starter {
 }
 
 .comparison {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.comparison table {
   border-spacing: 0;
   border-collapse: collapse;
 }
@@ -221,3 +237,7 @@ span.m-annotated.note-starter {
   opacity: .5;
 }
 
+
+.m-annotated.slice-notes {
+  background-color: #E8F0FF;
+}

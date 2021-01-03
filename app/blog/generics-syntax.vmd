@@ -1,0 +1,77 @@
+---
+title: Why Languages Should Use <> For Generics
+author: Evan Ovadia
+date: Jan 1, 2021
+realm: blog
+path: blog/comparisons
+layout: annotated
+namespace: c-blog m-annotated
+---
+
+
+
+
+two possibilities:
+
+if we use [],
+- we can still have seqs. when theres no identifier before it, its a seq.
+- ambiguity with indexing. `arr[x]` might be:
+  - index local "arr" with local "x"
+  - generic type "arr" specialized with type "x"
+  - referencing function arr
+
+languages get around this:
+- for declarations, go, nim, and scala both use ":" in their declarations
+- for making a new array:
+  - go requires saying [x]arr instead.
+  - scala uses new, or puts it behind a function. it uses new in the end.
+  - nim, not sure you even can make an array like that?
+  - C# uses new
+- for making a new instance of a generic type
+  - go requires {} afterward like Bunch[int]{1, 2, 3}
+  - nim NO IDEA
+  - scala uses new, or puts it behind a function. it uses new in the end.
+  - C# uses new
+
+
+if we use <>
+- we can still have seqs. when theres no identifier before it, its a seq.
+- ambiguity with less than and greater than. `arr<x> y;` might be:
+  - (arr < x) > y
+  - declare y of type arr<x>.
+  - calling generic function arr<x>
+  - making a new instance of type arr<x>
+
+languages get around this:
+- to do binary operators (like `arr < x > y`),
+  - rust requires ::<> for calls, so otherwise its binary ops
+  - vale requires no space before or no space after
+  - java requires new
+- to do declaration
+  - rust requires : in its declarations.
+  - vale looks for the =, everything to the left is a definition.
+  - java requires new
+- calling generic function
+  - rust requires ::<> for calls
+  - vale uses spacing
+  - java i think requires ThisClass.<params here> for this.
+- make new instance of type arr<x>
+  - rust requires braces, i think
+  - vale treats it like a generic function.
+  - java uses the new keyword.
+
+C++/java/swift/rust vastly outweigh C#/scala/go/nim.
+the statically typed language taught in schools is java.
+so, go with familiarity. for ease, require new, or do spacing.
+
+
+spacing isnt bad, because we do it all the time.
+- `fn myFunction(a: i64) -> i64 { ... }` has a space between `fn` and `myFunction`
+- `a and b` needs a space before and after `and`. same with `is`, `or`, etc.
+- `not a`
+- `void main`, `int x`
+- `let myThing`
+- `return x`
+
+literally any keyword requires spaces.
+

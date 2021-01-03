@@ -108,36 +108,38 @@ For this experiment, we benchmarked [#program] [#rustandc] three flavors of Vale
  * *GM*, which uses generational references.
 
 
-<table class="comparison">
-  <thead>
-    <tr>
-      <th>Mode</th>
-      <th>Speed&nbsp;(seconds)</th>
-      <th>Overhead Compared to Unsafe (seconds)</th>
-      <th>Overhead Compared to Unsafe (%)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th class="na">Unsafe</th>
-      <td class="na">43.82&nbsp;seconds</td>
-      <td class="na">n/a</td>
-      <td class="na">n/a</td>
-    </tr>
-    <tr>
-      <th class="na">RC</th>
-      <td class="bad">54.90&nbsp;seconds</td>
-      <td class="bad">+11.08&nbsp;seconds</td>
-      <td class="bad">+25.29%</td>
-    </tr>
-    <tr>
-      <th class="na">GM</th>
-      <td class="good">48.57&nbsp;seconds</td>
-      <td class="good">+4.75&nbsp;seconds</td>
-      <td class="good">+10.84%</td>
-    </tr>
-  </tbody>
-</table>
+<div class="comparison">
+  <table>
+    <thead>
+      <tr>
+        <th>Mode</th>
+        <th>Speed&nbsp;(seconds)</th>
+        <th>Overhead Compared to Unsafe (seconds)</th>
+        <th>Overhead Compared to Unsafe (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th class="na">Unsafe</th>
+        <td class="na">43.82&nbsp;seconds</td>
+        <td class="na">n/a</td>
+        <td class="na">n/a</td>
+      </tr>
+      <tr>
+        <th class="na">RC</th>
+        <td class="bad">54.90&nbsp;seconds</td>
+        <td class="bad">+11.08&nbsp;seconds</td>
+        <td class="bad">+25.29%</td>
+      </tr>
+      <tr>
+        <th class="na">GM</th>
+        <td class="good">48.57&nbsp;seconds</td>
+        <td class="good">+4.75&nbsp;seconds</td>
+        <td class="good">+10.84%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 
 <slice>
@@ -265,7 +267,7 @@ Generational references are more cache friendly:
 
 For a given if-statement, CPUs will predict whether we'll go down the "then" branch or the "else" branch. This is called [branch prediction](https://en.wikipedia.org/wiki/Branch_predictor). It guesses based on various factors.
 
-When we do a liveness check, we can hint to the CPU that we assume it will succeed; it doesn't have to guess.
+In Vale, when we do a liveness check, we hint to the CPU that it should assume it will succeed; it doesn't have to guess.
 
 However, in RC, when we check if a counter is zero (to know whether to free the object), we don't know what to tell the CPU to expect. It has to guess. If it's wrong, then it has to back up, throw away any effects it's done in the meantime, and go down the correct branch.
 

@@ -6,14 +6,15 @@
 
 .m-annotated.slice-notes {
   width: 100%;
-  background-color: #E8F0FF;
 }
 
 .m-annotated.notes-first-header {
   display: none;
 }
 
-
+.m-annotated.slice {
+  overflow: auto;
+}
 
 
 .m-annotated.notes-container {
