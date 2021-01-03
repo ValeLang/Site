@@ -104,10 +104,8 @@ To address some frequently asked questions:
 Some potential weaknesses to explore:
 
  * Storing the generation number at the top of a <=64b allocation means a liveness check won't incur an extra cache miss since we're about to dereference the object anyway, and the entire object is on one cache line. However, for larger objects, it does incur an extra cache miss. Most objects are small, but programs with an unusually large proportion of medium sized objects not in an array could suffer a small performance hit.
- * We would be halting the program when deleting an object that is currently tethered by a local. In practice this will be very rare. [# These are more permissive than constraint references, which themselves are quite rare to trigger.]
-    * Assist mode can help developers find these. Constraint references would detect these well before they become a problem.
  * Adding the offset to every reference could interfere with optimizations. If so, we'll have to write our own LLVM pass. [# Presumably, we would make every generational reference have a pointer to the object, and a target generation number, and a pointer to the current generation. The LLVM pass would eliminate the latter.]
-
+ * In environments without virtual memory [# Every mainstream OS has virtual memory, but WASM does not.], memory fragmentation could be worse, because we can't give pages back to the OS. This is mitigated by [regions](/blog/zero-cost-refs-regions), where region-calling can guarantee no references pointing into a certain region. [# One day, we could write a compactor for Vale which could solve this.]
 
 <slice new-color="afterword"/>
 
@@ -171,7 +169,7 @@ Hybrid-generational memory doesn't rely on expanding arrays. However, the genera
 
 ## Immutability, Arenas, Pools
 
-Rust has its borrow checker and Vale has its [region borrow checker](/blog/zero-cost-refs-regions). Both allow the language to know when something's immutable, to optimize away redundant loads.
+Rust has its borrow checker and Vale has its [region borrow checker](/blog/zero-cost-refs-regions). Both allow the language to know when something's immutable, to optimize away redundant loads. Additionally, Vale lets us specify structs and interfaces as deeply immutable, which does the same thing without any borrow checking.
 
 Rust's borrow checker often forces us to use `Vec`s, and Vale's regions allow us to use pool or arena allocation. Both enable incredibly fast allocation. Vale's regions can apply it to any type, whereas in Rust we need to specifically add and keep track of every `Vec`, and some Rust allocations can't be put into `Vec`s. [# For example, `Rc`d objects are put on the heap.]
 

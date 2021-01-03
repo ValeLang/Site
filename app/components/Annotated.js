@@ -11,9 +11,12 @@ const urlParams = new URLSearchParams(window.location.search);
 
 // Start the window with max 928px to disable this entire script, and stick
 // with isolated margins.
-const jsmargined = window.matchMedia('screen and (min-width: 929px)').matches;
 
-if (jsmargined) {
+function currentlyWide() {
+  return window.matchMedia('screen and (min-width: 929px)').matches;
+}
+
+if (currentlyWide()) {
   page.classList.remove("nojs");
   page.classList.add("jsmargined");
 }
@@ -26,6 +29,9 @@ function offset(el) {
 }
 
 function relayoutNotes() {
+  if (!currentlyWide())
+    return;
+
   const anchorsPageYByNoteId = {};
   for (const anchor of anchors) {
     const noteId = anchor.getAttribute("data-noteId");
@@ -64,18 +70,19 @@ function relayoutNotes() {
     lastSliceNotesElement = sliceNotesElement;
   }
 
-  if (lastNote) {
-    const lastSliceNotesElementY = offset(lastSliceNotesElement).y;
+  // this didnt work because the height stays in mobile too and makes it too long
+  // if (lastNote) {
+  //   const lastSliceNotesElementY = offset(lastSliceNotesElement).y;
 
-    lastSliceNotesElement.style.height =
-        Math.max(
-            nextFreeY - lastSliceNotesElementY,
-            lastSliceNotesElement.getBoundingClientRect().height) +
-        "px";
-  }
+  //   lastSliceNotesElement.style.height =
+  //       Math.max(
+  //           nextFreeY - lastSliceNotesElementY,
+  //           lastSliceNotesElement.getBoundingClientRect().height) +
+  //       "px";
+  // }
 }
 
-if (jsmargined) {
+if (currentlyWide()) {
   window.addEventListener("load", () => {
     let delay = 50;
     (function relayoutNotesAndScheduleNext() {
