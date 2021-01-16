@@ -34,6 +34,7 @@ fi
 if [ "$1" == "generational-references" ] || [ "$1" == "all" ] ; then
   echo "Doing generational-references"
   ~/Markvale/build/a.out app/blog/generational-references.vmd build/blog/generational-references $2
+  cp build/blog/generational-references build/blog/generational-memory
 fi
 
 if [ "$1" == "hybrid-generational-memory" ] || [ "$1" == "all" ] ; then
@@ -121,6 +122,11 @@ if [ "$1" == "roadmap" ] || [ "$1" == "all" ] ; then
   echo "Doing roadmap"
   ~/Markvale/build/a.out app/roadmap/roadmap.vmd build/roadmap $2
   cp app/roadmap/*.css build
+fi
+
+if [ "$1" == "surprising-weak-refs" ] || [ "$1" == "all" ] ; then
+  echo "Doing surprising-weak-refs"
+  ~/Markvale/build/a.out app/blog/surprising-weak-refs.vmd build/blog/surprising-weak-refs $2
 fi
 
 cp app/*.css build

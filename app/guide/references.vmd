@@ -270,7 +270,7 @@ Ship base unknown!
 ```
 >>>>
 
-<slice>
+<slice new-color="afterword">
 #lock: Locking a weak reference gives us a `?&Spaceship`, also known as an `Opt<&Spaceship>`. This has two possible subclasses: `None<&Spaceship>` which is empty and `Some<&Spaceship>` which contains a `&Spaceship`.
 
 This line is checking if that `?&Spaceship` is the one-member subclass `Some<&Spaceship>` and if so, assigns its member to `o`.
@@ -281,7 +281,12 @@ This is a conditional destructure, see [Pattern Matching](/guide/patterns) for m
 </slice>
 
 
-# Pointers vs Values ("Inlining") [# Planned feature; see [Roadmap](/roadmap)!]
+# Planned Features
+
+These are planned features for Vale. See the [roadmap](/roadmap) for plans!
+
+
+## Pointers vs Values ("Inlining")
 
 *Inlining* is used for optimization.
 
@@ -332,4 +337,4 @@ fn main() export {
 ```
 >>>>
 
-<slice/>
+<slice new-color="default"/>

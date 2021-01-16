@@ -54,3 +54,15 @@ label .m-annotated.when-collapsed {
 .m-annotated.toggle:checked ~ label .m-annotated.when-collapsed {
   display: none;
 }
+
+.m-annotated.networking .m-annotated.slice-notes,
+.m-annotated.afterword .m-annotated.slice-notes,
+.m-annotated.plans .m-annotated.slice-notes {
+  background-color: #E0E0FF;
+}
+
+.m-annotated.networking .slice-contents,
+.m-annotated.afterword .slice-contents,
+.m-annotated.plans .slice-contents {
+  margin-right: 8px;
+}

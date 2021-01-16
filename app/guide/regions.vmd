@@ -13,7 +13,9 @@ series-entry: [Patterns](/guide/patterns)
 series-entry: []()
 ---
 
-We can divide our program's memory into *regions*, for *safer* and *faster* code. [# Planned feature; see [Roadmap](/roadmap)!]
+We can divide our program's memory into *regions*, for *safer* and *faster* code.
+
+(*These are planned features,* see the [roadmap](/roadmap) for plans!)
 
 Every function has its *current* region, but can access other regions as well.
 

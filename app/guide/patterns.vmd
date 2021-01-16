@@ -98,8 +98,15 @@ fn refuel(
 ```
 >>>>
 
+<slice new-color="afterword"/>
 
-# Match Statement [# Planned feature; see [Roadmap](/roadmap)!]
+
+# Planned Features
+
+These are planned features for Vale. See the [roadmap](/roadmap) for plans!
+
+
+## Match Statement
 
 <<<<
 We can use a pattern to check if the incoming data is a certain value.
@@ -150,3 +157,5 @@ fn main() export {
 Firefly name Serenity
 ```
 >>>>
+
+<slice new-color="default"/>

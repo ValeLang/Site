@@ -10,7 +10,7 @@ namespace: c-blog m-annotated
 ---
 
 
-Vale's *hybrid-generational memory* is a ground-breaking new memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. [#resilient]
+Vale's *hybrid-generational memory* is a new memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. [#resilient]
 
 Note that hybrid-generational-memory is *not* implemented yet, it's still just a design.
 
@@ -105,7 +105,7 @@ Some potential weaknesses to explore:
 
  * Storing the generation number at the top of a <=64b allocation means a liveness check won't incur an extra cache miss since we're about to dereference the object anyway, and the entire object is on one cache line. However, for larger objects, it does incur an extra cache miss. Most objects are small, but programs with an unusually large proportion of medium sized objects not in an array could suffer a small performance hit.
  * Adding the offset to every reference could interfere with optimizations. If so, we'll have to write our own LLVM pass. [# Presumably, we would make every generational reference have a pointer to the object, and a target generation number, and a pointer to the current generation. The LLVM pass would eliminate the latter.]
- * In environments without virtual memory [# Every mainstream OS has virtual memory, but WASM does not.], memory fragmentation could be worse, because we can't give pages back to the OS. This is mitigated by [regions](/blog/zero-cost-refs-regions), where region-calling can guarantee no references pointing into a certain region. [# One day, we could write a compactor for Vale which could solve this.]
+ * In environments without virtual memory [# Every mainstream OS has virtual memory, but WASM does not.], memory fragmentation could be worse, because we can't give pages back to the OS. This is mitigated by [regions](/blog/zero-cost-refs-regions), where region-calling can guarantee no references pointing into a certain region. [# One day, we could write a compactor for Vale which could also help this, though its probably unnecessary.]
 
 <slice new-color="afterword"/>
 
@@ -161,7 +161,7 @@ The borrow checker tends to force Rust code to overuse `Vec`s (even when `Vec`s 
 
 Hybrid-generational memory doesn't rely on expanding arrays. However, the generational stack does keep ten stacks, each which contains the maximum amount of memory it's ever had.
 
-`Rc`, `RefCell`, and generational indices all use 8b per object. Hybrid-generational memory uses 8b per object. Though once again, it should be noted that not all Rust code uses `Rc` or `RefCell` or generational indices.
+`RefCell`, and generational indices use 8b per object, and `Rc` uses 16. Hybrid-generational memory uses 8b per object. Though once again, it should be noted that not all Rust code uses `Rc` or `RefCell` or generational indices.
 
 
 <slice/>

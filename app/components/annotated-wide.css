@@ -49,3 +49,9 @@
 .page.m-annotated.jsmargined label .m-annotated.when-collapsed {
   display: none;
 }
+
+.m-annotated.networking .slice-contents,
+.m-annotated.afterword .slice-contents,
+.m-annotated.plans .slice-contents {
+  border-right: 2px solid white;
+}

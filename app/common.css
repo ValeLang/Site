@@ -129,6 +129,10 @@ ul.blank > li {
   margin-top: 8px;
 }
 
+
+.c-toc.title {
+  font-weight: bold;
+}
 .c-toc li,
 .c-toc ul {
   margin-top: 0;

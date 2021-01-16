@@ -1,8 +1,8 @@
 ---
-title: Vale's Generational References
-subtitle: For raw speed and power!
+title: Generational References
+subtitle: 2.3x faster than reference counting, unoptimized!
 author: Evan Ovadia
-date: Jan 2 2021
+date: Jan 5 2021
 realm: blog
 path: blog/generational-references
 layout: annotated
@@ -10,12 +10,23 @@ namespace: c-blog m-annotated
 ---
 
 
-Vale's *hybrid-generational memory* is a new ground-breaking memory model that combines all the best parts of existing memory strategies: it's as easy as garbage collection, as deterministic as reference counting, and as fast as borrow checking. [#resilient] [# See [Hybrid-Generational Memory](/blog/hybrid-generational-memory) for a full explanation (and some comparison with Rust!)]
-
-The *generational reference* is the keystone of the entire approach, the lynchpin that makes it all work. Keep reading to learn how it works!
+*Generational references* are a new memory management technique that's easy, deterministic, and _very_ fast.
 
 
-Note that hybrid-generational memory is *still in development*. We have some very promising early results, so we're sharing the idea to show you where Vale is headed. If you want to be part of this and bring hybrid-generational memory into the world, come [join us](/contribute) and help make it happen!
+This technique is the first ingredient in Vale's final [hybrid-generational memory](/blog/hybrid-generational-memory) design, which is even faster. Our eventual goal is to be as fast as Rust, and perhaps even as fast as C++, while being safer than both. [# See [HGM](/blog/hybrid-generational-memory)'s afterword for a hypothetical comparison with Rust!]
+
+This article explains how generational references work, how they compare to reference counting, and what makes it all so fast. [#resilient]
+
+
+# Built on Single Ownership
+
+Recall that in Vale, an object is freed when its *owning reference* goes out of scope. An object always has exactly one owning reference pointing to it.
+
+We can have as many *non-owning* references as we want. [# This distinction is similar to C++'s `unique_ptr<T>` and `T*`.]
+
+In other languages, when a programmer frees an object and then accidentally dereferences a non-owning reference to it, it can cause memory unsafety and vulnerabilities. [# Rust partially solves this, but forces complexity on the programmer and doesn't solve the [ABA problem](https://en.wikipedia.org/wiki/ABA_problem). We'd like a solution that's simpler, solves the whole problem, with as little [run-time overhead as Rust](/blog/hybrid-generational-memory#afterword-how-might-it-compare-to-rust).]
+
+Our goal is to detect this situation and react to it safely. [# Such as by halting or stack unwinding.]
 
 
 # Generational Malloc and the Sacred Integer
@@ -32,7 +43,7 @@ Later on, we use this number to see if a particular object is still alive, expla
 
 Generational malloc would normally be an adjustment to mimalloc or jemalloc, but we can simulate it with our own `genMalloc` and `genFree` functions:
 
- * `genFree` increments the generation number, and instead of calling `free` [#virtfree], caches the allocation in a free-list. There's a free-list for every size class (16b, 24b, 32b, <=48b, <=64b, <=128b, etc).
+ * `genFree` increments the generation number, and instead of calling `free` [#virtfree][#FF], remembers the allocation in a free-list. There's a free-list for every size class (16b, 24b, 32b, <=48b, <=64b, <=128b, etc).
  * `genMalloc` pulls from a free-list if possible. If it's empty, it calls `malloc` and initializes the generation number to 1.
 
 You can find our experimental implementation in [genHeap.c](https://github.com/ValeLang/Vale/blob/master/Midas/src/builtins/genHeap.c).
@@ -41,14 +52,17 @@ You can find our experimental implementation in [genHeap.c](https://github.com/V
 <slice>
 #resilient: Vale has three release modes:
 
- * Resilient mode, which is fast and memory safe; it will halt the program when we try to dereference a freed object.
- * Assist mode, for development, to detect potential problems even earlier.
- * Unsafe mode, which turns off all safety.
+ * *Resilient:* Fast and 100% safe.
+ * *Assist:* for development, detects logic problems.
+ * *Unsafe:* turns off all safety.
 
 Resilient mode uses hybrid-generational memory.
 
 
-#virtfree: Our experimental implementation doesn't release memory back to the operating system, but in the final version, once there are no more objects in a page, we would release the page back to the operating system and map that virtual page to a read-only one containing all 0xFF.
+#virtfree: Our experimental implementation doesn't release memory back to the OS until exit, but when a page is empty, the final version will release the page back to the operating system and map its virtual memory to a read-only page containing all 0xFF.
+
+
+#FF: When an allocation's generation can't be incremented any more, it's not used again (at least until we can re-map the page).
 </slice>
 
 
@@ -164,7 +178,7 @@ Try it out! In the Vale release, you can find a benchmark folder with scripts to
 *Note these caveats!* To isolate the difference between generational references and the other approaches:
 
  * In all flavors, we only allocate objects on the heap, except for primitives. Future versions will add stack allocations.
- * We used genHeap.c for all versions, though only GM ever touches the generation number, the other versions ignore it. Future versions will integrate generational malloc into jemalloc or mimalloc directly.
+ * We used [genHeap.c](https://github.com/ValeLang/Vale/blob/master/Midas/src/builtins/genHeap.c) for all versions, though only GM ever touches the generation number, the other versions ignore it. Future versions will integrate generational malloc into jemalloc or mimalloc directly.
 
 Once we address these limitations, we can get more precise benchmarks against the other approaches.
 
@@ -279,21 +293,27 @@ However, in RC, when we check if a counter is zero (to know whether to free the 
 
 No approach gets memory safety for free [#freesafety], and the same is true here; generational references use some memory.
 
-In Vale, owning references would still just be pointers, only 64 bits. Non-owning references are generational references, which are larger (128 bits).
+This technique uses 8 additional bytes for the generation numbers in allocations and in generational references.
+
+However, we don't incur this cost as much as one might think. [# Note that static analysis, regions, and inlining are not implemented yet; this list is talking about the final design.]
+
+ * Vale only uses generational references for *non-owning* references. The vast majority of references in a program's heap are owning references, which don't need a target generation number, and so don't require the extra 8 bytes.
+ * Inline objects (ones that are embedded into the containing struct's memory) don't need a generation number, they reuse the generation of the struct that contains them.
+    * Static analysis can make objects inline whenever possible.
+ * Static analysis can eliminate generational references, and sometimes even the allocation's generation.
+    * If it sees that a particular reference doesn't escape the lifetime of the object, it makes that reference a regular pointer; no generation number.
+    * For an object, if no references escape the lifetime of the object, it also takes out the allocation's generation number.
+ * Small immutable objects (<=32b) are copied rather than using any sort of overhead.
+    * This is particularly relevant for large arrays of ints, chars, etc.
+    * This can also be specified with the `inl` keyword.
+ * Objects inside an alternate region (such as arena or pool) have no overhead. [Region calling](/blog/zero-cost-refs-regions) makes this very easy.
+ * References into a locked region only need a pointer, not a generation, see [implicit locking](/blog/zero-cost-refs-regions) for more on this.
 
 
-Programs using generational references will use slightly more memory, but less than one would expect:
-
- * The vast majority of non-owning references appear as locals or parameters on the stack (which are hot in the cache), not as object's members. Most members are owning references, which aren't as large.
- * Under the hood, we can use escape analysis to turn many generational references into simple borrow references.
-
-We often make this tradeoff anyway. C++'s `unique_ptr`, `shared_ptr`, and `weak_ptr` and Rust's `generational_index` are all 128 bytes.
+In the end, we only use generations when necessary. This is similar to other languages, such as how in C++ we occasionally use `shared_ptr` and `weak_ptr`, and in Rust we occasionally use `generational_index` or `Rc`. [# We suspect that this approach will use slightly more memory than the average C++ program, and less than the average Rust program.]
 
 
-Generational malloc also has 8 more bytes at the top of the allocation, to store the generation number. This isn't unusual; Swift has a 16-byte header, and C++ and Java objects have an 8-byte vptr.
-
-
-Vale programs in extremely memory-constrained environments might want to use a different mode [#modes], but we predict that for the vast majority of programs, generational references will be a very good tradeoff.
+This article is talking about resilient mode (which uses generational references), but extremely memory constrained environments would benefit from developing and testing in assist mode (which is like a super-powered valgrind or asan) and releasing in unsafe mode which has no overhead. [# You can read more about assist mode and unsafe mode [here](/blog/raii-next-steps)!]
 
 
 <slice>
@@ -304,11 +324,6 @@ Vale programs in extremely memory-constrained environments might want to use a d
  * Reference count increments/decrements.
 
 Or large memory costs, for example if objects are stored in vectors.
-
-
-#modes: Extremely memory-constrained applications probably want to use unsafe mode, but develop and test with assist mode (which is like a super-powered valgrind or asan).
-
-Such memory-constrained applications might also take a look at C, C++, or unsafe Rust (safe Rust requires heap allocations, in the form of `Rc` or `Vec`s).
 </slice>
 
 
@@ -344,7 +359,7 @@ Hybrid-generational memory adds two layers of optimization:
  * Static analysis, to skip liveness checks.
  * Scope tethering, to keep an object alive longer.
 
-When hybrid-generational memory is fully realized, we expect it will be as fast as Rust, and almost as fast as C++. [# See [Hybrid-Generational Memory](/blog/hybrid-generational-memory) for some comparison with Rust!]
+When hybrid-generational memory is fully realized, we expect it could be as fast as Rust, and almost as fast as C++. [# See [Hybrid-Generational Memory](/blog/hybrid-generational-memory) for some comparison with Rust!]
 
 We're excited about this, because it gives us raw speed with zero unsafety, and keeps the language easy to learn and use.
 

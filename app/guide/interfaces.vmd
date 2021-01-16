@@ -117,10 +117,15 @@ fn main() export {
 ```
 >>>>
 
-<slice/>
+<slice new-color="afterword"/>
 
 
-# Sealed Interfaces [# Planned feature; see [Roadmap](/roadmap)!]
+# Planned Features
+
+These are planned features for Vale. See the [roadmap](/roadmap) for plans!
+
+
+## Sealed Interfaces
 
 <<<<
 By default, an interface is *open*, which means any struct can implement it.
@@ -151,7 +156,7 @@ Because the compiler knows all the implementing structs up-front, it:
 </slice>
 
 
-## Sealed Interface Constructors
+### Sealed Interface Constructors
 
 <<<<
 A *sealed interface constructor* is a function with the same name of the interface, which constructs the correct subclass depending on the given arguments.
@@ -176,7 +181,7 @@ A sealed interface constructor also allows us to make substructs via *shortcalli
 <slice/>
 
 
-## Shortcalling Sealed Interface Constructors
+### Shortcalling Sealed Interface Constructors
 
 <<<<
 We normally call a function by name, such as the `MaybeInt(7)` above. However, if the code is expecting a certain type, it can automatically call the constructor of the expected type.
@@ -219,3 +224,5 @@ fn main() export {
 }
 ```
 >>>>
+
+<slice new-color="default"/>

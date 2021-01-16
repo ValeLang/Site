@@ -1,5 +1,5 @@
 ---
-title: Why Languages Should Use <> For Generics
+title: Why We Prefer <> For Generics
 author: Evan Ovadia
 date: Jan 1, 2021
 realm: blog
@@ -21,15 +21,20 @@ if we use [],
   - referencing function arr
 
 languages get around this:
-- for declarations, go, nim, and scala both use ":" in their declarations
+- for declarations:
+  - go, and scala both use ":" in their declarations
+  - C# looks for the =
+- for binary operators, it's moot, [ and ] arent binary operators.
+- calling generic functions:
+  - go: myfunc[int](blah)
+  - scala: myfunc[int](blah)
+  - c#: not sure what they do here? moo<3>(5)
 - for making a new array:
   - go requires saying [x]arr instead.
   - scala uses new, or puts it behind a function. it uses new in the end.
-  - nim, not sure you even can make an array like that?
   - C# uses new
 - for making a new instance of a generic type
   - go requires {} afterward like Bunch[int]{1, 2, 3}
-  - nim NO IDEA
   - scala uses new, or puts it behind a function. it uses new in the end.
   - C# uses new
 
@@ -43,18 +48,22 @@ if we use <>
   - making a new instance of type arr<x>
 
 languages get around this:
-- to do binary operators (like `arr < x > y`),
-  - rust requires ::<> for calls, so otherwise its binary ops
-  - vale requires no space before or no space after
-  - java requires new
 - to do declaration
   - rust requires : in its declarations.
   - vale looks for the =, everything to the left is a definition.
+  - java requires new
+- to do binary operators (like `arr < x > y`),
+  - rust requires ::<> for calls, so otherwise its binary ops
+  - vale requires no space before or no space after
   - java requires new
 - calling generic function
   - rust requires ::<> for calls
   - vale uses spacing
   - java i think requires ThisClass.<params here> for this.
+- to make a new array:
+  - rust: let array: [i32; 3] = [0; 3];
+  - vale: it's a regular type.
+  - java: new keyword.
 - make new instance of type arr<x>
   - rust requires braces, i think
   - vale treats it like a generic function.
@@ -72,6 +81,43 @@ spacing isnt bad, because we do it all the time.
 - `void main`, `int x`
 - `let myThing`
 - `return x`
+- `is` and `as` in swift and rust
+- C#, linq: IEnumerable<int> highScoresQuery = from score in scores where score > 80 orderby score descending select score;
 
 literally any keyword requires spaces.
+
+
+
+java 11.4
+typescript 7.5
+c++ 6.94
+kotlin 0.71
+swift 0.7
+rust 0.92
+= 28.17
+
+go 8.82
+c# 3.72
+scala 1.55
+= 14.09
+
+literally 2x use <> lol
+
+
+
+vale uses semicolons and =, but thats not necessary. can look for `let` and `:`
+
+
+
+https://madnight.github.io/githut/#/pull_requests/2020/3
+
+
+
+
+
+
+
+Pair[5] can be to call a constructor
+maybe we can say you can never have something before the [
+like its gotta be [5]
 
