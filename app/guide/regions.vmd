@@ -41,7 +41,7 @@ Because of this, the compiler is free to do much more powerful optimizations. [#
 
 The compiler also keeps track of all references' regions, and makes sure that no reference outlive their region.
 ////
-```Vale
+```Vale: notest
 struct Ship {
   name str;
   size int;
@@ -49,7 +49,7 @@ struct Ship {
 
 fn biggestShipName<'a ro>(
   ships 'a &List<Ship>)
-Str {
+str {
   biggest! = ships.0;
   each ships (ship){
     if (ship.size > biggest.size) {
@@ -94,7 +94,7 @@ There's a corresponding `rwlock` method for `read-write` access.
 
 The compiler keeps track of all references' regions, and makes sure that no references outlive their lock.
 ////
-```Vale
+```Vale: notest
 struct Game {
   bases List<Base>;
   ships List<Ship>;
@@ -169,7 +169,7 @@ This can be costly. [#costly]
 
 Luckily, we can avoid this cost!
 ////
-```Vale
+```Vale: notest
 struct Vec2 { x float; y float; }
 // Represents a quadratic curve
 struct Curve {
@@ -237,7 +237,7 @@ Because the return isn't `'a`, the compiler knows that `Drawable` is a regioned 
 
 Now, `segmentifyAndSend` doesn't cause a secede!
 ////
-```Vale
+```Vale: notest
 fn segmentify<'a>(
     curve 'a &Curve) Drawable {
   results = List<Vec2>();

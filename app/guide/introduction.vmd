@@ -172,7 +172,7 @@ fn main() export {
 <<<<
 In Vale, functions and methods are the same thing, [#ufcs] so these two calls are exactly equivalent. [# Include vstl/list.vale for the `split` function.]
 ////
-```Vale
+```Vale: vstl/list.vale
 fn main() export {
   s1 = "Hail Hydra!".split(" ");
   s2 = split("Hail Hydra!", " ");
@@ -221,19 +221,21 @@ We can make an array with the `Array` function.
 fn main() export {
   n = stdinReadInt(); «inputInt»
   arr = MakeArray(n, {_ * 5}); «arrtype2»
-  println(arr);
+  arr.each({ println(_); });
 }
 ```
 ```stdin
-4
+3
 ```
 ```stdout
-[0, 5, 10, 15]
+0
+5
+10
 ```
 >>>>
 
 <slice>
-#inputInt: `stdinReadInt` reads an integer from the user's keyboard. In this example, the user is entering 4.
+#inputInt: `stdinReadInt` reads an integer from the user's keyboard. In this example, the user is entering 3.
 
 stdinReadInt is experimental, expect the stdin/stdout API to change soon.
 
@@ -248,7 +250,7 @@ Arrays can't be resized at run-time. Lists can!
 
 We can make one with the `List` function. [# Vale's lists are like C#'s `List`, Java's `ArrayList` or C++'s `vector`; it's backed by an array, not a linked list.]
 ////
-```Vale
+```Vale: vstl/list.vale
 fn main() export {
   l = List<int>();
   l.add(1);
@@ -273,9 +275,7 @@ We can loop with the `each` statement: [#each]
 ```Vale
 fn main() export {
   arr = ["Storm", "Earth", "Fire"];
-  each arr (x){
-    println(x);
-  }
+  arr.each((x){ println(x); });
 }
 ```
 ////
@@ -296,9 +296,9 @@ We can also get the index of the current iteration with the `eachI` statement.
 ```Vale
 fn main() export {
   arr = ["Storm", "Earth", "Fire"];
-  eachI arr (i, x){
+  arr.eachI((i, x){
     println(i + ": " + x);
-  }
+  });
 }
 ```
 ////
@@ -338,7 +338,7 @@ To make a variant, use an if-statement, and return a different type from the the
 
 Here, `a` is a variant, either a string or an integer. `a`'s type is `(str|int)`.
 ////
-```Vale
+```
 fn main() export {
   a =
     if (true) { "hello" }
@@ -355,7 +355,7 @@ Later, we can use the `match` statement to determine if `a` actually contains a 
 <<<<
 We'll be able to access a arbitrary fields of tuples or structs with square brackets, like `arr[1 + 1]`, which would produce a *variant*. [#variantindexing]
 ////
-```Vale
+```
 fn main() export {
   arr = [5, true, "V"];
   println("Saturn " + arr[1 + 1]);

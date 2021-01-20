@@ -214,7 +214,7 @@ Reference counting is costly:
 
 For example:
 
-```Vale
+```Vale: vstl/list.vale `struct Spaceship {}`
 fn launchShip(ships &Map<int, &Spaceship>, id int, armada &List<&Spaceship>) {
   ship = ships.get(id);
   // Increment ship's counter:
@@ -239,7 +239,7 @@ As you can see, reference counting incurs a cost whenever we alias or dealias. *
 
 Instead, generational references incur a cost whenever we dereference an object:
 
-```Vale
+```Vale: notest
 fn getShipName(ships &Map<int, &Spaceship>, id int) str {
   ship = ships.get(id);
 
