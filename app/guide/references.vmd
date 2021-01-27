@@ -239,7 +239,7 @@ In other words, we cannot reach into a struct through a weak reference directly;
 In this example, we're making a `o` constraint reference from the `ship.origin` weak reference.
 ////
 ```Vale
-struct Base {
+struct Base weakable {
   name str;
 }
 struct Spaceship {

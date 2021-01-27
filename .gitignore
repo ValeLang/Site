@@ -3,4 +3,3 @@ app/.DS_Store
 build
 .firebase
 .firebaserc
-firebase.json
