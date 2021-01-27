@@ -1,0 +1,48 @@
+{
+  "hosting": {
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    // Returns a permanent redirect to "/bar" for requests to "/foo" (but not "/foo/**")
+    "redirects": [
+      {
+        "source": "ValeCompiler-0.1.0.0-Linux.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.0.0-Linux.zip?alt=media&token=65aeb1a4-c4fa-4877-a1cd-8a1b638538b2",
+        "type": 302
+      },
+      {
+        "source": "ValeCompiler-0.1.0.0-Mac.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.0.0-Mac.zip?alt=media&token=51ec122d-0f2d-4d99-afd9-4f019e39a9aa",
+        "type": 302
+      },
+      {
+        "source": "ValeCompiler-0.1.0.0-Win.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.0.0-Win.zip?alt=media&token=5c68b832-9167-4905-9fb2-04e7bb3d21be",
+        "type": 302
+      },
+      {
+        "source": "ValeCompiler-0.1.1.0-Linux.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.1.0-Linux.zip?alt=media&token=3c305462-d87d-414a-a3c2-4929ab2c2e02",
+        "type": 302
+      },
+      {
+        "source": "ValeCompiler-0.1.1.0-Mac.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.1.0-Mac.zip?alt=media&token=1c2d25be-6b80-4c32-91da-4ba0a18d4e70",
+        "type": 302
+      },
+      {
+        "source": "ValeCompiler-0.1.1.0-Win.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.1.0-Win.zip?alt=media&token=e5143265-9f33-4cc8-9746-37d6c78b09aa",
+        "type": 302
+      },
+      {
+        "source": "ValeCompiler-0.1.1.1-Linux.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.1.1-Linux.zip?alt=media&token=669b9dce-3bce-452b-8b7f-34627b8968cf",
+        "type": 302
+      }
+    ]
+  }
+}
