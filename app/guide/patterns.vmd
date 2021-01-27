@@ -122,7 +122,7 @@ Here, we're using a match statement to check what the user entered.
 
 In patterns, `_` matches any incoming data and discards it.
 ////
-```
+```Vale
 fn main() export {
   mat inputInt() {
     1 { println("One!"); }
@@ -138,7 +138,7 @@ We can even check an incoming interface, to see what substruct it is.
 
 We can even destructure it at the same time!
 ////
-```
+```Vale
 interface ISpaceship { }
 
 struct Firefly { name str; }

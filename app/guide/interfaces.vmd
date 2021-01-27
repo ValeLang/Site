@@ -137,7 +137,7 @@ The current syntax is closer to the way Vale internally thinks about interfaces.
  * We could have override methods inside the `impl`.
 
 ////
-```
+```Vale
 interface Bipedal {
   fn hop(self) void;
   fn skip(self) void;
@@ -168,10 +168,10 @@ interface MaybeInt sealed { }
 // structs can implement MaybeInt.
 
 struct NoInt { }
-impl None for MaybeInt;
+impl MaybeInt for None;
 
 struct SomeInt { value int; }
-impl SomeInt for MaybeInt;
+impl MaybeInt for SomeInt;
 ```
 >>>>
 

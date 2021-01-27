@@ -222,10 +222,13 @@ struct Spaceship imm {
 
 fn main() export {
   ship = Spaceship("Serenity", 2);
+  ship2 = ship;
   println(ship.numWings);
+  println(ship2.numWings);
 }
 ```
 ```stdout
+Spaceship("Serenity", 2)
 Spaceship("Serenity", 2)
 ```
 >>>>
