@@ -1,0 +1,33 @@
+
+.roadmap .icon {
+  background-image: url("components/Sphere144-128-Red.png");
+  background-size: 14px 14px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 4px;
+  margin-top: -1px;
+  margin-bottom: -1px;
+}
+
+.roadmap .icon.done {
+  filter: hue-rotate(120deg) saturate(150%);
+}
+
+.roadmap .icon.todo {
+  filter: hue-rotate(50deg) saturate(300%);  
+}
+
+.roadmap .icon.later {
+  filter: saturate(0%) brightness(120%);
+}
+
+  /*
+  gray: filter: saturate(0%) brightness(120%);
+  red: filter: hue-rotate(0deg) saturate(150%);
+  orange: filter: hue-rotate(50deg) saturate(300%);
+  blue: filter: hue-rotate(240deg) saturate(300%);
+  purple: filter: hue-rotate(280deg) saturate(200%);
+  green: filter: hue-rotate(120deg) saturate(150%);
+  */
+  

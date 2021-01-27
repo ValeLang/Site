@@ -1,0 +1,110 @@
+
+.c-snippet.root {
+  width: 100%;
+  position: relative;
+}
+
+.c-snippet.code {
+  box-sizing: border-box;
+  color: #f8f8f2;
+  background-color: #282923;
+  padding: 0.5em;
+  white-space: pre;
+  font-size: 12px;
+  font-family: Roboto Mono, Courier New, Courier;
+  line-height: 12pt;
+  overflow: auto;
+}
+
+.c-snippet.header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  opacity: .7;
+  padding-right: 4px;
+}
+
+
+.c-snippet .Fn,
+.c-snippet .Struct,
+.c-snippet .Interface,
+.c-snippet .Impl {
+  font-weight: bold;
+  color: #FF9000;
+}
+.c-snippet .Memb {
+  font-weight: normal;
+  color: #FFFFFF;
+}
+.c-snippet .MembName {
+  font-weight: normal;
+  color: #FFFFFF;
+}
+.c-snippet .FnName,
+.c-snippet .StructName {
+  font-weight: bold;
+  color: #FFD000;
+}
+.c-snippet .Params,
+.c-snippet .Block,
+.c-snippet .Membs {
+  font-weight: normal;
+  color: #FFFFFF;
+}
+.c-snippet .Ret {
+  font-weight: bold;
+  color: #FFA0A0;
+}
+.c-snippet .Call {
+  font-weight: normal;
+  color: #E0E0E0;
+}
+.c-snippet .CallLookup {
+  font-weight: normal;
+  color: #FFD000;
+}
+.c-snippet .Str {
+  font-weight: normal;
+  color: #FFFF00;
+}
+.c-snippet .Num {
+  font-weight: normal;
+  color: #FFFF00;
+}
+.c-snippet .Let {
+  font-weight: normal;
+  color: #FFFFFF;
+}
+.c-snippet .Lookup {
+  font-weight: normal;
+  color: #FFFFFF;
+}
+.c-snippet .Mut {
+  font-weight: bold;
+  color: #FF8040;
+}
+.c-snippet .Typ {
+  font-weight: normal;
+  color: #FFFF00;
+}
+.c-snippet .CaptureName {
+  font-weight: bold;
+  color: #FFFFFF;
+}
+.c-snippet .Comment {
+  font-weight: normal;
+  color: #C0C0C0;
+}
+.c-snippet .Inl {
+  font-weight: normal;
+  color: #FFA040;
+}
+.c-snippet .Lend {
+  font-weight: normal;
+  color: #80FF00;
+}
+.c-snippet .Ownership {
+  font-weight: normal;
+  color: #80FF00;
+}
