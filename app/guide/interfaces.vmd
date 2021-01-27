@@ -137,7 +137,7 @@ The current syntax is closer to the way Vale internally thinks about interfaces.
  * We could have override methods inside the `impl`.
 
 ////
-```Vale: notest
+```
 interface Bipedal {
   fn hop(self) void;
   fn skip(self) void;

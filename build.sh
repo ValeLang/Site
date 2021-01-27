@@ -146,6 +146,7 @@ if [ $TARGET == "surprising-weak-refs" ] || [ $TARGET == "all" ] ; then
 fi
 
 if [ $MODE == "build" ] ; then
+  echo "Copying..."
   cp app/*.css build
   cp app/components/*.css build/components
   cp app/components/*.js build/components
