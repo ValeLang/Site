@@ -155,7 +155,7 @@ For example, `ChaseAbility`'s `getDesire` function will look for the nearest uni
 
 
 ////
-```Vale
+```Vale: notest
 fn gameLoop(world &World) {
   each (world.enemyUnits) (unit){
     // Implicit lock happens here!
@@ -272,7 +272,7 @@ At the end of `templar`, the locks are dropped, automatically closing the mutexe
 
 With our `Mutexes` and region annotations, the compiler can give us free, zero-cost access to everything in the `inAst`.
 ////
-```Vale
+```Vale: notest
 fn templar(
     inAstMutex &!Mutex<InAst>) {
   inAstLock = inAstMutex.openro();
@@ -355,7 +355,7 @@ We use the keyword `pool` after the region declaration `'i`.
  * References into the `'i` region are free because it uses pool allocation.
 
 ////
-```Vale
+```Vale: notest
 fn findNearbyUnits<'r ro, 'i pool>
   (world 'r &World, origin Location)
 'i List<'r &Unit>

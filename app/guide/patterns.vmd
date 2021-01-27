@@ -48,7 +48,7 @@ struct Vec3 imm {
   y int;
   z int;
 }
-fn makeVec() { Vec3(3, 4, 5) }
+fn makeVec() Vec3 { Vec3(3, 4, 5) }
 
 fn main() export {
   // Without destructure pattern:
@@ -58,13 +58,20 @@ fn main() export {
   c = tempVec.z;
 
   // Equivalent, using destructure:
-  Vec3(a, b, c) = makeVec();
+  Vec3(d, e, f) = makeVec();
+
+  // Equivalent; can leave off the type:
+  (g, h, i) = makeVec();
 
   println("a: " + a);
+  println("d: " + d);
+  println("g: " + g);
 }
 ```
 ```stdout
 a: 3
+d: 3
+g: 3
 ```
 >>>>
 
@@ -76,7 +83,7 @@ Every parameter is a pattern.
 
 Here, we're using destructuring for this function's parameters.
 ////
-```Vale
+```Vale: `struct Vec3 { x int; y int; z int; }`
 // Using above Vec3
 
 // Without destructuring:
@@ -98,8 +105,15 @@ fn refuel(
 ```
 >>>>
 
+<slice new-color="afterword"/>
 
-# Match Statement [# Planned feature; see [Roadmap](/roadmap)!]
+
+# Planned Features
+
+These are planned features for Vale. See the [roadmap](/roadmap) for plans!
+
+
+## Match Statement
 
 <<<<
 We can use a pattern to check if the incoming data is a certain value.
@@ -150,3 +164,5 @@ fn main() export {
 Firefly name Serenity
 ```
 >>>>
+
+<slice new-color="default"/>

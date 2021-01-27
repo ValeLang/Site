@@ -170,12 +170,12 @@ fn main() export {
 >>>>
 
 <<<<
-In Vale, functions and methods are the same thing, [#ufcs] so these two calls are exactly equivalent.
+In Vale, functions and methods are the same thing, [#ufcs] so these two calls are exactly equivalent. [# Include vstl/list.vale for the `split` function.]
 ////
-```Vale
+```Vale: vstl/list.vale
 fn main() export {
-  s = "Hail Hydra!".split(" ");
-  s = split("Hail Hydra!", " ");
+  s1 = "Hail Hydra!".split(" ");
+  s2 = split("Hail Hydra!", " ");
 }
 ```
 >>>>
@@ -209,24 +209,6 @@ Babylon 5
 ```
 >>>>
 
-<<<<
-We can also access an arbitrary field with square brackets, like `arr[1 + 1]`, which produces a *variant*. [# Coming soon, see [roadmap](/roadmap)!] [#variantindexing]
-////
-```Vale
-fn main() export {
-  arr = [5, true, "V"];
-  println("Saturn " + arr[1 + 1]);
-}
-```
-```stdout
-Saturn V
-```
->>>>
-
-<slice>
-#variantindexing: Specifically, indexing this tuple gives a variant `(int|bool|str)`, with a `+` function that calls the appropriate actual `+` depending on the run-time type (`int` vs `bool` vs `str`).
-</slice>
-
 
 # Arrays
 
@@ -237,23 +219,27 @@ We can make an array with the `Array` function.
 ////
 ```Vale
 fn main() export {
-  n = inputInt(); «inputInt»
-  arr = Array(n, {_ * 5}); «arrtype2»
-  println(arr);
+  n = stdinReadInt(); «inputInt»
+  arr = MakeArray(n, {_ * 5}); «arrtype2»
+  arr.each({ println(_); });
 }
 ```
 ```stdin
-4
+3
 ```
 ```stdout
-[0, 5, 10, 15]
+0
+5
+10
 ```
 >>>>
 
 <slice>
-#inputInt: `inputInt` reads an integer from the user's keyboard. In this example, the user is entering 4.
+#inputInt: `stdinReadInt` reads an integer from the user's keyboard. In this example, the user is entering 3.
 
-#arrtype2: The type of `arr` here is `Array<Int>`.
+stdinReadInt is experimental, expect the stdin/stdout API to change soon.
+
+#arrtype2: The type of `arr` here is `Array<int>`.
 </slice>
 
 
@@ -264,17 +250,17 @@ Arrays can't be resized at run-time. Lists can!
 
 We can make one with the `List` function. [# Vale's lists are like C#'s `List`, Java's `ArrayList` or C++'s `vector`; it's backed by an array, not a linked list.]
 ////
-```Vale
+```Vale: vstl/list.vale
 fn main() export {
-  l = List<Int>();
+  l = List<int>();
   l.add(1);
   l.add(3);
   l.add(7);
-  println(l);
+  println(l.get(2));
 }
 ```
 ```stdout
-List(1, 3, 7)
+7
 ```
 >>>>
 
@@ -289,9 +275,7 @@ We can loop with the `each` statement: [#each]
 ```Vale
 fn main() export {
   arr = ["Storm", "Earth", "Fire"];
-  each arr (x){
-    println(x);
-  }
+  arr.each((x){ println(x); });
 }
 ```
 ////
@@ -312,9 +296,9 @@ We can also get the index of the current iteration with the `eachI` statement.
 ```Vale
 fn main() export {
   arr = ["Storm", "Earth", "Fire"];
-  eachI arr (i, x){
+  arr.eachI((i, x){
     println(i + ": " + x);
-  }
+  });
 }
 ```
 ////
@@ -329,7 +313,7 @@ fn main() export {
 ```
 >>>>
 
-<slice>
+<slice new-color="afterword">
 #each: The each statement is syntactic sugar for the each method:
 
 `each arr (x){ println(x); }`
@@ -338,3 +322,51 @@ is equivalent to
 
 `arr.each((x){ println(x); })`
 </slice>
+
+
+# Planned Features
+
+These are planned features for Vale. See the [roadmap](/roadmap) for plans!
+
+
+## Variants
+
+<<<<
+We'll be able to produce a *variant*, which is something that can be one of two types (or more).
+
+To make a variant, use an if-statement, and return a different type from the then branch than the else branch.
+
+Here, `a` is a variant, either a string or an integer. `a`'s type is `(str|int)`.
+////
+```
+fn main() export {
+  a =
+    if (true) { "hello" }
+    else { 42 };
+}
+```
+>>>>
+
+Later, we can use the `match` statement to determine if `a` actually contains a `str` or an `int`.
+
+
+## Indexing Structs or Tuples for Variants
+
+<<<<
+We'll be able to access a arbitrary fields of tuples or structs with square brackets, like `arr[1 + 1]`, which would produce a *variant*. [#variantindexing]
+////
+```
+fn main() export {
+  arr = [5, true, "V"];
+  println("Saturn " + arr[1 + 1]);
+}
+```
+```stdout
+Saturn V
+```
+>>>>
+
+<slice new-color="default">
+#variantindexing: Specifically, indexing this tuple gives a variant `(int|bool|str)`, with a `+` function that calls the appropriate actual `+` depending on the run-time type (`int` vs `bool` vs `str`).
+</slice>
+

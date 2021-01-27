@@ -49,7 +49,7 @@ struct Spaceship {
   name str;
   numWings int;
 }
-fn Spaceship() {
+fn Spaceship() Spaceship {
   Spaceship("Serenity", 2)
 }
 
@@ -63,42 +63,6 @@ fn main() export {
 <slice/>
 
 
-# Shortcalling Constructors [# Planned feature; see [Roadmap](/roadmap)!]
-
-<<<<
-We normally call a function by name, such as the `Spaceship("Serenity", 2)` above. However, if the code is expecting a certain type, it can automatically call the constructor of the expected type.
-////
-```Vale
-// Using above Spaceship struct
-
-fn main() export {
-  // These statements are equivalent:
-  x Spaceship = Spaceship("Raza", 2);
-  x Spaceship = ("Raza", 2);
-}
-```
->>>>
-
-<<<<
-This saves a lot of typing when calling functions.
-////
-```Vale
-// Using above Spaceship struct
-
-fn foo(s Spaceship) { ... }
-
-fn main() export {
-  // These statements are equivalent:
-  foo(Spaceship("Raza", 2));
-  foo(("Raza", 2));
-}
-```
->>>>
-
-<slice/>
-
-
-
 # Ownership
 
 
@@ -107,7 +71,7 @@ Every mutable struct has exactly one owning reference at any given time. [# Ther
 <<<<
 When we create a mutable struct, we get the owning reference to it. When the owning reference disappears, the struct is automatically deallocated (via `drop`, explained below).
 ////
-```Vale
+```Vale: `struct Spaceship { name str; fuel int; }`
 fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
@@ -133,14 +97,14 @@ Vale's ownership has the flexibility of C++'s `unique_ptr` without the mutabilit
 Every mutable struct has exactly one owning reference pointing to it.
 
 <<<<
-When we make another reference to a struct, it will be a non-owning reference. [# More specifically, a constraint reference, see [References](/guide/references).] This is called a *lend*.
+We can make another reference to a struct with the `&` symbol. It will be a non-owning reference. [# More specifically, a constraint reference, see [References](/guide/references).] This is called a *lend*.
 
 In this example, the type of `owningRef` is `Spaceship`, and the type of `nonOwningRef` is `&Spaceship`.
 ////
-```Vale
+```Vale: `struct Spaceship { name str; fuel int; }`
 fn main() export {
   owningRef = Spaceship("Serenity", 2);
-  nonOwningRef = owningRef;
+  nonOwningRef = &owningRef;
 }
 ```
 >>>>
@@ -157,7 +121,7 @@ This is used to influence when the struct is `drop`ped, to keep it alive for lon
 <<<<
 In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
 ////
-```Vale
+```Vale: `struct Spaceship { name str; fuel int; }`
 fn main() export {
   a = Spaceship("Serenity", 2); «alocal»
   b = a; // Move the ship from a to b.
@@ -170,7 +134,7 @@ fn main() export {
 <<<<
 It works the same way when passing an owning reference to a function.
 ////
-```Vale
+```Vale: `struct Spaceship { name str; fuel int; }`
 fn foo(b Spaceship) {
   println(b.name);
 }
@@ -203,7 +167,7 @@ Here we can see where the implicit call to `drop` is.
 
 `drop` is called when the owning reference goes away, which in this case is `ship`.
 ////
-```Vale
+```Vale: `struct Spaceship { name str; fuel int; }`
 fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
@@ -266,6 +230,47 @@ Spaceship("Serenity", 2)
 ```
 >>>>
 
-<slice>
+<slice new-color="afterword">
 #small:  Small immutable structs (32b or less) are copied and passed by-value. Larger objects use *SNRC* (strategic nonatomic reference counting) to free themselves.
 </slice>
+
+
+# Planned Features
+
+These are planned features for Vale. See the [roadmap](/roadmap) for plans!
+
+
+## Shortcalling Constructors
+
+<<<<
+We normally call a function by name, such as the `Spaceship("Serenity", 2)` above. However, if the code is expecting a certain type, it can automatically call the constructor of the expected type.
+////
+```Vale: notest
+// Using above Spaceship struct
+
+fn main() export {
+  // These statements are equivalent:
+  x Spaceship = Spaceship("Raza", 2);
+  x Spaceship = ("Raza", 2);
+}
+```
+>>>>
+
+<<<<
+This saves a lot of typing when calling functions.
+////
+```Vale: notest
+// Using above Spaceship struct
+
+fn foo(s Spaceship) { ... }
+
+fn main() export {
+  // These statements are equivalent:
+  foo(Spaceship("Raza", 2));
+  foo(("Raza", 2));
+}
+```
+>>>>
+
+<slice new-color="default"/>
+

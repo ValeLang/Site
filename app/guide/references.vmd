@@ -20,7 +20,7 @@ An owning reference keeps an object alive. When a struct has no owning reference
 
 Every mutable struct has exactly one owning reference pointing to it. [#ownership]
 ////
-```Vale
+```Vale: `struct Spaceship { name str; fuel int; }`
 fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
@@ -70,7 +70,7 @@ This is used to influence when the struct is `drop`ped, to keep it alive for lon
 <<<<
 In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
 ////
-```Vale
+```Vale: `struct Spaceship {}`
 fn main() export {
   a = Spaceship(); «alocal»
   b = a; // Move the ship from a to b.
@@ -83,12 +83,12 @@ fn main() export {
 <<<<
 It works the same way when passing an owning reference to a function.
 ////
-```Vale
+```Vale: `struct Spaceship { name str; }`
 fn foo(b Spaceship) {
   println(b.name);
 }
 fn main() export {
-  a = Spaceship();
+  a = Spaceship("Raza");
   foo(a); // Move a into foo's b
   // Can't use a now.
 }
@@ -247,7 +247,9 @@ struct Spaceship {
   origin &&Base;
 }
 fn printShipBase(ship &Spaceship) {
-  if ((o) = lock(ship.origin)) { «lock»«mat»
+  maybeOrigin = lock(ship.origin); «lock»«iflet»
+  if (not maybeOrigin.isEmpty()) { «mat»
+    o = maybeOrigin.get();
     println("Ship base: " + o.name);
   } else {
     println("Ship base unknown!");
@@ -257,11 +259,11 @@ fn main() export {
   base = Base("Zion");
   ship = Spaceship("Neb", &&base);
 
-  printShipBase(ship);
+  printShipBase(&ship);
 
   base^.drop(); // Destroys base.
 
-  printShipBase(ship);
+  printShipBase(&ship);
 }
 ```
 ```stdout
@@ -270,18 +272,23 @@ Ship base unknown!
 ```
 >>>>
 
-<slice>
+<slice new-color="afterword">
 #lock: Locking a weak reference gives us a `?&Spaceship`, also known as an `Opt<&Spaceship>`. This has two possible subclasses: `None<&Spaceship>` which is empty and `Some<&Spaceship>` which contains a `&Spaceship`.
 
-This line is checking if that `?&Spaceship` is the one-member subclass `Some<&Spaceship>` and if so, assigns its member to `o`.
+#iflet: These three lines can be reduced to `if ((o) = lock(ship.origin)) {`.
 
-This is a conditional destructure, see [Pattern Matching](/guide/patterns) for more.
+This would specifically check if that `?&Spaceship` is the one-member subclass (`Some<&Spaceship>`) and if so, assigns its member to `o`. This is a conditional destructure, see [Pattern Matching](/guide/patterns) for more.
 
 #mat: We could also use a `mat` (match statement) here to check whether the `?&Spaceship` contained anything.
 </slice>
 
 
-# Pointers vs Values ("Inlining") [# Planned feature; see [Roadmap](/roadmap)!]
+# Planned Features
+
+These are planned features for Vale. See the [roadmap](/roadmap) for plans!
+
+
+## Pointers vs Values ("Inlining")
 
 *Inlining* is used for optimization.
 
@@ -332,4 +339,4 @@ fn main() export {
 ```
 >>>>
 
-<slice/>
+<slice new-color="default"/>

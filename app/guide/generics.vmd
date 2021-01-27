@@ -35,8 +35,8 @@ Because of this, we can't call `crazyIvan` on the longer ship!
 ////
 ```Vale
 interface ISpaceship {
-  fn length() Int;
-  fn honk() Void;
+  fn length(virtual this &ISpaceship) int; «this»
+  fn honk(virtual this &ISpaceship) void;
 }
 
 fn longerShip(
@@ -51,29 +51,33 @@ fn longerShip(
 }
 
 struct Raza { ... }
-fn length(r &Raza) { 4 }
-fn honk(r &Raza) { ... }
+fn length(r &Raza impl ISpaceship) int { 4 }
+fn honk(r &Raza impl ISpaceship) { ... }
 impl ISpaceship for Raza;
 
 struct Firefly { ... }
-fn length(f &Firefly) { 3 }
-fn honk(f &Firefly) { ... }
-fn crazyIvan(f &Firefly) { ... }
+fn length(f &Firefly impl ISpaceship) int { 3 }
+fn honk(f &Firefly impl ISpaceship) { ... }
 impl ISpaceship for Firefly;
+
+fn crazyIvan(f &Firefly) { ... }
 
 fn main() export {
   flametail = Firefly(...);
   serenity = Firefly(...);
   ship = longerShip(
-    flametail, serenity);
-  // Compile error: ship is type
-  // ISpaceship, not Firefly!
-  ship.crazyIvan();
+    &flametail, &serenity);
+
+  // ship.crazyIvan();
+  //   Compile error: ship is type
+  //   ISpaceship, not Firefly!
 }
 ```
 >>>>
 
-<slice/>
+<slice>
+#this: In future versions, this can be shortened to just `fn length(this) int;`.
+</slice>
 
 
 # Using Generics
@@ -89,13 +93,13 @@ In this case, we're calling it like `longerShip<Firefly>(...)`, which specifies 
 
 `longerShip<T>` returns a `T`, so `main` knows that `longerShip<Firefly>` returns a `Firefly`.
 ////
-```Vale
+```Vale: notest
 interface ISpaceship {
-  fn length() Int;
-  fn honk() Void;
+  fn length() int;
+  fn honk() void;
 }
 
-fn longerShip//<T impl ISpaceship>
+fn longerShip<T> «contract»
 (a &T, b &T) &T {
   if (a.length() > b.length()) {
     ret a;
@@ -128,6 +132,8 @@ fn main() export {
 >>>>
 
 <slice>
+#contract: In future versions, this can be `<T impl ISpaceship>` which will give a better compile error if someone calls longerShip with a non-ISpaceship.
+
 #meh: We can actually leave off the `<Firefly>` here, the compiler can figure it out from the arguments we passed in.
 </slice>
 
@@ -139,12 +145,11 @@ We can make generic structs too.
 
 Here we're making a Flock struct that can hold multiple of the same ship.
 ////
-```Vale
+```Vale: vstl/list.vale `struct Firefly {} fn crazyIvan(f &Firefly) {}`
 // Using above ISpaceship,
 // Firefly, Raza
 
 struct Flock<T>
-rules(implements(T, ISpaceship)) «impl»
 {
   ships List<T>;
 }
@@ -154,7 +159,7 @@ fn main() export {
   f.ships.add(Firefly(...));
   f.ships.add(Firefly(...));
 
-  firstShip = f.ships.0;
+  firstShip = f.ships.get(0);
   // This works because the compiler
   // can see that firstShip is a
   // Firefly.
@@ -163,6 +168,4 @@ fn main() export {
 ```
 >>>>
 
-<slice>
-#impl: In future versions, this can just be `struct Flock<T impl ISpaceship>`.
-</slice>
+<slice/>
