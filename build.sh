@@ -152,7 +152,6 @@ if [ $MODE == "build" ] ; then
   cp app/components/*.js build/components
   cp app/components/*.png build/components
   cp app/images/* build/images
-  cp app/releases/* build/releases
   cp app/blog/*.svg build/blog
 fi
 
