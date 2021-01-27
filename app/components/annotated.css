@@ -1,0 +1,239 @@
+
+a.m-annotated.note-anchor,
+span.m-annotated.note-starter,
+span.m-annotated.note-preview {
+  margin: -1px;
+  border-width: 1px;
+  border-style: solid;
+  min-width: 1.2em;
+  text-align: center;
+  font-weight: normal;
+}
+a.m-annotated.note-anchor,
+span.m-annotated.note-preview {
+  margin-left: 0px;
+  margin-right: 0px;
+  display: inline-block;
+  font-size: 9.5pt;
+}
+span.m-annotated.note-starter {
+  margin-left: 2px;
+  margin-right: 4px;
+  padding: 0px 2px;
+  float: left;
+}
+
+.m-annotated.note-color0 {
+  background-color: #D0F0D0;
+  border-color: #70E070;
+  color: #408040;
+}
+.m-annotated.note-color1 {
+  background-color: #F0D0F0;
+  border-color: #D0C0D0;
+  color: #804080;
+}
+.m-annotated.note-color2 {
+  background-color: #F0D0D0;
+  border-color: #E0B8B8;
+  color: #A06060;
+}
+.m-annotated.note-color3 {
+  background-color: #D0F0F0;
+  border-color: #70E0E0;
+  color: #408080;
+}
+.m-annotated.note-color4 {
+  background-color: #F4E0C0;
+  border-color: #FFC000;
+  color: #B07020;
+}
+.m-annotated.note-color5 {
+  background-color: #B8D8FF;
+  border-color: #B0C0FF;
+  color: #202080;
+}
+
+
+.m-annotated.inline-code {
+  font-family: Roboto Mono, Courier New, Courier;
+  padding: 0 4px;
+  white-space: pre-wrap;
+  font-size: 10pt;
+}
+
+.m-annotated.slice-contents .m-annotated.inline-code {
+  border: 1px solid #E0E0E0;
+  background-color: #F0F0F0;
+}
+
+.m-annotated.note .m-annotated.inline-code {
+  background-color: white;
+}
+
+.m-annotated.networking,
+.m-annotated.afterword,
+.m-annotated.plans {
+  background-color: #F0F0FF;
+}
+
+
+.m-annotated.networking .slice-contents,
+.m-annotated.afterword .slice-contents,
+.m-annotated.plans .slice-contents {
+  padding: 0 16px;
+}
+
+.m-annotated.plans .m-annotated.inline-code,
+.m-annotated.afterword .m-annotated.inline-code {
+  border: 1px solid #D0D0D0;
+  background-color: white;
+}
+
+
+.m-annotated.note ul {
+  margin: 0 0 8px 0;
+  padding-left: 16px;
+}
+
+.m-annotated.margin {
+  float: right;
+}
+.m-annotated.page.unimargined .m-annotated.margin {
+  position: absolute;
+  width: 264px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #F0F4FF;
+}
+
+.m-annotated .content {
+  margin-bottom: 16px;
+}
+
+.m-annotated.note section.m-annotated {
+  margin-bottom: 0px;
+}
+/*section.m-annotated:last-child {
+  margin-bottom: 0;
+}*/
+
+
+.m-annotated.intro-container {
+  width: 616px;
+}
+.m-annotated.toc-container {
+  width: 264px;
+  background-color: white;
+  box-sizing: border-box;
+}
+.m-annotated.page.unimargined .m-annotated.toc-container {
+  position: absolute;
+}
+
+
+.m-annotated.c-toc.root {
+  background-color: white;
+  padding-bottom: 16px;
+}
+
+
+.m-annotated.c-toc ul.m-annotated.c-toc {
+  margin: 0;
+  padding-left: 30px;
+}
+.m-annotated.c-toc li.m-annotated.c-toc {
+  margin: 0;
+}
+.m-annotated.c-toc li.m-annotated.c-toc + li.m-annotated.c-toc {
+  margin: 0;
+}
+.m-annotated.c-toc a.m-annotated.c-toc {
+  font-weight: normal;
+}
+
+
+
+
+.m-annotated.end {
+  margin-bottom: 0;
+}
+
+.m-annotated.line {
+  border-top: 2px solid #E0E0E0;
+  margin: 16px 0;
+}
+
+
+.m-annotated.noline {
+  border-top-width: 0;
+  padding-top: 0;
+}
+
+.m-annotated.comment {
+  color: #A0A0A0;
+}
+
+
+.m-annotated.afterword table {
+  background-color: white;
+}
+
+.comparison {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.comparison table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+.comparison td,
+.comparison th {
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #C0C0C0;
+  vertical-align: top;
+}
+.comparison .good {
+  background-color: #D8F0D8;
+}
+.comparison .meh {
+  background-color: #F0E8D8;
+}
+.comparison .na {
+  background-color: #F0F0F0;
+}
+.comparison .bad {
+  background-color: #F0D8D8;
+}
+.comparison .terrible {
+  background-color: #F0B0B0;
+}
+
+
+
+.m-annotated.note {
+  padding: 8px;
+}
+
+.m-annotated.note .m-annotated.slice-contents {
+  padding-right: 0;
+}
+
+
+
+.m-annotated.notes-header {
+  margin-top: 4px;
+  display: block;
+  padding: 8px;
+}
+
+.m-annotated.notes-header-text {
+  opacity: .5;
+}
+
+
+.m-annotated.slice-notes {
+  background-color: #E8F0FF;
+}

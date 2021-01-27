@@ -1,0 +1,17 @@
+
+.c-footer.root {
+  text-align: center;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.c-footer.copyright {
+	opacity: .8;
+	text-align: center;
+  margin-bottom: 8px;
+}
+
+.c-footer.everest {
+  opacity: .8;
+  text-align: center;
+}
