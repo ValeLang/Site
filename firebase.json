@@ -6,7 +6,6 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    // Returns a permanent redirect to "/bar" for requests to "/foo" (but not "/foo/**")
     "redirects": [
       {
         "source": "ValeCompiler-0.1.0.0-Linux.zip",
