@@ -25,25 +25,37 @@ We've made several-thousand line long programs in it, but there are rough edges:
 Download at your own risk, and report any bugs to the github!
 
 
-## Download
+## Releases
 
-Linux: [ValeCompiler-0.1.1.0-Linux.zip](releases/ValeCompiler-0.1.1.0-Linux.zip)
+### 0.1.1 "Ivo" Release
 
-Mac: [ValeCompiler-0.1.1.0-Mac.zip](releases/ValeCompiler-0.1.1.0-Mac.zip)
+Download:
 
-Windows: [ValeCompiler-0.1.1.0-Win.zip](releases/ValeCompiler-0.1.1.0-Win.zip)
+ * Linux: [ValeCompiler-0.1.1.0-Linux.zip](releases/ValeCompiler-0.1.1.0-Linux.zip)
+ * Mac: [ValeCompiler-0.1.1.0-Mac.zip](releases/ValeCompiler-0.1.1.0-Mac.zip)
+ * Windows: [ValeCompiler-0.1.1.0-Win.zip](releases/ValeCompiler-0.1.1.0-Win.zip)
 
+This release adds:
+
+ * A _lot_ of bugfixes! Special thanks to Ivo Balbaert for finding the rough edges and reporting bugs!
+ * Much more solid and reproducible building and running of the Vale compiler.
+ * More functions and classes to the standard library.
 
 The .zip includes:
 
  * *valec.py*, the main python script for invoking the compiler. Use `python3 valec.py help` for help.
- * *vstl* contains some classes you may find useful.
-    * *list.vale* is a regular array list.
-    * *hashset.vale* is a hash set.
-    * *hashmap.vale* is a hash map.
+ * *vstl* contains some classes you may find useful, such as a list, hashset, and hashmap.
  * *BenchmarkRL*, a terrain generator written in Vale, useful for comparing different regions. If on Linux, use `benchmark.sh` to run it against various regions.
  * *samples*, a collection of small programs written in Vale.
     * *roguelike.vale* is a program where you are an @ sign and can walk in four directions.
     * The rest are tiny programs that serve as test cases for the compiler.
  * `builtins` should be ignored, these are .vale and .c files used by the compiler itself.
 
+
+### 0.1.0 "Eevee" Release
+
+Linux: [ValeCompiler-0.1.0.0-Linux.zip](releases/ValeCompiler-0.1.0.0-Linux.zip)
+
+Mac: [ValeCompiler-0.1.0.0-Mac.zip](releases/ValeCompiler-0.1.0.0-Mac.zip)
+
+Windows: [ValeCompiler-0.1.0.0-Win.zip](releases/ValeCompiler-0.1.0.0-Win.zip)
