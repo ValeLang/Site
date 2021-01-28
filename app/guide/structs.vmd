@@ -228,8 +228,8 @@ fn main() export {
 }
 ```
 ```stdout
-Spaceship("Serenity", 2)
-Spaceship("Serenity", 2)
+2
+2
 ```
 >>>>
 
