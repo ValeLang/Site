@@ -76,20 +76,27 @@ g: 3
 >>>>
 
 
+<slice new-color="afterword"/>
+
+
+# Planned Features
+
+These are planned features for Vale. See the [roadmap](/roadmap) for plans!
+
 # Parameters
 
 <<<<
-Every parameter is a pattern.
+Every parameter could be a pattern.
 
 Here, we're using destructuring for this function's parameters.
 ////
-```Vale: `struct Vec3 { x int; y int; z int; }`
+```Vale: notest
 // Using above Vec3
 
 // Without destructuring:
-fn refuel(
+fn refuelA(
     vec Vec3,
-    len float) {
+    len int) {
   Vec3(
       vec.x * len,
       vec.y * len,
@@ -97,20 +104,13 @@ fn refuel(
 }
 
 // With destructuring:
-fn refuel(
+fn refuelB(
     Vec3(x, y, z),
-    len float) {
+    len int) {
   Vec3(x * len, y * len, z * len)
 }
 ```
 >>>>
-
-<slice new-color="afterword"/>
-
-
-# Planned Features
-
-These are planned features for Vale. See the [roadmap](/roadmap) for plans!
 
 
 ## Match Statement

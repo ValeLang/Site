@@ -101,7 +101,7 @@ When we make an open interface like the above `Bipedal`, the compiler makes an *
 
 It takes functions (or lambdas) as arguments, to use for the interface's methods.
 
-In this example, we're giving it a lambda for its `hop` method, and another lambda for its `skip` method.
+In this example, we're giving it a lambda for its `launch` method.
 ////
 ```Vale: notest
 interface IShip {
@@ -109,7 +109,7 @@ interface IShip {
 }
 
 fn main() export {
-  x = IShip((){ println("Launching!"); });
+  x = IShip({ println("Launching!"); });
   // x is an unnamed substruct which
   // implements IShip.
 
