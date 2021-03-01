@@ -1,16 +1,19 @@
 
 if [ "$1" == "" ] ; then
   echo "First arg should be 'build' or 'testvale'"
+  exit 1
 fi
 MODE="$1"
 
 if [ "$2" == "" ] ; then
-  echo "First arg should be 'all' or a page name"
+  echo "Second arg should be 'all' or a page name"
+  exit 1
 fi
 TARGET="$2"
 
 if [ "$3" == "" ] ; then
-  echo "Second arg should be path to Valestrom.jar"
+  echo "Third arg should be path to Valestrom.jar"
+  exit 1
 fi
 VALESTROM="$3"
 
