@@ -85,7 +85,7 @@ fn main() export {
 <<<<
 We can make longerShip into a *generic* function.
 
-Its parameters aren't exactly `ISpaceship`, they are any type `T` that implements `ISpaceship`.
+Its parameters aren't exactly `ISpaceship`, they are any type `T`.
 
 Since the parameters and return type are all `T`, the compiler knows that if we hand in `Firefly`s, we return a `Firefly`.
 
@@ -93,10 +93,10 @@ In this case, we're calling it like `longerShip<Firefly>(...)`, which specifies 
 
 `longerShip<T>` returns a `T`, so `main` knows that `longerShip<Firefly>` returns a `Firefly`.
 ////
-```Vale: notest
+```Vale
 interface ISpaceship {
-  fn length() int;
-  fn honk() void;
+  fn length(virtual self &ISpaceship) int;
+  fn honk(virtual self &ISpaceship);
 }
 
 fn longerShip<T> «contract»
@@ -109,13 +109,13 @@ fn longerShip<T> «contract»
 }
 
 struct Raza { ... }
-fn length(r &Raza) { 4 }
-fn honk(r &Raza) { ... }
 impl ISpaceship for Raza;
+fn length(r &Raza impl ISpaceship) int { 4 }
+fn honk(r &Raza impl ISpaceship) { ... }
 
 struct Firefly { ... }
-fn length(f &Firefly) { 3 }
-fn honk(f &Firefly) { ... }
+fn length(f &Firefly impl ISpaceship) int { 3 }
+fn honk(f &Firefly impl ISpaceship) { ... }
 fn crazyIvan(f &Firefly) { ... }
 impl ISpaceship for Firefly;
 

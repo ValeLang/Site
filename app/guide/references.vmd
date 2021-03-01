@@ -275,11 +275,11 @@ Ship base unknown!
 <slice new-color="afterword">
 #lock: Locking a weak reference gives us a `?&Spaceship`, also known as an `Opt<&Spaceship>`. This has two possible subclasses: `None<&Spaceship>` which is empty and `Some<&Spaceship>` which contains a `&Spaceship`.
 
-#iflet: These three lines can be reduced to `if ((o) = lock(ship.origin)) {`.
+#iflet: In future versions, these three lines can be reduced to `if ((o) = lock(ship.origin)) {`.
 
 This would specifically check if that `?&Spaceship` is the one-member subclass (`Some<&Spaceship>`) and if so, assigns its member to `o`. This is a conditional destructure, see [Pattern Matching](/guide/patterns) for more.
 
-#mat: We could also use a `mat` (match statement) here to check whether the `?&Spaceship` contained anything.
+#mat: In future versions, we could also use a `mat` (match statement) here to check whether the `?&Spaceship` contained anything.
 </slice>
 
 
