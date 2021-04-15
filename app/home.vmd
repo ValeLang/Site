@@ -48,24 +48,22 @@ Read comparisons with [C++, Javascript, and Rust](/blog/comparisons)!
  * [Announcing Vale!](https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/) (Jul 11 2020)
 
 
-```Vale
+```vale
 fn main() export {
   println("Hello world!");
 }
-```
 ```stdout
 Hello world!
 ```
 
 
-```Vale
+```vale
 fn main() export {
   planets = ["Venus", "Earth", "Mars"];
   each planets (planet){
     println("Hello " + planet + "!");
   }
 }
-```
 ```stdout
 Hello Venus!
 Hello Earth!

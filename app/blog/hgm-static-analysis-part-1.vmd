@@ -25,12 +25,12 @@ When an object is created, its allocated memory is guaranteed to be safe until i
 
 HGM leverages this to eliminate generation checks for references to objects who’s owning reference is still available.
 ////
-```Vale
+```vale
 struct Spaceship {
   fuel int;
 }
 
-fn main() int {
+fn main() int export {
   s = Spaceship(10);
   b = &s;
   ret b.fuel;
@@ -75,12 +75,12 @@ Variables = HashMap<str, str>();
 
 Using the example from the previous section, Catalyst’s tables after each line in main would read as follows (assuming that each reference’s unique identifier is the variable name):
 
-```Vale
+```vale
 struct Spaceship {
     fuel int;
 }
 
-fn main() int {
+fn main() int export {
   s = Spaceship(10);
   // Objects = {‘s’->true}
   // Variables = {}

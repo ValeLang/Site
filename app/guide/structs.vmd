@@ -11,6 +11,7 @@ series-entry: [Interfaces](/guide/interfaces)
 series-entry: [Generics](/guide/generics)
 series-entry: [Patterns](/guide/patterns)
 series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs-exports)
 ---
 
 <<<<
@@ -20,7 +21,7 @@ We can construct it using its *constructor* function, which has the same name an
 
 All structs are *mutable* by default, more on that in the Mutability section below.
 ////
-```Vale
+```vale
 struct Spaceship {
   name str;
   numWings int;
@@ -30,7 +31,6 @@ fn main() export {
   ship = Spaceship("Serenity", 2);
   println(ship.name);
 }
-```
 ```stdout
 Serenity
 ```
@@ -44,7 +44,7 @@ We can specify a custom constructor for our struct.
 
 We just need to give it the same name as the struct. [#  Inside the constructor, we must call either another constructor or `constructor<T>`.]
 ////
-```Vale
+```vale
 struct Spaceship {
   name str;
   numWings int;
@@ -71,7 +71,7 @@ Every mutable struct has exactly one owning reference at any given time. [# Ther
 <<<<
 When we create a mutable struct, we get the owning reference to it. When the owning reference disappears, the struct is automatically deallocated (via `drop`, explained below).
 ////
-```Vale: `struct Spaceship { name str; fuel int; }`
+```vale
 fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
@@ -80,7 +80,7 @@ fn main() export {
 
   // implicitly drops ship
 }
-```
+```: `struct Spaceship { name str; fuel int; }`
 >>>>
 
 <slice>
@@ -101,12 +101,12 @@ We can make another reference to a struct with the `&` symbol. It will be a non-
 
 In this example, the type of `owningRef` is `Spaceship`, and the type of `nonOwningRef` is `&Spaceship`.
 ////
-```Vale: `struct Spaceship { name str; fuel int; }`
+```vale
 fn main() export {
   owningRef = Spaceship("Serenity", 2);
   nonOwningRef = &owningRef;
 }
-```
+```: `struct Spaceship { name str; fuel int; }`
 >>>>
 
 <slice/>
@@ -121,20 +121,20 @@ This is used to influence when the struct is `drop`ped, to keep it alive for lon
 <<<<
 In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
 ////
-```Vale: `struct Spaceship { name str; fuel int; }`
+```vale
 fn main() export {
   a = Spaceship("Serenity", 2); «alocal»
   b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
   // Can't use a now.
 }
-```
+```: `struct Spaceship { name str; fuel int; }`
 >>>>
 
 <<<<
 It works the same way when passing an owning reference to a function.
 ////
-```Vale: `struct Spaceship { name str; fuel int; }`
+```vale
 fn foo(b Spaceship) {
   println(b.name);
 }
@@ -145,7 +145,7 @@ fn main() export {
   foo(a);
   // Can't use a now.
 }
-```
+```: `struct Spaceship { name str; fuel int; }`
 >>>>
 
 
@@ -167,7 +167,7 @@ Here we can see where the implicit call to `drop` is.
 
 `drop` is called when the owning reference goes away, which in this case is `ship`.
 ////
-```Vale: `struct Spaceship { name str; fuel int; }`
+```vale
 fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
@@ -181,7 +181,7 @@ fn main() export {
 // fn drop(s Spaceship) {
 //   destruct s; «destruct» // frees
 // }
-```
+```: `struct Spaceship { name str; fuel int; }`
 >>>>
 
 We can specify our own `drop` function. A custom drop could be used to:
@@ -214,7 +214,7 @@ Vale also automatically derives the functions `println`, `str`, `hash`, `==`, an
 
 Immutable structs cannot have drop functions. [# See [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for the reasoning behind this.]
 ////
-```Vale
+```vale
 struct Spaceship imm {
   name str;
   numWings int;
@@ -224,9 +224,8 @@ fn main() export {
   ship = Spaceship("Serenity", 2);
   println(ship.numWings);
 }
-```
 ```stdout
-Spaceship("Serenity", 2)
+2
 ```
 >>>>
 
@@ -245,7 +244,7 @@ These are planned features for Vale. See the [roadmap](/roadmap) for plans!
 <<<<
 We normally call a function by name, such as the `Spaceship("Serenity", 2)` above. However, if the code is expecting a certain type, it can automatically call the constructor of the expected type.
 ////
-```Vale: notest
+```vale
 // Using above Spaceship struct
 
 fn main() export {
@@ -253,13 +252,13 @@ fn main() export {
   x Spaceship = Spaceship("Raza", 2);
   x Spaceship = ("Raza", 2);
 }
-```
+```: notest
 >>>>
 
 <<<<
 This saves a lot of typing when calling functions.
 ////
-```Vale: notest
+```vale
 // Using above Spaceship struct
 
 fn foo(s Spaceship) { ... }
@@ -269,7 +268,7 @@ fn main() export {
   foo(Spaceship("Raza", 2));
   foo(("Raza", 2));
 }
-```
+```: notest
 >>>>
 
 <slice new-color="default"/>

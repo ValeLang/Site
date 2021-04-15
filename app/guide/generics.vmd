@@ -11,6 +11,7 @@ series-entry: [Interfaces](/guide/interfaces)
 series-entry: []()
 series-entry: [Patterns](/guide/patterns)
 series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs-exports)
 ---
 
 Generics are a different way to reuse code for different types.
@@ -33,7 +34,7 @@ main doesn't know that though; all is sees is that `longerShip` returns an `&ISp
 
 Because of this, we can't call `crazyIvan` on the longer ship!
 ////
-```Vale
+```vale
 interface ISpaceship {
   fn length(virtual this &ISpaceship) int; «this»
   fn honk(virtual this &ISpaceship) void;
@@ -93,7 +94,7 @@ In this case, we're calling it like `longerShip<Firefly>(...)`, which specifies 
 
 `longerShip<T>` returns a `T`, so `main` knows that `longerShip<Firefly>` returns a `Firefly`.
 ////
-```Vale
+```vale
 interface ISpaceship {
   fn length(virtual self &ISpaceship) int;
   fn honk(virtual self &ISpaceship);
@@ -145,7 +146,7 @@ We can make generic structs too.
 
 Here we're making a Flock struct that can hold multiple of the same ship.
 ////
-```Vale: vstl/list.vale `struct Firefly {} fn crazyIvan(f &Firefly) {}`
+```vale
 // Using above ISpaceship,
 // Firefly, Raza
 
@@ -165,7 +166,7 @@ fn main() export {
   // Firefly.
   firstShip.crazyIvan();
 }
-```
+```: vstl/list.vale `struct Firefly {} fn crazyIvan(f &Firefly) {}`
 >>>>
 
 <slice/>

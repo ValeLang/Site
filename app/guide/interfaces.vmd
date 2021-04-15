@@ -11,6 +11,7 @@ series-entry: []()
 series-entry: [Generics](/guide/generics)
 series-entry: [Patterns](/guide/patterns)
 series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs-exports)
 ---
 
 <<<<
@@ -24,7 +25,7 @@ It would be great if we could make a function accept any kind of reference, as l
 
 We can, using *interfaces*!
 ////
-```Vale
+```vale
 struct Human { ... }
 fn hop(s &Human) { ... }
 fn skip(s &Human) { ... }
@@ -56,7 +57,7 @@ Then, to tell the compiler that `Human` and `DarkElf` conform to that interface,
 
 Last, we change `hopscotch` to take in a `&Bipedal`, and now we can call it with a `Human` or `DarkElf`, since both implement the `Bipedal` interface.
 ////
-```Vale
+```vale
 interface Bipedal {
   fn hop(virtual b &Bipedal) void; «bettersyntax»
   fn skip(virtual b &Bipedal) void;
@@ -103,7 +104,7 @@ It takes functions (or lambdas) as arguments, to use for the interface's methods
 
 In this example, we're giving it a lambda for its `launch` method.
 ////
-```Vale: notest
+```vale
 interface IShip {
   fn launch(virtual ship &IShip);
 }
@@ -162,7 +163,7 @@ By default, an interface is *open*, which means any struct can implement it.
 
 A *sealed* interface can only be implemented by structs defined in the same file.
 ////
-```Vale: notest
+```vale
 interface MaybeInt sealed { }
 // sealed: only the below two
 // structs can implement MaybeInt.
@@ -172,7 +173,7 @@ impl None for MaybeInt;
 
 struct SomeInt { value int; }
 impl SomeInt for MaybeInt;
-```
+```: notest
 >>>>
 
 Because the compiler knows all the implementing structs up-front, it:
@@ -193,7 +194,7 @@ A *sealed interface constructor* is a function with the same name of the interfa
 
 In this example, when we call `MaybeInt(7)`, the compiler finds that the `SomeInt` substruct indeed has a constructor accepting one int, and calls that.
 ////
-```Vale: notest
+```vale
 // Using above MaybeInt/NoInt/SomeInt
 
 fn main() export {
@@ -203,7 +204,7 @@ fn main() export {
   y = MaybeInt();
   // y is of type NoInt.
 }
-```
+```: notest
 >>>>
 
 A sealed interface constructor also allows us to make substructs via *shortcalling*. [# See [Structs](/guide/structs) for more on shortcalling.]
@@ -216,7 +217,7 @@ A sealed interface constructor also allows us to make substructs via *shortcalli
 <<<<
 We normally call a function by name, such as the `MaybeInt(7)` above. However, if the code is expecting a certain type, it can automatically call the constructor of the expected type.
 ////
-```Vale: notest
+```vale
 // Using above MaybeInt/NoInt/SomeInt
 
 fn main() export {
@@ -224,13 +225,13 @@ fn main() export {
   x MaybeInt = MaybeInt(7);
   x MaybeInt = (7);
 }
-```
+```: notest
 >>>>
 
 <<<<
 This saves a lot of typing when calling functions.
 ////
-```Vale: notest
+```vale
 // Using above MaybeInt/NoInt/SomeInt
 
 fn foo(m MaybeInt) { ... }
@@ -252,7 +253,7 @@ fn main() export {
   // interface constructor:
   foo(());
 }
-```
+```: notest
 >>>>
 
 <slice new-color="default"/>

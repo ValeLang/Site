@@ -11,6 +11,7 @@ series-entry: [Interfaces](/guide/interfaces)
 series-entry: [Generics](/guide/generics)
 series-entry: [Patterns](/guide/patterns)
 series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs-exports)
 ---
 
 # Owning Reference
@@ -20,7 +21,7 @@ An owning reference keeps an object alive. When a struct has no owning reference
 
 Every mutable struct has exactly one owning reference pointing to it. [#ownership]
 ////
-```Vale: `struct Spaceship { name str; fuel int; }`
+```vale
 fn main() export {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
@@ -29,7 +30,7 @@ fn main() export {
 
   // implicit ship^.drop()
 }
-```
+```: `struct Spaceship { name str; fuel int; }`
 >>>>
 
 
@@ -42,7 +43,7 @@ When we say `a = b;` for an immutable struct, both a and b can still be used.
 
 Immutables are simple to use. The rest of the page is about references to mutable structs.
 ////
-```Vale
+```vale
 struct Vec3 imm {
   x int;
   y int;
@@ -54,7 +55,6 @@ fn main() export {
   // Can use both freely.
   println(firstRef.x + otherRef.y);
 }
-```
 ```stdout
 7
 ```
@@ -70,20 +70,20 @@ This is used to influence when the struct is `drop`ped, to keep it alive for lon
 <<<<
 In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
 ////
-```Vale: `struct Spaceship {}`
+```vale
 fn main() export {
   a = Spaceship(); «alocal»
   b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
   // Can't use a now.
 }
-```
+```: `struct Spaceship {}`
 >>>>
 
 <<<<
 It works the same way when passing an owning reference to a function.
 ////
-```Vale: `struct Spaceship { name str; }`
+```vale
 fn foo(b Spaceship) {
   println(b.name);
 }
@@ -92,7 +92,7 @@ fn main() export {
   foo(a); // Move a into foo's b
   // Can't use a now.
 }
-```
+```: `struct Spaceship { name str; }`
 >>>>
 
 
@@ -136,7 +136,7 @@ To make a constraint reference, use the & symbol.
 
 In this example, we're making a constraint reference to `ship` and giving it to the `foo` function.
 ////
-```Vale
+```vale
 struct Spaceship {
   name str;
   numWings int;
@@ -164,7 +164,7 @@ To avoid the program halting:
  * Get rid of the constraint reference sooner. [# For example, by copying the needed data out. In this example, we could have copied into a `wings` local.]
  * If the reference doesn't actually require the object to be alive, use a weak reference instead.
 ////
-```Vale
+```vale
 struct Spaceship {
   name str;
   wings int;
@@ -186,7 +186,6 @@ fn main() export {
 
   println("Wings: " + shipCRef.wings);
 }
-```
 ```stdout
 Name: Serenity
 Error: Dangling pointers detected!
@@ -238,7 +237,7 @@ In other words, we cannot reach into a struct through a weak reference directly;
 
 In this example, we're making a `o` constraint reference from the `ship.origin` weak reference.
 ////
-```Vale
+```vale
 struct Base weakable {
   name str;
 }
@@ -265,7 +264,6 @@ fn main() export {
 
   printShipBase(&ship);
 }
-```
 ```stdout
 Ship base: Zion
 Ship base unknown!
@@ -297,7 +295,7 @@ By default, a reference is a pointer, to something on the heap. [# Vale uses esc
 
 Inline objects are much faster to allocate and deallocate, but cannot be moved.
 ////
-```Vale
+```vale
 struct Spaceship {
   name str;
   numWings int;
@@ -306,7 +304,6 @@ fn main() export {
   ship = inl Spaceship("Enterprise", 4);
   println(ship.name);
 }
-```
 ```stdout
 Enterprise
 ```
@@ -321,7 +318,7 @@ In this example, the `Engine`'s memory is inside the `Spaceship`'s memory. This 
 
 In a way, `inl` means "It should live here, not somewhere else."
 ////
-```Vale
+```vale
 struct Engine {
   model str;
   fuel int;
