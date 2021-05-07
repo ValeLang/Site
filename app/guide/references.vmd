@@ -188,16 +188,20 @@ fn main() export {
 }
 ```stdout
 Name: Serenity
-Error: Dangling pointers detected!
+Error: Dangling pointers detected!«extrainfo»
+```
+>>>>
+
+<slice>
+#extrainfo: Soon, there will be more details printed out here, like:
+```
 Dead object:
   takeAndDestroy::ship main.vale:5:19
 Dangling pointers:
   main::shipCRef main.vale:13:3
 Continue? [y,N]
 ```
->>>>
-
-<slice />
+</slice>
 
 
 ### Constraint Modes
@@ -218,6 +222,57 @@ Different modes will be useful at different times.
 <slice>
 #betterthancpp: This is safer than C++, because we can do our testing in assist mode, giving us more confidence that we aren't even _making_ any pointers dangle, which makes us even more confident that we wouldn't accidentally _dereference_ any dangling pointers.
 </slice>
+
+
+
+## Read-only or Read-write References
+
+A constraint reference can either be *read-only* (e.g. `&Spaceship`) or *read-write* (e.g. `&!Spaceship`).
+
+We can get a read-only reference to an object with `&`, like `&ship`.
+
+We can get a read-write reference to an object with `&!`, like `&!ship`.
+
+<<<<
+We can't use a readonly reference to change an object. This example would fail to compile:
+////
+```Vale
+struct Spaceship {
+  fuel int;
+}
+fn main() export {
+  ship = Spaceship(10);
+  readonlyRef = &ship;
+  mut readonlyRef.fuel = 20; // error
+}
+```: notest
+>>>>
+
+<<<<
+Note that even if _we_ have a read-only reference to a ship, _someone else_ can modify the object using a read-write reference.
+
+In this example, `mut readwriteRef.fuel = 20;` is changing the object, even though we have a read-only reference `readonlyRef` to it.
+////
+```Vale
+struct Spaceship {
+  fuel int;
+}
+fn main() export {
+  ship = Spaceship(10);
+  readonlyRef = &ship;
+
+  readwriteRef = &!ship;
+  mut readwriteRef.fuel = 20;
+
+  println(readonlyRef.fuel);
+}
+```stdout
+20
+```
+>>>>
+
+All references to immutable structs are automatically read-only.
+
 
 
 ## Weak References

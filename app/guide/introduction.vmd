@@ -192,11 +192,11 @@ as opposed to
 <<<<
 A tuple is a simple struct, whose members are named 0, 1, 2, etc.
 
-We can make a tuple in Vale with square brackets (like `[5, true, "V"]`), and can access them with a dot ,like `arr.0`.
+We can make a tuple in Vale with square brackets (like `[5, true, 42]`), and can access them with a dot ,like `arr.0`.
 ////
 ```vale
 fn main() export {
-  arr = [5, true, "V"];
+  arr = [5, true, 42];
   println("Babylon " + arr.0);
 }
 ```stdout
@@ -246,9 +246,9 @@ We can make one with the `List` function. [# Vale's lists are like C#'s `List`, 
 ```vale
 fn main() export {
   l = List<int>();
-  l.add(1);
-  l.add(3);
-  l.add(7);
+  l!.add(1);
+  l!.add(3);
+  l!.add(7);
   println(l.get(2));
 }
 ```stdout

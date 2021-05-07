@@ -157,8 +157,8 @@ struct Flock<T>
 
 fn main() export {
   f = Flock<Firefly>(List<Firefly>());
-  f.ships.add(Firefly(...));
-  f.ships.add(Firefly(...));
+  f.ships!.add(Firefly(...));
+  f.ships!.add(Firefly(...));
 
   firstShip = f.ships.get(0);
   // This works because the compiler
