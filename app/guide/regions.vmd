@@ -84,7 +84,7 @@ We can make a mutexed region with the `Mutex` function.
 
 It accepts a *regioned object*. A regioned object is an object where all of its (directly or indirectly) owned objects refer only to each other and are referred to only by each other.
 
-Here, we're making an regioned object with a region call, the `'a makeGame()`.
+Here, we're making a regioned object with a region call, the `'a makeGame()`.
 
 `Mutex` will take the regioned object, and wrap it in a `Mutex` object.
 

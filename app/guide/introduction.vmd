@@ -68,7 +68,7 @@ Hello Antarctica!
 >>>>
 
 <slice>
-#running: You can put the code into e.g. `hello.vale` and invoke the compiler with `python3 valec.py hello.vale`. (After 0.1, it will simply be `vale build hello.vale`.)
+#running: You can put the code into e.g. `hello.vale` and invoke the compiler with `python3 valec.py build hello.vale`. (After 0.1, it will simply be `vale build hello.vale`.)
 
 That will produce an executable named `hello.exe` (on Windows) or `hello` (on Mac or Linux).
 </slice>
