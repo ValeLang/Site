@@ -169,7 +169,7 @@ interface MaybeInt sealed { }
 // structs can implement MaybeInt.
 
 struct NoInt { }
-impl None for MaybeInt;
+impl MaybeInt for None;
 
 struct SomeInt { value int; }
 impl SomeInt for MaybeInt;
