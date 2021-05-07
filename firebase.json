@@ -41,6 +41,21 @@
         "source": "/releases/ValeCompiler-0.1.1.1-Linux.zip",
         "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.1.1-Linux.zip?alt=media&token=669b9dce-3bce-452b-8b7f-34627b8968cf",
         "type": 302
+      },
+      {
+        "source": "/releases/ValeCompiler-0.1.2.2-Mac.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.2.2-Mac.zip?alt=media&token=73a1223a-30cc-4cec-8b44-7d57a2f3657b",
+        "type": 302
+      },
+      {
+        "source": "/releases/ValeCompiler-0.1.2.2-Win.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.2.2-Windows.zip?alt=media&token=f4401d75-2fe2-4546-9e2d-f89f2e909f73",
+        "type": 302
+      },
+      {
+        "source": "/releases/ValeCompiler-0.1.2.2-Linux.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.2.2-Linux.zip?alt=media&token=b8619c54-d615-4c56-89b8-79d8e8ac59ab",
+        "type": 302
       }
     ]
   }
