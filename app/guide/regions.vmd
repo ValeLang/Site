@@ -11,6 +11,7 @@ series-entry: [Interfaces](/guide/interfaces)
 series-entry: [Generics](/guide/generics)
 series-entry: [Patterns](/guide/patterns)
 series-entry: []()
+series-entry: [Externs and Exports](/guide/externs-exports)
 ---
 
 We can divide our program's memory into *regions*, for *safer* and *faster* code.
@@ -41,7 +42,7 @@ Because of this, the compiler is free to do much more powerful optimizations. [#
 
 The compiler also keeps track of all references' regions, and makes sure that no reference outlive their region.
 ////
-```Vale: notest
+```vale
 struct Ship {
   name str;
   size int;
@@ -68,10 +69,9 @@ fn main() export {
 
   println(n);
 }
-```
 ```stdout
 Serenity
-```
+```: notest
 >>>>
 
 
@@ -94,7 +94,7 @@ There's a corresponding `rwlock` method for `read-write` access.
 
 The compiler keeps track of all references' regions, and makes sure that no references outlive their lock.
 ////
-```Vale: notest
+```vale
 struct Game {
   bases List<Base>;
   ships List<Ship>;
@@ -129,7 +129,7 @@ fn main() export {
     rwGame.bases.0;
   drop(rwLock);
 }
-```
+```: notest
 >>>>
 
 
@@ -169,7 +169,7 @@ This can be costly. [#costly]
 
 Luckily, we can avoid this cost!
 ////
-```Vale: notest
+```vale
 struct Vec2 { x float; y float; }
 // Represents a quadratic curve
 struct Curve {
@@ -205,7 +205,7 @@ fn segmentifyAndSend<'a, 'b>(
   // Can now add it to drawables
   drawables.add(drawableInB);
 }
-```
+```: notest
 >>>>
 
 <slice>
@@ -237,7 +237,7 @@ Because the return isn't `'a`, the compiler knows that `Drawable` is a regioned 
 
 Now, `segmentifyAndSend` doesn't cause a secede!
 ////
-```Vale: notest
+```vale
 fn segmentify<'a>(
     curve 'a &Curve) Drawable {
   results = List<Vec2>();
@@ -261,7 +261,7 @@ fn segmentifyAndSend<'a, 'b>(
   // Can now add it to drawables
   drawables.add(drawableInB);
 }
-```
+```: notest
 >>>>
 
 

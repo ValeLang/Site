@@ -185,7 +185,7 @@ Calling flyTo here will:
  * Call `flyTo`.
 
 ////
-```Vale: notest
+```vale
 fn launch(
   spaceship 'core &Spaceship,
   e ClickEvent,
@@ -195,7 +195,7 @@ fn launch(
   println("Flying " + dist + " parsecs!");
   spaceship.flyTo(e.location, callback);
 }
-```
+```: notest
 >>>>
 
 <<<<
@@ -206,7 +206,7 @@ This snippet is compiled to native assembly.
  * `callback` is compiled to a u64, an index into the Java Constraint Ref Table.
 
 ////
-```Vale: notest
+```vale
 fn flyTo(
   ship &Spaceship,
   loc Loc,
@@ -220,7 +220,7 @@ fn flyTo(
     mut spaceship.flyingCallback = callback;
   }
 }
-```
+```: notest
 >>>>
 
 <<<<
@@ -230,7 +230,7 @@ The `distance` function here is also compiled to both worlds.
 
 Since this is a normal struct without any region annotations, it can be compiled to both sides. There will be a native version of `distance` which works on native `Loc`s, and a JVM version of `distance` that works on JVM `Loc`s.
 ////
-```Vale: notest
+```vale
 struct Loc imm {
   x Int;
   y Int;
@@ -239,7 +239,7 @@ struct Loc imm {
     sqrt(sq(this.x - that.x) + sq(this.y - that.y))
   }
 }
-```
+```: notest
 >>>>
 
 <<<<
@@ -247,14 +247,14 @@ This struct is compiled in native only.
 
 JVM can still have a reference to it (perhaps through the Tables), but there's no JVM Spaceship class.
 ////
-```Vale: notest
+```vale
 struct Spaceship 'core {
   fuel Int;
   loc! Loc;
   target! Loc;
   callback 'platform ICallback; // change to fn(bool)void;
 }
-```
+```: notest
 >>>>
 
 Vale can call seamlessly into native code, with only a few annotations.

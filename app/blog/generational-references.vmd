@@ -214,7 +214,7 @@ Reference counting is costly:
 
 For example:
 
-```Vale: vstl/list.vale `struct Spaceship {}`
+```vale
 fn launchShip(ships &Map<int, &Spaceship>, id int, armada &List<&Spaceship>) {
   ship = ships.get(id);
   // Increment ship's counter:
@@ -229,7 +229,7 @@ fn launchShip(ships &Map<int, &Spaceship>, id int, armada &List<&Spaceship>) {
   //     ship.__deallocate();
   //   }
 }
-```
+```: vstl/list.vale `struct Spaceship {} struct Map<T, Y> { t T; y Y; } fn main() export {}`
 
 As you can see, reference counting incurs a cost whenever we alias or dealias. *Generational references don't have that cost.* The above snippet would have zero overhead if it used generational references.
 
@@ -239,7 +239,7 @@ As you can see, reference counting incurs a cost whenever we alias or dealias. *
 
 Instead, generational references incur a cost whenever we dereference an object:
 
-```Vale: notest
+```vale
 fn getShipName(ships &Map<int, &Spaceship>, id int) str {
   ship = ships.get(id);
 
@@ -247,7 +247,7 @@ fn getShipName(ships &Map<int, &Spaceship>, id int) str {
   //   assert(shipRef.targetGen == shipRef.obj.actualGen);
   ret ship.name;
 }
-```
+```: notest
 
 
 This is cheaper because *programs dereference less than they alias and dealias:* our sample program had 4.7 million counter adjustments, but only 1.3 million liveness checks. [#somany] [#noopt]

@@ -119,8 +119,7 @@ public:
     d(make_unique<D>(a.get(), c.get()))
   { }
 };
-```
-```Vale: `struct A {} struct B { a &A; } struct C { a &A; } struct D { a &A; c &C; }`
+```vale
 struct BigClass {
   a A; «nounique»
   b B;
@@ -133,7 +132,7 @@ struct BigClass {
     this.d = D(&this.a, &this.c);
   }
 }
-```
+```: `struct A {} struct B { a &A; } struct C { a &A; } struct D { a &A; c &C; } fn main() export {}`
 >>>>
 
 <slice>
@@ -266,8 +265,7 @@ public:
     INetworkCallback* callback)
   { ... }
 };
-```
-```Vale: notest
+```vale
 interface INetworkCallback {
   fn handleResponse(&this, resp Str);
   fn drop(this);
@@ -279,7 +277,7 @@ struct Network {
     callback &!INetworkCallback)
   { ... }
 }
-```
+```: notest
 >>>>
 
 <img style="float: right; width: 308px; height: 159px;" src="clasp.svg"/>
@@ -481,7 +479,7 @@ This isn't just useful for transactions. Imagine a `Future<T, E>` class with two
 
 Now, we can never accidentally drop a future without resolving or rejecting it first!
 ////
-```Vale: notest
+```vale
 struct Transaction {
   fn read(&!this, query ReadQuery)
     ReadResult { ... }
@@ -504,7 +502,7 @@ fn main() export {
   // To rollback:
   transaction^.rollback(TUMBLE);
 }
-```
+```: notest
 >>>>
 
 
@@ -566,7 +564,7 @@ Normally, we would need to use an allocator. But instead, we could take in the f
 
 This is impossible in C++'s syntax (we don't get to move `this`), [# Maybe we could make this work in C++ if it allowed us to specify an explicit `this` parameter, which was wrapped in a `unique_ptr`. Something like Rust's [Arbitrary Self Types](https://github.com/rust-lang/rust/issues/44874).] so we'll use Vale syntax:
 
-```Vale
+```vale
 struct Transaction {
   fn read(&!this, query ReadQuery) ReadResult { ... }
 
@@ -581,7 +579,7 @@ struct Transaction {
     ret SUCCESS;
   }
 }
-```
+```: `fn main() export {}`
 
 
 # What even _is_ a destructor?

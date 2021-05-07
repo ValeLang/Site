@@ -155,7 +155,7 @@ For example, `ChaseAbility`'s `getDesire` function will look for the nearest uni
 
 
 ////
-```Vale: notest
+```vale
 fn gameLoop(world &World) {
   each (world.enemyUnits) (unit){
     // Implicit lock happens here!
@@ -207,7 +207,7 @@ struct ChaseDesire<'i, 'r ro>
   }
 }
 
-```
+```: notest
 >>>>
 
 <slice>
@@ -272,7 +272,7 @@ At the end of `templar`, the locks are dropped, automatically closing the mutexe
 
 With our `Mutexes` and region annotations, the compiler can give us free, zero-cost access to everything in the `inAst`.
 ////
-```Vale: notest
+```vale
 fn templar(
     inAstMutex &!Mutex<InAst>) {
   inAstLock = inAstMutex.openro();
@@ -298,7 +298,7 @@ OutASTFunction {
   // Read func, add things to outAst.
   ...;
 }
-```
+```: notest
 >>>>
 
 We still increment and decrement the ref-counts of objects inside `'i`, but we just made those objects, so they'll likely be hot in the cache.
@@ -355,7 +355,7 @@ We use the keyword `pool` after the region declaration `'i`.
  * References into the `'i` region are free because it uses pool allocation.
 
 ////
-```Vale: notest
+```vale
 fn findNearbyUnits<'r ro, 'i pool>
   (world 'r &World, origin Location)
 'i List<'r &Unit>
@@ -391,7 +391,7 @@ pure 'i {
   }
   ret result;
 }
-```
+```: notest
 >>>>
 
 <slice>

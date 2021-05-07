@@ -11,6 +11,7 @@ series-entry: [Interfaces](/guide/interfaces)
 series-entry: [Generics](/guide/generics)
 series-entry: [Patterns](/guide/patterns)
 series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs-exports)
 ---
 
 Welcome to Vale! Vale is a fast, safe, and simple programming language. This introduction will show how to write a program in Vale.
@@ -25,11 +26,10 @@ Vale is still "in alpha", which means it's a preview; you can write programs in 
 <<<<
 Run the code to the right [#running] to see it produce the output in the gray box.
 ////
-```Vale
+```vale
 fn main() export {
   println("Hello world!");
 }
-```
 ```stdout
 Hello world!
 ```
@@ -43,12 +43,11 @@ We can make a local with the `=` symbol.
 
 By default, a local is "final". A final local cannot be changed after it's made.
 ////
-```Vale
+```vale
 fn main() export {
   x = "world!";
   println("Hello " + x);
 }
-```
 ```stdout
 Hello world!
 ```
@@ -57,13 +56,12 @@ Hello world!
 <<<<
 We can make a *varying* local with the `!` symbol[# Vale's `x` and `x!` are like Java's `final String x` and `String x`.], and change it later with the `mut` keyword. [# `mut x` does *not* declare a local named x. It changes an _existing_ local's value.]
 ////
-```Vale
+```vale
 fn main() export {
   x! = "world!";
   mut x = "Antarctica!";
   println("Hello " + x);
 }
-```
 ```stdout
 Hello Antarctica!
 ```
@@ -86,12 +84,11 @@ In this example, `a` is a `str`. We can even specify it after the local's name.
 
 ...though we usually leave it out, because Vale uses type inference to figure out the type of `a` for us.
 ////
-```Vale
+```vale
 fn main() export {
   a str = "world!";
   println("Hello " + a);
 }
-```
 ```stdout
 Hello world!
 ```
@@ -105,14 +102,13 @@ Hello world!
 <<<<
 Here we have a simple function that `ret`urns the argument plus two.
 ////
-```Vale
+```vale
 fn add2(x int) int {
   ret x + 2;
 }
 fn main() export {
   println("Half-Life " + add2(1));
 }
-```
 ```stdout
 Half-Life 3
 ```
@@ -121,25 +117,25 @@ Half-Life 3
 <<<<
 If we use the `infer-ret` keyword, Vale will automatically figure out the return type of the function. [# `infer-ret` should be used sparingly, as it increases compile times.]
 ////
-```Vale
+```vale
 fn add2(x int) infer-ret {
   ret x + 2;
 }
-```
+```: `fn main() export {}`
 >>>>
 
 <<<<
 If a block has only one line, we can leave off the `ret` and the semicolon.
 ////
-```Vale
+```vale
 fn add2(x int) int { x + 2 }
-```
+```: `fn main() export {}`
 >>>>
 
 <<<<
 We can also make a *lambda*, a function inside another one. [# See the Tuples section below for an example of how lambdas are super useful.]
 ////
-```Vale
+```vale
 fn main() export {
   add2 = (x int){ x + 2 };
   println("Half-Life " + add2(1));
@@ -150,7 +146,7 @@ fn main() export {
 <<<<
 We can leave the type off of a lambda's parameter, to make it shorter. [# Taking out the parameter's type makes this a "generic" lambda, see [generics](/guide/generics) for more.]
 ////
-```Vale
+```vale
 fn main() export {
   add2 = (x){ x + 2 };
   println("Half-Life " + add2(1));
@@ -161,7 +157,7 @@ fn main() export {
 <<<<
 We can shorten lambdas with the *almighty underscore*, which declares and immediately uses an implicit parameter.
 ////
-```Vale
+```vale
 fn main() export {
   add2 = { _ + 2 };
   println("Half-Life " + add2(1));
@@ -172,12 +168,12 @@ fn main() export {
 <<<<
 In Vale, functions and methods are the same thing, [#ufcs] so these two calls are exactly equivalent. [# Include vstl/list.vale for the `split` function.]
 ////
-```Vale: vstl/list.vale
+```vale
 fn main() export {
   s1 = "Hail Hydra!".split(" ");
   s2 = split("Hail Hydra!", " ");
 }
-```
+```: vstl/list.vale
 >>>>
 
 <slice>
@@ -196,14 +192,13 @@ as opposed to
 <<<<
 A tuple is a simple struct, whose members are named 0, 1, 2, etc.
 
-We can make a tuple in Vale with square brackets (like `[5, true, "V"]`), and can access them with a dot ,like `arr.0`.
+We can make a tuple in Vale with square brackets (like `[5, true, 42]`), and can access them with a dot ,like `arr.0`.
 ////
-```Vale
+```vale
 fn main() export {
-  arr = [5, true, "V"];
+  arr = [5, true, 42];
   println("Babylon " + arr.0);
 }
-```
 ```stdout
 Babylon 5
 ```
@@ -217,16 +212,14 @@ We can only make a tuple if we know the number of elements at compile-time. If w
 
 We can make an array with the `Array` function.
 ////
-```Vale
+```vale
 fn main() export {
   n = stdinReadInt(); «inputInt»
   arr = MakeArray(n, {_ * 5}); «arrtype2»
   arr.each({ println(_); });
 }
-```
 ```stdin
 3
-```
 ```stdout
 0
 5
@@ -250,18 +243,17 @@ Arrays can't be resized at run-time. Lists can!
 
 We can make one with the `List` function. [# Vale's lists are like C#'s `List`, Java's `ArrayList` or C++'s `vector`; it's backed by an array, not a linked list.]
 ////
-```Vale: vstl/list.vale
+```vale
 fn main() export {
   l = List<int>();
-  l.add(1);
-  l.add(3);
-  l.add(7);
+  l!.add(1);
+  l!.add(3);
+  l!.add(7);
   println(l.get(2));
 }
-```
 ```stdout
 7
-```
+```: vstl/list.vale
 >>>>
 
 <slice/>
@@ -272,7 +264,7 @@ fn main() export {
 We can loop with the `each` statement: [#each]
 
 <<<<
-```Vale
+```vale
 fn main() export {
   arr = ["Storm", "Earth", "Fire"];
   arr.each((x){ println(x); });
@@ -293,7 +285,7 @@ Fire
 We can also get the index of the current iteration with the `eachI` statement.
 
 <<<<
-```Vale
+```vale
 fn main() export {
   arr = ["Storm", "Earth", "Fire"];
   arr.eachI((i, x){
@@ -360,7 +352,6 @@ fn main() export {
   arr = [5, true, "V"];
   println("Saturn " + arr[1 + 1]);
 }
-```
 ```stdout
 Saturn V
 ```
