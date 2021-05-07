@@ -1,6 +1,6 @@
 ---
 title: Externs and Exports
-path: guide/externs-exports
+path: guide/externs
 layout: annotated
 namespace: m-annotated
 series-name: Vale Language Guide
