@@ -8,6 +8,16 @@
     ],
     "redirects": [
       {
+        "regex": "/issues/(.+)",
+        "destination": "https://github.com/ValeLang/Vale/issues?q=is%3Aissue+is%3Aopen+label%3A:1",
+        "type": 302
+      },
+      {
+        "source": "/notes",
+        "destination": "https://drive.google.com/drive/folders/1NXqIVG9X4uRjNRbyB0h1dJ8nOJxdiJma?usp=sharing",
+        "type": 302
+      },
+      {
         "source": "/releases/ValeCompiler-0.1.0.0-Linux.zip",
         "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.0.0-Linux.zip?alt=media&token=65aeb1a4-c4fa-4877-a1cd-8a1b638538b2",
         "type": 302
