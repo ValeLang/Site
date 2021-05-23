@@ -39,7 +39,8 @@ fi
 
 if [ $TARGET == "raii-next-steps" ] || [ $TARGET == "all" ] ; then
   echo "Doing raii-next-steps"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/raii-next-steps.vmd build/blog/raii-next-steps
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/raii-next-steps app/blog/raii-next-steps.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/raii-next-steps app/blog/raii-next-steps.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -48,7 +49,8 @@ fi
 
 if [ $TARGET == "cross-platform-core-vision" ] || [ $TARGET == "all" ] ; then
   echo "Doing cross-platform-core-vision"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/cross-platform-core-vision.vmd build/blog/cross-platform-core-vision
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/cross-platform-core-vision app/blog/cross-platform-core-vision.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/cross-platform-core-vision app/blog/cross-platform-core-vision.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -57,7 +59,8 @@ fi
 
 if [ $TARGET == "zero-cost-refs-regions" ] || [ $TARGET == "all" ] ; then
   echo "Doing zero-cost-refs-regions"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/zero-cost-refs-regions.vmd build/blog/zero-cost-refs-regions
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/zero-cost-refs-regions app/blog/zero-cost-refs-regions.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/zero-cost-refs-regions app/blog/zero-cost-refs-regions.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -66,7 +69,8 @@ fi
 
 if [ $TARGET == "generational-references" ] || [ $TARGET == "all" ] ; then
   echo "Doing generational-references"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/generational-references.vmd build/blog/generational-references
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/generational-references app/blog/generational-references.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/generational-references app/blog/generational-references.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -78,7 +82,8 @@ fi
 
 if [ $TARGET == "hybrid-generational-memory" ] || [ $TARGET == "all" ] ; then
   echo "Doing hybrid-generational-memory"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/hybrid-generational-memory.vmd build/blog/hybrid-generational-memory
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/hybrid-generational-memory app/blog/hybrid-generational-memory.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/hybrid-generational-memory app/blog/hybrid-generational-memory.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -87,7 +92,8 @@ fi
 
 if [ $TARGET == "hgm-static-analysis-part-1" ] || [ $TARGET == "all" ] ; then
   echo "Doing hgm-static-analysis-part-1"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/hgm-static-analysis-part-1.vmd build/blog/hgm-static-analysis-part-1
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/hgm-static-analysis-part-1 app/blog/hgm-static-analysis-part-1.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/hgm-static-analysis-part-1 app/blog/hgm-static-analysis-part-1.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -96,7 +102,8 @@ fi
 
 if [ $TARGET == "beyond-rust-innovations" ] || [ $TARGET == "all" ] ; then
   echo "Doing beyond-rust-innovations"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/beyond-rust-innovations.vmd build/blog/beyond-rust-innovations
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/beyond-rust-innovations app/blog/beyond-rust-innovations.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/beyond-rust-innovations app/blog/beyond-rust-innovations.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -105,7 +112,8 @@ fi
 
 if [ $TARGET == "comparisons" ] || [ $TARGET == "all" ] ; then
   echo "Doing comparisons"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/comparisons.vmd build/blog/comparisons
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/comparisons app/blog/comparisons.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/comparisons app/blog/comparisons.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -114,7 +122,8 @@ fi
 
 if [ $TARGET == "fearless" ] || [ $TARGET == "all" ] ; then
   echo "Doing fearless"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/fearless.vmd build/blog/fearless
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/fearless app/blog/fearless.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/fearless app/blog/fearless.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -123,7 +132,8 @@ fi
 
 if [ $TARGET == "contributors" ] || [ $TARGET == "all" ] ; then
   echo "Doing contributors"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/contributors.vmd build/contributors
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/contributors app/contributors.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/contributors app/contributors.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -132,7 +142,8 @@ fi
 
 if [ $TARGET == "download" ] || [ $TARGET == "all" ] ; then
   echo "Doing download"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/download.vmd build/download
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/download app/download.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/download app/download.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -141,7 +152,8 @@ fi
 
 if [ $TARGET == "introduction" ] || [ $TARGET == "all" ] ; then
   echo "Doing introduction"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/guide/introduction.vmd build/guide/introduction
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/introduction app/guide/introduction.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/introduction app/guide/introduction.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -150,7 +162,8 @@ fi
 
 if [ $TARGET == "structs" ] || [ $TARGET == "all" ] ; then
   echo "Doing structs"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/guide/structs.vmd build/guide/structs
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/structs app/guide/structs.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/structs app/guide/structs.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -159,7 +172,8 @@ fi
 
 if [ $TARGET == "references" ] || [ $TARGET == "all" ] ; then
   echo "Doing references"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/guide/references.vmd build/guide/references
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/references app/guide/references.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/references app/guide/references.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -168,7 +182,8 @@ fi
 
 if [ $TARGET == "interfaces" ] || [ $TARGET == "all" ] ; then
   echo "Doing interfaces"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/guide/interfaces.vmd build/guide/interfaces
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/interfaces app/guide/interfaces.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/interfaces app/guide/interfaces.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -177,7 +192,8 @@ fi
 
 if [ $TARGET == "generics" ] || [ $TARGET == "all" ] ; then
   echo "Doing generics"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/guide/generics.vmd build/guide/generics
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/generics app/guide/generics.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/generics app/guide/generics.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -186,7 +202,8 @@ fi
 
 if [ $TARGET == "patterns" ] || [ $TARGET == "all" ] ; then
   echo "Doing patterns"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/guide/patterns.vmd build/guide/patterns
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/patterns app/guide/patterns.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/patterns app/guide/patterns.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -195,7 +212,8 @@ fi
 
 if [ $TARGET == "regions" ] || [ $TARGET == "all" ] ; then
   echo "Doing regions"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/guide/regions.vmd build/guide/regions
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/regions app/guide/regions.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/regions app/guide/regions.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -204,7 +222,8 @@ fi
 
 if [ $TARGET == "externs" ] || [ $TARGET == "all" ] ; then
   echo "Doing externs"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/guide/externs.vmd build/guide/externs
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/externs app/guide/externs.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/guide/externs app/guide/externs.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -213,7 +232,8 @@ fi
 
 if [ $TARGET == "home" ] || [ $TARGET == "all" ] ; then
   echo "Doing home"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/home.vmd build/home
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/home app/home.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/home app/home.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -225,7 +245,8 @@ fi
 
 if [ $TARGET == "contribute" ] || [ $TARGET == "all" ] ; then
   echo "Doing contribute"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/contribute.vmd build/contribute
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/contribute app/contribute.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/contribute app/contribute.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -234,7 +255,8 @@ fi
 
 if [ $TARGET == "roadmap" ] || [ $TARGET == "all" ] ; then
   echo "Doing roadmap"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/roadmap/roadmap.vmd build/roadmap
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/roadmap app/roadmap/roadmap.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/roadmap app/roadmap/roadmap.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -244,7 +266,8 @@ fi
 
 if [ $TARGET == "surprising-weak-refs" ] || [ $TARGET == "all" ] ; then
   echo "Doing surprising-weak-refs"
-  eval ~/Markvale/build/a.out $MODE $VALESTROM $STDLIB app/blog/surprising-weak-refs.vmd build/blog/surprising-weak-refs
+  echo ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/surprising-weak-refs app/blog/surprising-weak-refs.vmd
+  eval ~/Markvale/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB --out build/blog/surprising-weak-refs app/blog/surprising-weak-refs.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
