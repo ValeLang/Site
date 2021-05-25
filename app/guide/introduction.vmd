@@ -208,7 +208,7 @@ Babylon 5
 # Arrays
 
 <<<<
-We can only make a tuple if we know the number of elements at compile-time. If we don't know, then we must use an *array*.
+We can only make a tuple if we know the number of elements at compile-time. If we don't know, then we must use a *runtime-sized array*.
 
 To make an array, we use the `[*](size, func)` syntax:
 
