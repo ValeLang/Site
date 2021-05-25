@@ -32,7 +32,7 @@ fn main() export {
 }
 ```stdout
 Hello world!
-```
+```: `import stdlib.src.*;`
 >>>>
 
 
@@ -50,7 +50,7 @@ fn main() export {
 }
 ```stdout
 Hello world!
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <<<<
@@ -64,7 +64,7 @@ fn main() export {
 }
 ```stdout
 Hello Antarctica!
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <slice>
@@ -91,7 +91,7 @@ fn main() export {
 }
 ```stdout
 Hello world!
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <slice/>
@@ -111,7 +111,7 @@ fn main() export {
 }
 ```stdout
 Half-Life 3
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <<<<
@@ -140,7 +140,7 @@ fn main() export {
   add2 = (x int){ x + 2 };
   println("Half-Life " + add2(1));
 }
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <<<<
@@ -151,7 +151,7 @@ fn main() export {
   add2 = (x){ x + 2 };
   println("Half-Life " + add2(1));
 }
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <<<<
@@ -162,7 +162,7 @@ fn main() export {
   add2 = { _ + 2 };
   println("Half-Life " + add2(1));
 }
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <<<<
@@ -173,7 +173,7 @@ fn main() export {
   s1 = "Hail Hydra!".split(" ");
   s2 = split("Hail Hydra!", " ");
 }
-```: vstl/list.vale
+```: `import stdlib.src.*; import stdlib.src.stringutils.*; import stdlib.src.collections.*;`
 >>>>
 
 <slice>
@@ -201,21 +201,28 @@ fn main() export {
 }
 ```stdout
 Babylon 5
-```
+```: `import stdlib.src.*;`
 >>>>
 
 
 # Arrays
 
 <<<<
-We can only make a tuple if we know the number of elements at compile-time. If we don't know, then we must use an *array*.
+We can only make a tuple if we know the number of elements at compile-time. If we don't know, then we must use a *runtime-sized array*.
 
-We can make an array with the `Array` function.
+To make an array, we use the `[*](size, func)` syntax:
+
+ * `[*]` means we're making a runtime-sized array.
+ * The `size` parameter is how many elements this array should hold.
+ * The `func` parameter is a function to populate it.
+
+In this example, `{_ * 5}` is the function that will populate the array.
+
 ////
 ```vale
 fn main() export {
   n = stdinReadInt(); «inputInt»
-  arr = MakeArray(n, {_ * 5}); «arrtype2»
+  arr = [*](n, {_ * 5}); «arrtype2»
   arr.each({ println(_); });
 }
 ```stdin
@@ -224,13 +231,13 @@ fn main() export {
 0
 5
 10
-```
+```: `import stdlib.src.*; import stdlib.src.stdin.*;`
 >>>>
 
 <slice>
 #inputInt: `stdinReadInt` reads an integer from the user's keyboard. In this example, the user is entering 3.
 
-stdinReadInt is experimental, expect the stdin/stdout API to change soon.
+stdinReadInt is temporary and experimental, expect the stdin/stdout API to change soon.
 
 #arrtype2: The type of `arr` here is `Array<int>`.
 </slice>
@@ -253,7 +260,7 @@ fn main() export {
 }
 ```stdout
 7
-```: vstl/list.vale
+```: `import stdlib.src.collections.*;`
 >>>>
 
 <slice/>
@@ -261,48 +268,43 @@ fn main() export {
 
 # Loops
 
+<<<<
+
 We can loop with the `each` statement: [#each]
 
-<<<<
+////
+
 ```vale
 fn main() export {
-  arr = ["Storm", "Earth", "Fire"];
+  arr = []["Storm", "Earth", "Fire"];
   arr.each((x){ println(x); });
 }
-```
-////
 ```stdout
 Storm
 Earth
 Fire
+```: `import stdlib.src.*;`
 
-
-
-
-```
 >>>>
+
+<<<<
 
 We can also get the index of the current iteration with the `eachI` statement.
 
-<<<<
+////
+
 ```vale
 fn main() export {
-  arr = ["Storm", "Earth", "Fire"];
+  arr = []["Storm", "Earth", "Fire"];
   arr.eachI((i, x){
     println(i + ": " + x);
   });
 }
-```
-////
 ```stdout
 0: Storm
 1: Earth
 2: Fire
-
-
-
-
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <slice new-color="afterword">

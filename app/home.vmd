@@ -54,12 +54,12 @@ fn main() export {
 }
 ```stdout
 Hello world!
-```
+```: `import stdlib.src.*;`
 
 
 ```vale
 fn main() export {
-  planets = ["Venus", "Earth", "Mars"];
+  planets = []["Venus", "Earth", "Mars"];
   each planets (planet){
     println("Hello " + planet + "!");
   }
@@ -68,7 +68,7 @@ fn main() export {
 Hello Venus!
 Hello Earth!
 Hello Mars!
-```
+```: `import stdlib.src.*;`
 
 
 Vale is at version 0.1, see the [Roadmap](/roadmap) for what's next!

@@ -229,7 +229,7 @@ fn launchShip(ships &Map<int, &Spaceship>, id int, armada &List<&Spaceship>) {
   //     ship.__deallocate();
   //   }
 }
-```: vstl/list.vale `struct Spaceship {} struct Map<T, Y> { t T; y Y; } fn main() export {}`
+```: `import stdlib.src.*; import stdlib.src.collections.*; struct Spaceship {} struct Map<T, Y> { t T; y Y; } fn main() export {}`
 
 As you can see, reference counting incurs a cost whenever we alias or dealias. *Generational references don't have that cost.* The above snippet would have zero overhead if it used generational references.
 

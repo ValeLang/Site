@@ -116,7 +116,7 @@ fn main() export {
 
   x.launch();
 }
-```
+```: `import stdlib.src.*;`
 >>>>
 
 <slice new-color="afterword"/>

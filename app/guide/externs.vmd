@@ -44,7 +44,7 @@ extern int64_t readInt() {
 42
 ```stdout
 User entered: 42
-```
+```: `import stdlib.src.*;`
 >>>>
 
 
@@ -111,7 +111,7 @@ extern int sum(Vec3* v) {
 }
 ```stdout
 33
-```
+```: `import stdlib.src.*;`
 >>>>
 
 
@@ -151,7 +151,7 @@ extern int halfFuel(ShipRef s) {
 }
 ```stdout
 21
-```
+```: `import stdlib.src.*;`
 >>>>
 
 
