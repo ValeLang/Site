@@ -32,7 +32,7 @@ fn main() export {
 }
 ```stdout
 Hello world!
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 
@@ -50,7 +50,7 @@ fn main() export {
 }
 ```stdout
 Hello world!
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <<<<
@@ -64,7 +64,7 @@ fn main() export {
 }
 ```stdout
 Hello Antarctica!
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <slice>
@@ -91,7 +91,7 @@ fn main() export {
 }
 ```stdout
 Hello world!
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <slice/>
@@ -111,7 +111,7 @@ fn main() export {
 }
 ```stdout
 Half-Life 3
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <<<<
@@ -140,7 +140,7 @@ fn main() export {
   add2 = (x int){ x + 2 };
   println("Half-Life " + add2(1));
 }
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <<<<
@@ -151,7 +151,7 @@ fn main() export {
   add2 = (x){ x + 2 };
   println("Half-Life " + add2(1));
 }
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <<<<
@@ -162,7 +162,7 @@ fn main() export {
   add2 = { _ + 2 };
   println("Half-Life " + add2(1));
 }
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <<<<
@@ -173,7 +173,7 @@ fn main() export {
   s1 = "Hail Hydra!".split(" ");
   s2 = split("Hail Hydra!", " ");
 }
-```: `import stdlib.src.*; import stdlib.src.stringutils.*; import stdlib.src.collections.*;`
+```: `import stdlib.*; import stdlib.stringutils.*; import stdlib.collections.*;`
 >>>>
 
 <slice>
@@ -201,7 +201,7 @@ fn main() export {
 }
 ```stdout
 Babylon 5
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 
@@ -231,7 +231,7 @@ fn main() export {
 0
 5
 10
-```: `import stdlib.src.*; import stdlib.src.stdin.*;`
+```: `import stdlib.*; import stdlib.stdin.*;`
 >>>>
 
 <slice>
@@ -260,7 +260,7 @@ fn main() export {
 }
 ```stdout
 7
-```: `import stdlib.src.collections.*;`
+```: `import stdlib.collections.*;`
 >>>>
 
 <slice/>
@@ -283,7 +283,7 @@ fn main() export {
 Storm
 Earth
 Fire
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 
 >>>>
 
@@ -304,7 +304,7 @@ fn main() export {
 0: Storm
 1: Earth
 2: Fire
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <slice new-color="afterword">
