@@ -35,9 +35,10 @@ fn readInt() int extern;
 ```c
 #include <stdint.h>
 #include <stdio.h>
-extern int64_t readInt() {
+#include "mvtest/readInt.h"
+extern ValeInt mvtest_readInt() {
   int64_t x = 0;
-  scanf("%lld", &x);
+  scanf("%ld", &x);
   return x;
 }
 ```stdin
@@ -53,13 +54,13 @@ User entered: 42
 The above Vale code called into a C function. The opposite is also possible, C code can call into Vale code. These Vale functions are known as `export` functions.
 
 <<<<
-Here, a Vale `main` is calling into a C `cMain` function, which is calling into a Vale `export`ed `triple` function.
+Here, a Vale `main` is calling into a C `cFunc` function, which is calling into a Vale `export`ed `triple` function.
 
 Vale automatically provides a header file so C can call the function. 
 ////
 ```vale
-fn cMain() extern;
-fn main() export { cMain(); }
+fn cFunc() extern;
+fn main() export { cFunc(); }
 
 fn triple(x int) int export {
   x * 3
@@ -67,9 +68,10 @@ fn triple(x int) int export {
 ```c
 #include <stdint.h>
 #include <stdio.h>
-#include "triple.h"
-extern void cMain() {
-  printf("%d", triple(14));
+#include "mvtest/cFunc.h"
+#include "mvtest/triple.h"
+extern void mvtest_cFunc() {
+  printf("%ld", mvtest_triple(14));
 }
 ```stdout
 42
@@ -105,8 +107,9 @@ fn main() export {
 fn sum(v Vec3) int extern;
 ```c
 #include <stdint.h>
-#include "Vec3.h"
-extern int sum(Vec3* v) {
+#include "mvtest/Vec3.h"
+#include "mvtest/sum.h"
+extern int mvtest_sum(mvtest_Vec3* v) {
   return v->x + v->y + v->z;
 }
 ```stdout
@@ -144,10 +147,12 @@ fn main() export {
 fn halfFuel(s &Ship) int extern;
 ```c
 #include <stdint.h>
-#include "Ship.h"
-#include "getFuel.h"
-extern int halfFuel(ShipRef s) {
-  return getFuel(s) / 2;
+#include "mvtest/Ship.h"
+#include "mvtest/halfFuel.h"
+#include "mvtest/getFuel.h"
+extern int mvtest_halfFuel(mvtest_ShipRef* sPtr) {
+  mvtest_ShipRef s = *sPtr;
+  return mvtest_getFuel(&s) / 2;
 }
 ```stdout
 21

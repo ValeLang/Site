@@ -1,0 +1,129 @@
+---
+title: Regions and the Region Borrow Checker, Part 1
+subtitle: Behold
+author: Evan Ovadia
+date: Candle 4th, 2021
+realm: blog
+path: blog/regions-part-1-immutability
+layout: annotated
+namespace: c-blog m-annotated
+---
+
+Vale's goal is to make *fast* and *memory-safe* programs *easy* to make. As part of that quest, Vale version (blah) brings us regions and the region borrow checker, an easy way to make our programs _ridiculously fast_.
+
+With regions, we can:
+
+ * Have more powerful optimizations, by temporarily making a region *immutable* (the subject of this article!)
+ * Reuse memory much more efficiently, with different *allocators*
+ * Eliminate data races, by controlling a region's *isolation*
+
+Vale's regions are: [# v: is this the best way to motivate the rbc, for those who already know rust?]
+
+ * Opt-in: Vale code doesn't have to use regions at all. We can prototype and profile first, and add regions later!
+ * Incremental: We can add regions gradually. Static analysis can even suggest where to start!
+ * Non-intrusive: They don't require us to re-architect our program!
+
+(v: mention somewhere that regions neednt be in pure functions, can be non-isolated)
+
+
+# Pure Functions and the Region Borrow Checker
+
+A *pure* function is one that cannot:
+
+ * Modify any objects that existed before the call.
+ * Read or modify any global variables,
+
+Optimizers _love_ pure functions.
+
+
+## Why Optimizers Love Pure Functions
+
+In normal (non-pure) functions, an optimizer has to re-load something from a struct or array, because it may have changed since the last time we loaded it. For example:
+
+```vale
+fn printShipDetails(ship &Spaceship) {
+  // Load ship.leftWingLength into register A, add to string, print it
+  println("Ship's left wing length: {ship.leftWingLength}");
+
+  // Load ship.rightWingLength into register B, add to string, print it
+  println("Ship's right wing length: {ship.rightWingLength}");
+
+  printShipFuel(&ship);
+
+  // Re-load (!) both lengths into the registers, add to string, print it
+  println("Ship's total wing span: {ship.leftWingLength + ship.rightWingLength}");
+}
+```: `struct Spaceship {} fn printShipFuel(ship &Spaceship) {} fn main() export {}`
+
+In this case, the optimizer doesn't know if `printShipFuel` changed `ship`, so it must re-load from `ship`.
+
+But if this was a pure function, the optimizer would know `ship` didn't change!
+
+```vale
+fn printShipDetails(ship &Spaceship) pure {
+  // Load ship.leftWingLength into register A, add to string, print it.
+  println("Ship's left wing length: {ship.leftWingLength}");
+
+  // Load ship.rightWingLength into register B, add to string, print it.
+  println("Ship's right wing length: {ship.rightWingLength}");
+
+  printShipFuel(ship);
+
+  // Reuse registers A and B! Add to string, print it.
+  println("Ship's total wing span: {ship.leftWingLength + ship.rightWingLength}");
+}
+```: `struct Spaceship {} fn printShipFuel(ship &Spaceship) {} fn main() export {}`
+
+As the comments say, we were able to reuse the already-loaded wing lengths, and didn't have to go all the way out to RAM to fetch them again.
+
+This is good, because fetching them again is _very_ slow. If they aren't in the CPU caches, we might have to go all the way to RAM, which takes thousands of CPU cycles.
+
+
+# Pure Functions Can Make New Objects
+
+Pure functions can't change anything that existed before the call. But they _can_ make new objects, and then change those new objects.
+
+For example:
+
+```vale
+struct MyObject { x! int; }
+
+fn printShipDetails(ship &Spaceship) pure {
+  println("Ship's left wing length: {ship.leftWingLength}");
+  println("Ship's right wing length: {ship.rightWingLength}");
+
+  // We're making a new object here!
+  obj = MyObject(7);
+  // We can change it, too!
+  set obj.x = 13;
+
+  println("Ship's total wing span: {ship.leftWingLength + ship.rightWingLength}");
+}
+```: `struct Spaceship {} fn printShipFuel(ship &Spaceship) {} fn main() export {}`
+
+But how does the compiler keep track of what we can modify? The next section explains!
+
+
+# The Secret Sauce: Regions
+
+A pure function establishes two *regions* in memory: the caller's region, and the "temporary" region.
+
+The Vale compiler remembers the region each piece of data belongs to. In the example above, `ship` was in the caller's region, and `obj` was in the temporary region.
+
+This is usually inferred by the compiler, but we can make it explicit too:
+
+```vale
+fn printShipDetails<'r ro>(ship 'r &Spaceship) pure 't {
+  println("Ship's left wing length: {ship.leftWingLength}");
+  println("Ship's right wing length: {ship.rightWingLength}");
+
+  obj = 't MyObject(7);
+  set obj.x = 13;
+
+  println("Ship's total wing span: {ship.leftWingLength + ship.rightWingLength}");
+}
+```: `struct Spaceship {} fn printShipFuel(ship &Spaceship) {} fn main() export {}`
+ * `<'r ro>` makes the function aware of another region besides its own, which is *r*ead*o*only.
+ * `'r` in `ship 'r &Spaceship' says that the incoming `ship` is part of that region.
+ * `'t {` is declaring a temporary region for this function to use.
+ * `'t MyObject(7)` is making a new object in our temporary region.
