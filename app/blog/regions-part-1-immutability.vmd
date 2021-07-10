@@ -122,7 +122,7 @@ fn printShipDetails<'r ro>(ship 'r &Spaceship) pure 't {
 
   println("Ship's total wing span: {ship.leftWingLength + ship.rightWingLength}");
 }
-```: `struct Spaceship {} fn printShipFuel(ship &Spaceship) {} fn main() export {}`
+```: notest
  * `<'r ro>` makes the function aware of another region besides its own, which is *r*ead*o*only.
  * `'r` in `ship 'r &Spaceship' says that the incoming `ship` is part of that region.
  * `'t {` is declaring a temporary region for this function to use.
