@@ -498,16 +498,16 @@ struct Transaction {
 fn main() export {
   // ...
   // To commit:
-  transaction^.commit(); «caret»
+  (transaction).commit(); «caret»
   // To rollback:
-  transaction^.rollback(TUMBLE);
+  (transaction).rollback(TUMBLE);
 }
 ```: notest
 >>>>
 
 
 <slice>
-#caret: The `^.` means we're moving into a method, equivalent to `commit(transaction)`.
+#caret: The parentheses here cause us to move into a method, equivalent to `commit(transaction)`.
 
 A regular `.` like in `transaction.commit()` gives a constraint reference to the method, equivalent to `commit(&transaction)`.
 

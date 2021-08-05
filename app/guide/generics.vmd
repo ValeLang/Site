@@ -166,7 +166,7 @@ fn main() export {
   // Firefly.
   firstShip.crazyIvan();
 }
-```: vstl/list.vale `struct Firefly {} fn crazyIvan(f &Firefly) {}`
+```: `import stdlib.collections.*; struct Firefly {} fn crazyIvan(f &Firefly) {}`
 >>>>
 
 <slice/>

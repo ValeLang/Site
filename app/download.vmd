@@ -27,6 +27,37 @@ Download at your own risk, and report any bugs to the github!
 
 ## Releases
 
+### 0.1.3 "Cardinal" Release
+
+Download:
+
+ * Ubuntu: [ValeCompiler-0.1.3.2-Ubuntu.zip](releases/ValeCompiler-0.1.3.2-Ubuntu.zip)
+ * Mac: [ValeCompiler-0.1.3.2-Mac.zip](releases/ValeCompiler-0.1.3.2-Mac.zip)
+ * Windows: [ValeCompiler-0.1.3.2-Win.zip](releases/ValeCompiler-0.1.3.2-Win.zip)
+
+This release adds:
+
+ * Modules and import statements!
+ * A standard library!
+ * Downcasting
+ * Constructing static-sized array via lambda
+ * Improved FFI; Midas now generates better headers
+ * Better error messages
+ * i64 type
+ * A _lot_ of bugfixes!
+
+See the [0.1.3 Milestone](https://github.com/ValeLang/Vale/issues?q=is%3Aissue+milestone%3A%220.1.3+-+Readonly+Refs%2C+Modules%2C+Stdlib%2C+Arrays%22+is%3Aclosed) for all changes.
+
+The .zip includes:
+
+ * *valec.py*, the main python script for invoking the compiler. Use `python3 valec.py help` for help.
+ * *stdlib* contains the standard library.
+ * *samples*, a collection of small programs written in Vale.
+    * *roguelike.vale* is a program where you are an @ sign and can walk in four directions.
+    * The rest are tiny programs that serve as test cases for the compiler.
+ * `builtins` should be ignored, these are .c files used by the compiler itself.
+
+
 ### 0.1.2 "Maya" Release
 
 Download:
