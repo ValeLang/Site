@@ -1,0 +1,11 @@
+
+we _hope_ this will make it into the final design.
+
+basically, we put a check every few functions, to see if we need to increase the stack.
+
+instead of at the top of every function, we can have the caller take responsibility. theres probably a balance.
+
+we might need to do this for only NSC regions; switch to a pool.
+
+perhaps all the threads can share a pool! holy shit that would be incredible. HOLY SHIT.
+can definitely at least do this with structured concurrency!

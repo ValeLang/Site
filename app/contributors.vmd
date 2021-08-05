@@ -11,11 +11,6 @@ layout: onecolumn
 Language designer, Valestrom and Midas implementor, mad scientist. Good at memory acrobatics, not so good at writing articles!
 
 
-*Eske Hansen* (aka Veim)
-
-ValeJS architect, parsing trailblazer. Likes naming things and writing generators!
-
-
 *Theo Watkins*
 
 Hybrid-generational memory explorer, static analysis architect.
@@ -23,9 +18,14 @@ Hybrid-generational memory explorer, static analysis architect.
 
 *John D. Goodwin*
 
-Co-conspirator and catalyst. Actually thinks garbage collection and dynamic typing are sometimes okay.
+Co-conspirator and catalyst. Check out his language, [Cone](https://cone.jondgoodwin.com/)!
+
+
+*Eske Hansen* (aka Veim)
+
+ValeJS architect, parsing trailblazer. Likes naming things and writing generators!
 
 
 *Kevin Navero* (aka Solstice333)
 
-Slayer of mountains, lord of the boundaries.
+Slayer of mountains, lord of the boundaries! Creator of our entire contributing, testing, and release pipelines!

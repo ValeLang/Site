@@ -1,8 +1,8 @@
 ---
-title: Regions and the Region Borrow Checker, Part 1
-subtitle: Behold
+title: Fast Code, Part 3: Region Immutability
+subtitle: Hark, and behold!
 author: Evan Ovadia
-date: Candle 4th, 2021
+date: Candle 4th, 2021 (Draft)
 realm: blog
 path: blog/regions-part-1-immutability
 layout: annotated
@@ -11,22 +11,26 @@ namespace: c-blog m-annotated
 
 Vale's goal is to make *fast* and *memory-safe* programs *easy* to make. As part of that quest, Vale version (blah) brings us regions and the region borrow checker, an easy way to make our programs _ridiculously fast_.
 
+
 With regions, we can:
 
  * Have more powerful optimizations, by temporarily making a region *immutable* (the subject of this article!)
  * Reuse memory much more efficiently, with different *allocators*
- * Eliminate data races, by controlling a region's *isolation*
+ * Guarantee no data races, by controlling a region's *isolation*
+ * Use *structured concurrency*!
 
-Vale's regions are: [# v: is this the best way to motivate the rbc, for those who already know rust?]
+
+Vale's regions are: [# v: is this the best way to motivate the rbc, for those familiar with borrow checking?]
 
  * Opt-in: Vale code doesn't have to use regions at all. We can prototype and profile first, and add regions later!
  * Incremental: We can add regions gradually. Static analysis can even suggest where to start!
  * Non-intrusive: They don't require us to re-architect our program!
 
+
 (v: mention somewhere that regions neednt be in pure functions, can be non-isolated)
 
 
-# Pure Functions and the Region Borrow Checker
+# Pure Functions
 
 A *pure* function is one that cannot:
 

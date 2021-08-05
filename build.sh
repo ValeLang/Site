@@ -38,6 +38,7 @@ if [ $MODE == "build" ] ; then
     mkdir build/components
     mkdir build/images
     mkdir build/guide
+    mkdir build/vision
     mkdir build/blog
     mkdir build/releases
   fi
@@ -73,15 +74,25 @@ if [ $TARGET == "zero-cost-refs-regions" ] || [ $TARGET == "all" ] ; then
   fi
 fi
 
-if [ $TARGET == "regions-part-1-immutability" ] || [ $TARGET == "all" ] ; then
-  echo "Doing regions-part-1-immutability"
-  echo $VMD_SITE_GEN/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/regions-part-1-immutability app/blog/regions-part-1-immutability.vmd
-  eval $VMD_SITE_GEN/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/regions-part-1-immutability app/blog/regions-part-1-immutability.vmd
+if [ $TARGET == "vision" ] || [ $TARGET == "all" ] ; then
+  echo "Doing vision"
+  echo $VMD_SITE_GEN/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/vision app/vision/vision.vmd
+  eval $VMD_SITE_GEN/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/vision app/vision/vision.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
   fi
 fi
+
+# if [ $TARGET == "safety-1-regions-borrow-checker" ] || [ $TARGET == "all" ] ; then
+#   echo "Doing safety-1-regions-borrow-checker"
+#   echo $VMD_SITE_GEN/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/safety-1-regions-borrow-checker app/vision/safety-1-regions-borrow-checker.vmd
+#   eval $VMD_SITE_GEN/build/a.out $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/safety-1-regions-borrow-checker app/vision/safety-1-regions-borrow-checker.vmd
+#   if [ $? != 0 ]; then
+#     echo "Failed!"
+#     exit 1
+#   fi
+# fi
 
 if [ $TARGET == "generational-references" ] || [ $TARGET == "all" ] ; then
   echo "Doing generational-references"

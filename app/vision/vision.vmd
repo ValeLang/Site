@@ -1,0 +1,381 @@
+---
+title: Vale's Vision
+subtitle: Here's what we're tryin' to make happen!
+author: Evan Ovadia
+date: Raven 5th, 2021 (Draft)
+realm: blog
+path: blog/vision/index.html
+layout: annotated
+namespace: c-blog m-annotated
+---
+
+Welcome to the *Vale's Vision* blog series! [#todo]
+
+
+This series describes how Vale plans to make it *easy* to make *fast* and *memory-safe* programs.
+
+
+You'll enjoy this series if you...
+
+ * ...are interested in where programming languages are heading! We'll point out other languages that are trying variants of these ideas.
+ * ...are making a programming language, and are looking for ideas to experiment with and combine in new ways!
+ * ...use Vale and want to see what we have planned!
+
+
+You'll learn some interesting things along the way, such as:
+
+ * how memory-safe structured concurrency is possible without RC or GC!
+ * how one can trivially reproduce race conditions.
+ * how inline data [# An inline object is one that's stack-allocated or lives in the containing object's memory, such as is common in C, C++, Rust, Zig, Odin, etc.] can be done in a memory-safe way, even with RC and GC.
+ * how pure functions enable an opt-in borrow checker!
+
+...and the occasional design philosophy which motivates these!
+
+
+This is a look into the future, *most of these things are not here yet.* We'll specifically mention which parts are finished and which are not.
+
+
+This series is divided into a few themes, each with multiple parts. This page will summarize each part, and you can visit a part's page for more details.
+
+<slice>
+#todo: To do:
+
+ * Define memory-safe in a side note
+ * Doublecheck for absolute statements
+ * clarify GC
+
+</slice>
+
+
+# A new approach to memory safety
+
+Vale aims to be the *safest* native-speed language. [# We're using the term "native-speed" somewhat arbitrarily here. More precisely we're referring to languages without RC or GC, such as C++, Zig, etc.]
+
+It uses *generational references* and *non-shape-changing memory* as a foundation for its memory safety, and its *extern boundary* ensures no unsafe code can cause memory safety in Vale code.
+
+These things are explained in the following sections.
+
+
+This level of safety enables some pretty surprising benefits:
+
+ * Deterministic replaying!
+ * Fearless structured concurrency!
+ * We don't have to worry about dependencies causing memory unsafety vulnerabilities!
+
+<slice />
+
+
+## Generational References
+
+In Vale, every allocation has an 8-byte ID. Freeing an allocation will change its ID.
+
+
+A "generational reference" is made of two things:
+
+ * A pointer to an object.
+ * The ID of the allocation containing the object.
+
+Before it dereferences the object, it will "generation check" that the object's allocation still has the same ID that the reference remembers.
+
+
+It's analogous to doing a bounds check before accessing something in an array.
+
+
+With this, we can guarantee that we never use memory after it's freed. It's also very fast, and other Vale features (HGM, immutable regions, non-shape-changing) allow you to eliminate a lot of generation checks.
+
+
+This works today! Find more details at [Memory Safety, Part 1: Generational References](vision/safety-1-generational-references).
+
+<slice />
+
+
+## Non-Shape-Changing Memory
+
+Non-Shape-Changing Memory (NSCM) is a principle that states:
+
+> It is safe to dereference or mutably alias [# To "mutably alias" an object means that we can have multiple mutable references to it. A mutable reference is a reference that we can use to change something in the object.] an object as long as no references nor the containing allocator change its *shape*.
+
+
+For example, it can be memory-safe to have two mutable references to a `Spaceship` which has a final [# Final in the Java `final` sense, where a reference is fixed. Keep in mind, we can have a final reference to a mutable object.] reference to an `Engine`, as long as its containing allocator doesn't reuse the `Spaceship`'s or `Engine`'s memory for e.g. a Boat.
+
+
+This is the fastest form of memory management, so Vale uses it when possible:
+
+ * It automatically uses this principle to do scope tethering which, for a given scope, keeps an object's memory from being reused for a different type.
+ * With pure functions, we can temporarily consider all pre-existing memory immutable, letting us use NSCM to skip the vast majority of generation checks on pre-existing memory.
+ * With regions, we can temporarily use NSCM allocators instead of malloc, skipping all generation checks for anything allocated.
+
+
+This is planned! You can read more about it at [Memory Safety, Part 2: Non-Shape-Changing Memory](vision/safety-2-non-shape-changing).
+
+<slice />
+
+
+## Region Borrow Checker
+
+A region is an area of memory, or a collection of objects. We can make a new region by:
+
+ * Calling a pure function: all arguments are in a region, any new objects are in another.
+ * Making an isolated object: all objects it indirectly owns are in a region.
+ * Making a mutex.
+ * Using structured concurrency.
+
+
+The Region Borrow Checker will:
+
+ * Keep track of which "region" a reference is pointing into.
+ * Make it so an object in one region can't point to an object in another (except temporarily).
+ * Guarantee no escaping references, e.g. to inside a mutex-guarded area of memory.
+ * Track which regions are immutable (such as arguments to a pure function).
+ * Avoid shape-changing allocators like malloc for a region, at our request.
+
+
+Which means we can:
+
+ * Use NSCM for an entire region, to make it faster.
+ * Safely use mutexes.
+ * Have safe shared immutable access to memory while doing structured concurrency/parallelism.
+
+
+This is planned! Check out [Memory Safety, Part 3: Region Borrow Checker](vision/safety-3-region-borrow-checker) for more.
+
+<slice />
+
+
+## Unique Unions
+
+Vale allows us to have unions on the stack and in objects, by adhering to the Unique Unions principle, which states:
+
+> A mutable object can only contain a varying union via a unique reference. [#bcvrbc]
+
+
+Vale will offer tools to more easily work with unique references:
+
+ * Temporary unique aliasing via Region Borrow Checker
+ * Automatic deep copying
+ * Unique swapping
+
+
+This is planned! You can read more at [Memory Safety, Part 4: Unique Unions](vision/safety-4-unique-unions).
+
+<slice>
+#bcvrbc: Rust's borrow checker accomplishes this by letting us either have immutable aliases to the object *or* letting us change it.
+
+Vale's region borrow checker accomplishes this in a similar way, but at a region level.
+</slice>
+
+
+## Externs and Fearless FFI
+
+Vale can send data to other languages in two ways:
+
+ * Sending a *deep copy.*
+ * Sending a *handle.*
+
+
+A handle is an opaque fat pointer [# An opaque pointer is one that the user cannot dereference. A fat pointer is a pointer that is wider than 64 bits.]. Vale will automatically export methods to allow other languages to easily interact with handles.
+
+
+By doing this instead of giving raw access to Vale objects, Vale can guarantees that any accidental mistakes in C will not cause Vale code to trigger memory unsafety.
+
+
+This works today! You can read more about it at [Memory Safety, Part 5: Externs and Fearless FFI](vision/safety-5-externs-fearless-ffi).
+
+
+# Fast Code in Vale
+
+Vale aims to be the *fastest* 100%-memory-safe language. [#perfectsafety]
+
+To do this, we use a blend of single ownership, non-shape-changing memory, and region borrow checking. Read on to learn what these are!
+
+<slice>
+#perfectsafety: By 100% memory-safe language, we're referring to languages like Javascript which offer no opportunity for us (or our dependencies) to cause memory unsafety, as opposed to languages like C++ or Rust which offer memory-unsafe operations.
+
+Note that we're talking about the language design itself. Generally speaking, even if a program is written in a 100% memory-safe language, there could still be compiler bugs, VM bugs, linker attacks, cosmic rays, etc that can still make it unsafe.
+</slice>
+
+
+## Single Ownership
+
+In Vale, almost every object [# Except shared immutable references.] is owned by a single reference: the *owning reference*.
+
+When the owning reference goes out of scope [# Meaning, if the block or function containing it exits, or the object containing it is destroyed.] the object is destroyed, and its memory can be reused, depending on the allocator. [#rustcpp]
+
+This makes Vale faster because:
+
+ * We can have objects on the stack, because we know they won't need to outlive this function.
+ * We know at compile-time exactly where each object needs to be destroyed, as opposed to how:
+    * RC needs to increment/decrement a reference counter to know.
+    * GC needs to periodically scan memory to find which objects are still alive.
+
+This works today! You can read more about it at [Speed, Part 1: Single Ownership](vision/speed-1-single-ownership).
+
+<slice>
+#rustcpp: This is like C++ but memory-safe, and like Rust without the borrow checker's restrictions.
+</slice>
+
+
+## Inline Data
+
+Inline data is the opposite of heap-allocated data. Inline data will live in either:
+
+ * The stack (if it's held by a local).
+ * The containing struct (if it's held by a field).
+
+Inline data helps our locality, [# [Data locality](https://gameprogrammingpatterns.com/data-locality.html) is how two related pieces of memory should be closer to each other in memory, to more quickly access them.] and makes our programs a lot faster.
+
+Vale employs some interesting tricks to make this work in a memory-safe way:
+
+ * Most references also remember an offset to the top of the allocation, for generation-checking purposes.
+ * Inline interfaces (aka unions) must be unique references, but can use the region borrow checker for temporary aliasing.
+
+This is planned! Check out [Speed, Part 2: Inline Data](vision/speed-2-inline-data) for more.
+
+<slice />
+
+
+## Allocators
+
+Depending on usage patterns, `malloc` and `free` can add an extra 30% to a program's run time. To avoid this slowdown, programs can use faster allocators, such as [pools](https://gameprogrammingpatterns.com/object-pool.html).
+
+Vale has a lot of flexibility in allocators:
+
+ * What they allocate:
+    * Single-type allocators allocate and deallocate instances of a specific struct.
+    * Multi-type allocators can allocate and deallocate anything.
+ * How they reuse memory:
+    * Normal allocators reuse a freed object's memory for something of the same size.
+    * Pools reuse a freed object's memory for something of the same type.
+    * Arenas don't reuse memory.
+ * Optional memory usage thresholds:
+    * A "reuse threshold" when an arena will become a certain kind of pool.
+    * A "notify threshold" when we'll print a message.
+    * A "panic threshold" when we'll halt the program.
+
+Vale also also allows us to temporarily change the default allocator. This is very useful for any short-lived function, to give it some extra memory to be faster.
+
+This is all done with zero memory unsafety! Under the hood, it involves some interesting mechanisms, even involving function pointers and xor operations.
+
+This is planned! Check out [Speed, Part 3: Allocators](vision/speed-3-allocators) for more.
+
+<slice />
+
+
+## Non-Shape-Changing Regions
+
+As mentioned in the *Non-Shape-Changing Memory* section above, some allocators will never reuse any freed object's memory for a new object of a different type.
+
+
+Specifically:
+
+ * A pool allocator will only reuse a freed object's memory for something of the same type.
+ * An arena allocator doesn't reuse freed objects' memory at all, so it counts too.
+
+
+We can specify, for an entire region, that it only uses non-shape-changing allocators. With this, and the NSCM principle, we can skip _all_ generation checks for anything inside that region.
+
+
+This is planned! Check out [Speed, Part 4: Non-Shape-Changing Regions](vision/speed-4-non-shape-changing-regions) for more.
+
+<slice />
+
+
+## Immutable Regions
+
+As mentioned in the Region Borrow Checker section above, we can use pure functions to temporarily make all pre-existing memory immutable.
+
+
+When we do this, we can employ _much_ more powerful optimizations, and we can skip the vast majority of generation checks.
+
+
+This is planned! Check out [Speed, Part 5: Immutable Regions](vision/speed-5-immutable-regions) for more.
+
+<slice />
+
+
+## Hybrid-Generational Memory
+
+Hybrid Generational Memory is a memory management model that applies scope tethering and the NSCM principle to skip a lot of generation checks.
+
+
+Basically, for a given scope, we can set a "scope tethered" bit on an object, which still allows it to be destroyed, but keeps its allocation from being reused for a different type.
+
+
+During a scope tether's scope, we can access the object (and anything it indirectly finally [# Final in the Java `final` sense, where a reference is fixed. Keep in mind, we can have a final reference to a mutable object.] contains, without any generation checks.
+
+
+This is planned! Check out [Speed, Part 6: Hybrid-Generational Memory](vision/speed-6-hybrid-generational-memory) for more.
+
+<slice />
+
+
+# Simplicity
+
+Vale's goal is to be fast and memory-safe, while still being *easy to learn and use.*
+
+It does this with three principles:
+
+ * *Opt-in complexity:* A user doesn't have to learn all of Vale before making a working program.
+ * *Limited Blast Radius:* Prefer features that don't require massive refactors or viral annotations.
+ * *Sugar, not Magic:* No implicit function calls; mysterious behavior should always have a visual clue.
+
+The following sections show why we reject certain features, and how we keep the language simple.
+
+<slice />
+
+
+## Opt-in Complexity
+
+To sum up opt-in complexity:
+
+ * It should be easy to use a programming language correctly on the first day.
+ * If a language feature is complex, it should be optional.
+ * A feature should only make your life more complicated once you decide you need it. [# This is similar to the "zero-cost abstraction" principle, but for a language's learning curve.]
+
+
+For example, C#'s approach to inline data, `struct`, is opt-in; a user can make an entire program without knowing about `struct`s. A counter-example is Rust's borrow checker; users need to learn the correct workarounds and design patterns for a while before they can make their program.
+
+
+There are cases where we can bend this rule: if the compiler can suggest an adjustment that is guaranteed to work.
+
+
+Read more about opt-in complexity, and the features that didn't make it into Vale, in [Simplicity, Part 1: Opt-in Complexity](vision/simplicity-1-opt-in-complexity) for more.
+
+<slice />
+
+
+## Limited Blast Radius
+
+Vale prefers *decoupled* language features, which don't require us to refactor our entire codebase.
+
+
+For example:
+
+ * Vale accomplishes pure functions and concurrency in ways that don't require function coloring.
+ * We can use a new allocator with our existing code, we don't have to refactor to explicitly allocate from it.
+
+
+Read more about features' blast radius, and the features that didn't make it into Vale, in [Simplicity, Part 2: Limited Blast Radius](vision/simplicity-2-limited-blast-radius) for more.
+
+<slice />
+
+
+## Avoid Mutable Magic
+
+There should never be any hidden control flow or function calls that could affect the output of a program.
+
+In other words, there should always be some sort of visual indicator for any function call which can modify the program's state.
+
+
+For example, Vale doesn't call an object's `drop` unless you tell it to.
+
+
+There are cases where we can bend this rule: if the visual indicator is in the same function, that _can_ be explicit enough.
+
+For example, Vale will call an object's `drop` if you say `defer drop(x);` somewhere above.
+
+
+Read more about this principle, and the features that didn't make it into Vale, in [Simplicity, Part 3: Avoid Mutable Magic](vision/simplicity-3-avoid-mutable-magic) for more.
+
+<slice />
+
