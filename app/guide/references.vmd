@@ -28,9 +28,9 @@ fn main() export {
 
   println(ship.name);
 
-  // implicit ship^.drop()
+  // implicit (ship).drop()
 }
-```: `import stdlib.src.*; struct Spaceship { name str; fuel int; }`
+```: `import stdlib.*; struct Spaceship { name str; fuel int; }`
 >>>>
 
 
@@ -57,7 +57,7 @@ fn main() export {
 }
 ```stdout
 7
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 
@@ -92,7 +92,7 @@ fn main() export {
   foo(a); // Move a into foo's b
   // Can't use a now.
 }
-```: `import stdlib.src.*; struct Spaceship { name str; }`
+```: `import stdlib.*; struct Spaceship { name str; }`
 >>>>
 
 
@@ -148,7 +148,7 @@ fn main() export {
   ship = Spaceship("Serenity", 2);
   foo(&ship);
 }
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 For example, if we have an open UI dialog for editing an entry in a given spreadsheet, the dialog would want a constraint reference to the entry. [# A constraint reference is the best kind of reference to use here. A weak reference just delays the halt until we try to dereference it. It's often better to catch bugs sooner.]
@@ -189,7 +189,7 @@ fn main() export {
 ```stdout
 Name: Serenity
 Error: Dangling pointers detected!«extrainfo»
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <slice>
@@ -268,7 +268,7 @@ fn main() export {
 }
 ```stdout
 20
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 All references to immutable structs are automatically read-only.
@@ -315,14 +315,14 @@ fn main() export {
 
   printShipBase(&ship);
 
-  base^.drop(); // Destroys base.
+  (base).drop(); // Destroys base.
 
   printShipBase(&ship);
 }
 ```stdout
 Ship base: Zion
 Ship base unknown!
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <slice new-color="afterword">
@@ -361,7 +361,7 @@ fn main() export {
 }
 ```stdout
 Enterprise
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <<<<
@@ -388,7 +388,7 @@ fn main() export {
       inl Engine("TCB", 10));
   println(ship.name);
 }
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <slice new-color="default"/>

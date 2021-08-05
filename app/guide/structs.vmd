@@ -33,7 +33,7 @@ fn main() export {
 }
 ```stdout
 Serenity
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 
@@ -57,7 +57,7 @@ fn main() export {
   ship = Spaceship();
   println(ship.name);
 }
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <slice/>
@@ -80,7 +80,7 @@ fn main() export {
 
   // implicitly drops ship
 }
-```: `import stdlib.src.*; struct Spaceship { name str; fuel int; }`
+```: `import stdlib.*; struct Spaceship { name str; fuel int; }`
 >>>>
 
 <slice>
@@ -145,7 +145,7 @@ fn main() export {
   foo(a);
   // Can't use a now.
 }
-```: `import stdlib.src.*; struct Spaceship { name str; fuel int; }`
+```: `import stdlib.*; struct Spaceship { name str; fuel int; }`
 >>>>
 
 
@@ -174,14 +174,14 @@ fn main() export {
 
   println(ship.name);
 
-  // implicit ship^.drop().
+  // implicit (ship).drop().
 }
 
 // Implicit:
 // fn drop(s Spaceship) {
 //   destruct s; «destruct» // frees
 // }
-```: `import stdlib.src.*; struct Spaceship { name str; fuel int; }`
+```: `import stdlib.*; struct Spaceship { name str; fuel int; }`
 >>>>
 
 We can specify our own `drop` function. A custom drop could be used to:
@@ -229,7 +229,7 @@ fn main() export {
 ```stdout
 2
 2
-```: `import stdlib.src.*;`
+```: `import stdlib.*;`
 >>>>
 
 <slice new-color="afterword">

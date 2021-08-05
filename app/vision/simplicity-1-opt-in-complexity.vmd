@@ -1,0 +1,20 @@
+
+this article is more about what we keep out, than what we add in.
+
+also talk about why learning curve is so important for a language
+
+when its okay to add opt-out complexity: when theres an extremely easy fix for it. example: ! on fields, and ^ on heapy things.
+
+it has to _actually_ resolve your problem. by the end of them, your program should be working again.
+
+talk about some features we rejected:
+- per-object borrow checker. complexity cost is much too high. besides, rust already exists lol
+
+
+talk about times we didn't do this:
+- single ownership. we want that sweet stack performance.
+  - generally, just promote the owned object, or its owner, up one scope.
+
+
+explain what it is
+say that we're trying to stick to these principles in vale
