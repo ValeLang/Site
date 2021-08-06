@@ -7,9 +7,9 @@ layout: onecolumn
 
 ## Here be Dragons!
 
-The Vale compiler is *version 0.1.2*.
+The Vale compiler is *version 0.1.3*.
 
-This means:
+A 0.x version means:
 
  * It works!
  * ...technically.
@@ -19,10 +19,10 @@ This means:
 We've made several-thousand line long programs in it, but there are rough edges:
 
  * Most problems in Vale code have nice compile errors, but not everything. There will be the occasional compiler crash.
- * It's not optimized yet. In these early phases, we're prioritizing ease of experimenting over compilation speed, and we're using Scala which is already rather slow.
- * The standard library is quite small (just a list, hash set, hash map).
+ * The compiler is slow. In these early phases, we're prioritizing ease of experimenting over compilation speed, and we're using Scala which is already rather slow.
 
-Download at your own risk, and report any bugs to the github!
+
+Use at your own risk, and report any bugs to the github!
 
 
 ## Releases
@@ -72,16 +72,6 @@ This release adds:
  * Externs and exports!
  * A _lot_ of bugfixes! Special thanks (again!) to Ivo Balbaert for searching and finding so many bugs.
 
-The .zip includes:
-
- * *valec.py*, the main python script for invoking the compiler. Use `python3 valec.py help` for help.
- * *vstl* contains some classes you may find useful, such as a list, hashset, and hashmap.
- * *BenchmarkRL*, a terrain generator written in Vale, useful for comparing different regions. If on Linux, use `benchmark.sh` to run it against various regions.
- * *samples*, a collection of small programs written in Vale.
-    * *roguelike.vale* is a program where you are an @ sign and can walk in four directions.
-    * The rest are tiny programs that serve as test cases for the compiler.
- * `builtins` should be ignored, these are .vale and .c files used by the compiler itself.
-
 
 ### 0.1.1 "Ivo" Release
 
@@ -96,16 +86,6 @@ This release adds:
  * A _lot_ of bugfixes! Special thanks to Ivo Balbaert for finding the rough edges and reporting bugs!
  * Much more solid and reproducible building and running of the Vale compiler.
  * More functions and classes to the standard library.
-
-The .zip includes:
-
- * *valec.py*, the main python script for invoking the compiler. Use `python3 valec.py help` for help.
- * *vstl* contains some classes you may find useful, such as a list, hashset, and hashmap.
- * *BenchmarkRL*, a terrain generator written in Vale, useful for comparing different regions. If on Linux, use `benchmark.sh` to run it against various regions.
- * *samples*, a collection of small programs written in Vale.
-    * *roguelike.vale* is a program where you are an @ sign and can walk in four directions.
-    * The rest are tiny programs that serve as test cases for the compiler.
- * `builtins` should be ignored, these are .vale and .c files used by the compiler itself.
 
 
 ### 0.1.0 "Eevee" Release

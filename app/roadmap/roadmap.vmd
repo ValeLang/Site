@@ -16,19 +16,8 @@ We're currently 10% of the way to version 0.2!
  . <span class="icon later"></span> Planned for Later
 >>>>
 
+
 <<<<
-*References*
-
- . <span class="icon done"></span> Immutables' Refs
- . <span class="icon done"></span> Owning Refs
- . <span class="icon done"></span> Moving
- . <span class="icon done"></span> Constraint Refs
- . <span class="icon done"></span> Weak Refs
- . <span class="icon later"></span> Expect
- . <span class="icon later"></span> Optional Sugar
- . <span class="icon later"></span> Inlining
- . <span class="icon done"></span> Varying/Final
-
 *Functions*
 
  . <span class="icon done"></span> UFCS
@@ -39,56 +28,49 @@ We're currently 10% of the way to version 0.2!
  . <span class="icon done"></span> Virtual Functions
  . <span class="icon done"></span> Extern Calls
  . <span class="icon done"></span> Overloads
- . <span class="icon later"></span> Must-use
-
-*Generics*
-
- . <span class="icon done"></span> Functions
- . <span class="icon done"></span> Structs/Interfaces
- . <span class="icon done"></span> Virtual Generics
- . <span class="icon done"></span> Const Generics
- . <span class="icon later"></span> Static Eaching
- . <span class="icon later"></span> Metaprogramming
- . <span class="icon later"></span> Concepts
-
-////
-
-*Arrays*
-
- . <span class="icon done"></span> Mutability
- . <span class="icon done"></span> Known-size
- . <span class="icon done"></span> Unknown-size
- . <span class="icon later"></span> Asterisk for Arrays
-
-*ADTs*
-
- . <span class="icon done"></span> Tuples
- . <span class="icon later"></span> Variants
- . <span class="icon later"></span> Variant Indexing
- . <span class="icon later"></span> Errors
+ . <span class="icon done"></span> Pure Functions
 
 *Structs*
 
  . <span class="icon done"></span> Mutability
  . <span class="icon done"></span> Auto-drop
- . <span class="icon done"></span> Member constructing
- . <span class="icon later"></span> Explicit auto-drop
- . <span class="icon later"></span> constructor&lt;T&gt;
- . <span class="icon later"></span> Destructor Parameters
- . <span class="icon later"></span> Shortcalling
+ . <span class="icon done"></span> Constructors
 
 *Interfaces*
 
  . <span class="icon done"></span> Mutability
  . <span class="icon done"></span> Open Constructors
- . <span class="icon later"></span> Open Shortcalling
- . <span class="icon later"></span> Sealed Constructors
- . <span class="icon later"></span> Sealed Shortcalling
+
+////
+
+*References*
+
+ . <span class="icon done"></span> Shared Refs
+ . <span class="icon done"></span> Owning Refs
+ . <span class="icon done"></span> Moving
+ . <span class="icon done"></span> Constraint Refs
+ . <span class="icon done"></span> Weak Refs
+ . <span class="icon done"></span> Varying/Final
+
+*Modules*
+
+ . <span class="icon done"></span> Modules
+ . <span class="icon done"></span> Import statements
+ . <span class="icon done"></span> Test-only Modules
+ . <span class="icon done"></span> Standard Library
+
+*Arrays*
+
+ . <span class="icon done"></span> Mutability
+ . <span class="icon done"></span> Statically-sized
+ . <span class="icon done"></span> Runtime-sized
+ . <span class="icon done"></span> Make via Lambda
 
 ////
 
 *Constructs*
 
+ . <span class="icon done"></span> Set
  . <span class="icon done"></span> If
  . <span class="icon done"></span> While
  . <span class="icon done"></span> Each
@@ -102,53 +84,138 @@ We're currently 10% of the way to version 0.2!
 
  . <span class="icon done"></span> Locals
  . <span class="icon done"></span> Destructuring
- . <span class="icon later"></span> Equating
- . <span class="icon later"></span> Extractors
 
-*Operators*
+*ADTs*
 
- . <span class="icon done"></span> Short-circuiting
- . <span class="icon todo"></span> Map, FlatMap
- . <span class="icon later"></span> Bail
-
-*Standard Library*
-
- . <span class="icon done"></span> Optional
- . <span class="icon done"></span> List
- . <span class="icon done"></span> HashMap
- . <span class="icon todo"></span> Set
- . <span class="icon done"></span> HashSet
- . <span class="icon later"></span> Bunch
+ . <span class="icon done"></span> Tuples
+ . <span class="icon done"></span> Opt
+ . <span class="icon done"></span> Result
 
 ////
 
 *LLVM Codegen*
 
  . <span class="icon done"></span> Native Executables
- . <span class="icon done"></span> Resilient Mode
- . <span class="icon todo"></span> Continue on panic
- . <span class="icon done"></span> Constraint Modes
- . <span class="icon later"></span> Threading
- . <span class="icon later"></span> Replayability
+ . <span class="icon done"></span> Resilient Mod
+ . <span class="icon done"></span> Constraint Mode
+ . <span class="icon done"></span> Unsafe Mode
+
+*Operators*
+
+ . <span class="icon done"></span> Short-circuiting
+ . <span class="icon done"></span> Owning methods
+ . <span class="icon later"></span> Expect
+
+*Ergonomics*
+
+ . <span class="icon done"></span> Compile Errors
+ . <span class="icon later"></span> Syntax Highlighting
+
+*Generics*
+
+ . <span class="icon done"></span> Functions
+ . <span class="icon done"></span> Structs/Interfaces
+ . <span class="icon done"></span> Const Generics
+
+>>>>
+
+
+<<<<
+*Externs*
+
+ . <span class="icon done"></span> Primitives
+ . <span class="icon done"></span> Copying structs
+ . <span class="icon done"></span> Copying interfaces
+ . <span class="icon done"></span> Struct handles
+ . <span class="icon done"></span> Interface handles
+ . <span class="icon done"></span> Generate headers
+ . <span class="icon done"></span> Module prefixing
+ . <span class="icon later"></span> Extern interfaces
+ . <span class="icon later"></span> Encrypted handles
+
+*Inlines*
+
+ . <span class="icon later"></span> Final structs
+ . <span class="icon later"></span> Vary structs
+ . <span class="icon later"></span> Final interfaces
+ . <span class="icon later"></span> Vary interfaces
 
 *Regions*
 
  . <span class="icon later"></span> Basics
  . <span class="icon later"></span> Read-only Regions
- . <span class="icon later"></span> Mutexes
  . <span class="icon later"></span> Transmigrating
  . <span class="icon later"></span> Seceding
+
+////
+
+*Structs*
+
+ . <span class="icon later"></span> Derive drop
+ . <span class="icon later"></span> Explicit auto-drop
+ . <span class="icon later"></span> constructor&lt;T&gt;
+ . <span class="icon later"></span> Destructor Parameters
+ . <span class="icon later"></span> Shortcalling
+
+*Interfaces*
+
+ . <span class="icon later"></span> Open Shortcalling
+ . <span class="icon later"></span> Sealed Constructors
+ . <span class="icon later"></span> Sealed Shortcalling
+ . <span class="icon later"></span> Variants
+ . <span class="icon later"></span> Variant Indexing
+
+*Generics*
+
+ . <span class="icon later"></span> Concepts
+ . <span class="icon later"></span> Static Eaching
+ . <span class="icon later"></span> Metaprogramming
+
+*Misc*
+
+ . <span class="icon later"></span> Must-use
+ . <span class="icon later"></span> Private, public
+
+////
+
+*Patterns*
+
+ . <span class="icon later"></span> Equating
+ . <span class="icon later"></span> Extractors
+ . <span class="icon later"></span> Mutating
+
+*Operators*
+
+ . <span class="icon later"></span> Bail
+ . <span class="icon todo"></span> Map, FlatMap
+
+*Allocators*
+
+ . <span class="icon later"></span> Arena
+ . <span class="icon later"></span> Single Pool
+ . <span class="icon later"></span> Shared Pool
+ . <span class="icon later"></span> Multi Pool
+
+*LLVM Codegen*
+
+ . <span class="icon todo"></span> Continue on panic
+ . <span class="icon later"></span> Threading
+ . <span class="icon later"></span> Replayability
+
+////
+
+*Concurrency*
+
+ . <span class="icon later"></span> Coroutines
+ . <span class="icon later"></span> Structured Concurrency
+ . <span class="icon later"></span> Threads
+ . <span class="icon later"></span> Mutexes
 
 *Optimization*
 
  . <span class="icon done"></span> Generational Memory
  . <span class="icon todo"></span> Gen-check Elimination
  . <span class="icon todo"></span> Hybrid-Generational Memory
-
-*Ergonomics*
-
- . <span class="icon done"></span> Compile Errors
- . <span class="icon later"></span> Syntax Highlighting
 
 *Possibilities*
 
@@ -157,3 +224,4 @@ We're currently 10% of the way to version 0.2!
  . <span class="icon later"></span> VS/IDEA Plugins
 
 >>>>
+

@@ -18,3 +18,26 @@ talk about times we didn't do this:
 
 explain what it is
 say that we're trying to stick to these principles in vale
+
+
+productivity is important. especially when prototyping.
+  this is why people like python.
+  C# is great at this.
+  rust is not as great at this.
+reduce language complexity:
+  operators+methods+functions -> functions
+  this -> normal parameter
+    we look in the environment of all parameter types
+    any parameter can be virtual
+  article about avoiding coloring where possible, because it bifurcates the codebase
+    const vs nonconst, for example in Opt.get
+    sync vs async
+    pure vs impure
+opt-in performance directives.
+  automatic -> inl vs heap. linters and analysis will help with this eventually. could automatically infer whether a member struct should be inline by looking at all constructors and whether its final.
+  normal -> region borrow checker, to save gen checks
+  hgm -> hgm, pool, arena. we decouple at a generics level (not like zig), can use any function with any allocator.
+  perf is about allocators, cpu prefetching, and sharing cache lines.
+its important you use the right tool for the job.
+  if your entire program needs the optimization and it's not premature, then use something like Rust. (rust difficult: https://news.ycombinator.com/item?id=26794916)
+  if only part of your program needs it, then use vale! (or maybe dont include it)
