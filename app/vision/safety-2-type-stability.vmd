@@ -1,0 +1,62 @@
+---
+title: Type Stability
+subtitle: Vale's Vision, Memory Safety Part 2
+author: Evan Ovadia
+date: August 31 2021
+realm: blog
+path: blog/generational-references
+layout: annotated
+namespace: c-blog m-annotated
+---
+
+
+Vale sometimes gets memory safety from type stability.
+
+
+With *type stability*, we can have memory safety without the usual costs:
+
+ * without run-time aliasing costs (like with reference counting)
+ * without dereferencing costs (like with generational references)
+ * without added complexity (like with borrow checking)
+ * without run-time pauses (like with tracing garbage collection)
+ * without extra copies or bounds checking [#bounds] (like in Rust programs)
+
+It is *memory-safe to mutably alias* [#mutablyalias] a type-stable object. [#incompatible]
+
+
+
+
+# What is Type Stability?
+
+
+An object is type-stable as long as we only reuse its memory for an object of the same type.
+
+
+
+There are many ways we can know an object is type-stable:
+
+ * In type-stable regions, we know we're only using type-stable allocators.
+ * With pure functions, we know that all pre-existing memory is immutable, and therefore type-stable.
+ * For a given scope, we can scope-tether an object, so the allocator doesn't reuse its memory for a different type.
+
+
+
+
+
+As long as we aren't reusing an object's memory for an object type, then the object is shape-stable.
+
+An object is *shape-stable* as long as its memory isn't reused for another type.
+
+It is memory-safe to mutably alias [#mutablyalias] a shape-stable object. An object is shape-stable as long as its memory isn't reused for an object of an incompatible shape.
+
+
+
+
+
+
+Every approach has a tradeoff, and type stability is no different:
+
+ * It can sometimes use more memory than other approaches.
+ * Some objects can't go on the stack.
+    * This is mitigated by a linked stack, explained below.
+

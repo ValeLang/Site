@@ -22,7 +22,7 @@ All of today's native languages have some unsafety in them. For example, in C, y
 
 Rust does especially well here, though its guarantees are violated by its `unsafe` keyword. Most think that memory unsafety can only happen inside `unsafe` blocks, but unfortunately, it can cause memory unsafety outside, in safe Rust as well.
 
-Vale uses [hybrid-generational memory](/blog/hybrid-geerational-memory), which doesn't require any unsafe, even in its standard library.
+Vale uses [hybrid-generational memory](/blog/hybrid-generational-memory), which doesn't require any unsafe, even in its standard library.
 
 Vale goes even further, by not allowing *any* unsafe code. Even if we call into C, there's no way to trigger memory unsafety in Vale.
 
