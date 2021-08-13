@@ -89,26 +89,50 @@ This works today! Find more details at [Memory Safety, Part 1: Generational Refe
 <slice />
 
 
-## Non-Shape-Changing Memory
+## Type Stability
 
-Non-Shape-Changing Memory (NSCM) is a principle that states:
+An object is type-stable as long as we only reuse its memory for an object of the same type.
 
-> It is safe to dereference or mutably alias [# To "mutably alias" an object means that we can have multiple mutable references to it. A mutable reference is a reference that we can use to change something in the object.] an object as long as no references nor the containing allocator change its *shape*.
-
-
-For example, it can be memory-safe to have two mutable references to a `Spaceship` which has a final [# Final in the Java `final` sense, where a reference is fixed. Keep in mind, we can have a final reference to a mutable object.] reference to an `Engine`, as long as its containing allocator doesn't reuse the `Spaceship`'s or `Engine`'s memory for e.g. a Boat.
+It is *memory-safe to mutably alias* [#mutablyalias] a type-stable object. [#incompatible]
 
 
-This is the fastest form of memory management, so Vale uses it when possible:
+There are many ways we can know an object is type-stable:
 
- * It automatically uses this principle to do scope tethering which, for a given scope, keeps an object's memory from being reused for a different type.
- * With pure functions, we can temporarily consider all pre-existing memory immutable, letting us use NSCM to skip the vast majority of generation checks on pre-existing memory.
- * With regions, we can temporarily use NSCM allocators instead of malloc, skipping all generation checks for anything allocated.
+ * In type-stable regions, we know we're only using type-stable allocators.
+ * With pure functions, we know that all pre-existing memory is immutable, and therefore type-stable.
+ * For a given scope, we can scope-tether an object, so the allocator doesn't reuse its memory for a different type.
 
 
-This is planned! You can read more about it at [Memory Safety, Part 2: Non-Shape-Changing Memory](vision/safety-2-non-shape-changing).
+<<<<
+Here, a `Spaceship` struct contains an `Engine` struct.
 
-<slice />
+We then make two aliases to it, and then use them to modify the engine.
+
+This works because we know nobody will change the object's shape. [#inlint]
+////
+```vale
+struct Spaceship { engine Engine; }
+struct Engine { fuel! int; }
+fn main() export {
+   ship = Spaceship(Engine(1337));
+   alias_a = &!ship;
+   alias_b = &!ship;
+   set alias_a.engine.fuel = 73;
+   set alias_b.engine.fuel = 42;
+}
+```
+>>>>
+
+
+This is planned! You can read more about it at [Memory Safety, Part 2: Shape-Stable Memory](vision/safety-2-non-shape-changing).
+
+<slice>
+#incompatible: Two objects' shapes are "compatible" only if they have pointers in the same exact positions in memory. Corresponding pointers must point to objects that are of the same shape as each other.
+
+#mutablyalias: To "mutably alias" an object means that we can have multiple mutable references to it. A mutable reference is a reference that we can use to change something in the object.
+
+#inlint: We can also embed unions (a.k.a. sum types, variants, enums, inline interfaces) with `uni`que references, explained below.
+</slice>
 
 
 ## Region Borrow Checker

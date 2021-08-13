@@ -150,8 +150,7 @@ fn halfFuel(s &Ship) int extern;
 #include "mvtest/Ship.h"
 #include "mvtest/halfFuel.h"
 #include "mvtest/getFuel.h"
-extern int mvtest_halfFuel(mvtest_ShipRef* sPtr) {
-  mvtest_ShipRef s = *sPtr;
+extern int mvtest_halfFuel(mvtest_ShipRef s) {
   return mvtest_getFuel(&s) / 2;
 }
 ```stdout
