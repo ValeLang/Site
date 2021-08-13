@@ -10,9 +10,6 @@ namespace: c-blog m-annotated
 ---
 
 
-! This article has been moved and updated! Check it out at [Safety Part 1: Generational References](vision/safety-1-generational-references).
-
-
 *Generational references* are a new memory management technique that's easy, deterministic, and _very_ fast.
 
 
