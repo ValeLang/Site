@@ -88,6 +88,11 @@
         "type": 302
       },
       {
+        "source": "/releases/ValeCompiler-0.1.3.4-Win.zip",
+        "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.3.4-Win.zip?alt=media&token=e6ae9478-e402-4961-a149-febc45f2986e",
+        "type": 302
+      },
+      {
         "source": "/releases/ValeCompiler-0.1.3.3-Mac.zip",
         "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.3.3-Mac.zip?alt=media&token=31597d94-1411-4e5c-bb4e-e8624d6acf72",
         "type": 302
