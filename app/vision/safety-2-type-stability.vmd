@@ -185,9 +185,6 @@ Specifically, it's instructing `findPath` to use the (type-stable) `'pool` [#poo
 
 
 Vale recognizes that the `'pool` allocator is a type-stable one, so will compile `findPath` so that it skips generation checks for anything in `'b`.
-
-
-Vale sees that we're using a type-stable allocator for region `'b`, so it knows it doesn't need generation checks for the `'b` region.
 ////
 ```vale
 fn main() export {
@@ -215,8 +212,6 @@ List<Location> 'b {
 
 
 Note how `findPath` doesn't mention `'pool` at all. `findPath` is completely decoupled from the allocator it will be using.
-
-This means we can 
 
 
 <slice>
