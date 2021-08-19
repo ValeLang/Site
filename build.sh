@@ -84,15 +84,25 @@ if [ $TARGET == "vision" ] || [ $TARGET == "all" ] ; then
   fi
 fi
 
-# if [ $TARGET == "safety-1-regions-borrow-checker" ] || [ $TARGET == "all" ] ; then
-#   echo "Doing safety-1-regions-borrow-checker"
-#   echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/safety-1-regions-borrow-checker app/vision/safety-1-regions-borrow-checker.vmd
-#   eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/safety-1-regions-borrow-checker app/vision/safety-1-regions-borrow-checker.vmd
-#   if [ $? != 0 ]; then
-#     echo "Failed!"
-#     exit 1
-#   fi
-# fi
+if [ $TARGET == "vision-safety-generational-references" ] || [ $TARGET == "all" ] ; then
+  echo "Doing vision-safety-generational-references"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/safety-1-generational-references app/vision/safety-1-generational-references.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/safety-1-generational-references app/vision/safety-1-generational-references.vmd
+  if [ $? != 0 ]; then
+    echo "Failed!"
+    exit 1
+  fi
+fi
+
+if [ $TARGET == "vision-safety-type-stability" ] || [ $TARGET == "all" ] ; then
+  echo "Doing vision-safety-type-stability"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/safety-2-type-stability app/vision/safety-2-type-stability.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/safety-2-type-stability app/vision/safety-2-type-stability.vmd
+  if [ $? != 0 ]; then
+    echo "Failed!"
+    exit 1
+  fi
+fi
 
 if [ $TARGET == "generational-references" ] || [ $TARGET == "all" ] ; then
   echo "Doing generational-references"

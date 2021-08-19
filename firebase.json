@@ -18,6 +18,11 @@
         "type": 302
       },
       {
+        "source": "/vision",
+        "destination": "/vision/vision",
+        "type": 302
+      },
+      {
         "source": "/releases/ValeCompiler-0.1.0.0-Linux.zip",
         "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.0.0-Linux.zip?alt=media&token=65aeb1a4-c4fa-4877-a1cd-8a1b638538b2",
         "type": 302

@@ -51,7 +51,7 @@ This series is divided into a few themes, each with multiple parts. This page wi
 
 Vale aims to be the *safest* native-speed language. [# We're using the term "native-speed" somewhat arbitrarily here. More precisely we're referring to languages without RC or GC, such as C++, Zig, etc.]
 
-It uses *generational references* and *non-shape-changing memory* as a foundation for its memory safety, and its *extern boundary* ensures no unsafe code can cause memory safety in Vale code.
+It uses *generational references* and *type stability* as a foundation for its memory safety, and its *extern boundary* ensures no unsafe code can cause memory safety in Vale code.
 
 These things are explained in the following sections.
 
@@ -81,10 +81,10 @@ Before it dereferences the object, it will "generation check" that the object's 
 It's analogous to doing a bounds check before accessing something in an array.
 
 
-With this, we can guarantee that we never use memory after it's freed. It's also very fast, and other Vale features (HGM, immutable regions, non-shape-changing) allow you to eliminate a lot of generation checks.
+With this, we can guarantee that we never use memory after it's freed. It's also very fast, and other Vale features (HGM, immutable regions, type stability) allow you to eliminate a lot of generation checks to make it even faster.
 
 
-This works today! Find more details at [Memory Safety, Part 1: Generational References](vision/safety-1-generational-references).
+This works today! Find more details at [Memory Safety, Part 1: Generational References](/vision/safety-1-generational-references).
 
 <slice />
 
@@ -93,7 +93,7 @@ This works today! Find more details at [Memory Safety, Part 1: Generational Refe
 
 An object is type-stable as long as we only reuse its memory for an object of the same type.
 
-It is *memory-safe to mutably alias* [#mutablyalias] a type-stable object. [#incompatible]
+It is *memory-safe to mutably alias* [#mutablyalias] a type-stable object.
 
 
 There are many ways we can know an object is type-stable:
@@ -108,7 +108,7 @@ Here, a `Spaceship` struct contains an `Engine` struct.
 
 We then make two aliases to it, and then use them to modify the engine.
 
-This works because we know nobody will change the object's shape. [#inlint]
+This works because we know nobody will change the object's type. [#inlint]
 ////
 ```vale
 struct Spaceship { engine Engine; }
@@ -124,11 +124,9 @@ fn main() export {
 >>>>
 
 
-This is planned! You can read more about it at [Memory Safety, Part 2: Shape-Stable Memory](vision/safety-2-non-shape-changing).
+This is planned! You can read more about it at [Memory Safety, Part 2: Type Stability](/vision/safety-2-type-stability).
 
 <slice>
-#incompatible: Two objects' shapes are "compatible" only if they have pointers in the same exact positions in memory. Corresponding pointers must point to objects that are of the same shape as each other.
-
 #mutablyalias: To "mutably alias" an object means that we can have multiple mutable references to it. A mutable reference is a reference that we can use to change something in the object.
 
 #inlint: We can also embed unions (a.k.a. sum types, variants, enums, inline interfaces) with `uni`que references, explained below.
@@ -151,7 +149,7 @@ The Region Borrow Checker will:
  * Make it so an object in one region can't point to an object in another (except temporarily).
  * Guarantee no escaping references, e.g. to inside a mutex-guarded area of memory.
  * Track which regions are immutable (such as arguments to a pure function).
- * Avoid shape-changing allocators like malloc for a region, at our request.
+ * Avoid type-unstable allocators like malloc for a region, at our request.
 
 
 Which means we can:
@@ -161,7 +159,7 @@ Which means we can:
  * Have safe shared immutable access to memory while doing structured concurrency/parallelism.
 
 
-This is planned! Check out [Memory Safety, Part 3: Region Borrow Checker](vision/safety-3-region-borrow-checker) for more.
+This is planned! Check out [Memory Safety, Part 3: Region Borrow Checker](/vision/safety-3-region-borrow-checker) for more.
 
 <slice />
 
@@ -180,7 +178,7 @@ Vale will offer tools to more easily work with unique references:
  * Unique swapping
 
 
-This is planned! You can read more at [Memory Safety, Part 4: Unique Unions](vision/safety-4-unique-unions).
+This is planned! You can read more at [Memory Safety, Part 4: Unique Unions](/vision/safety-4-unique-unions).
 
 <slice>
 #bcvrbc: Rust's borrow checker accomplishes this by letting us either have immutable aliases to the object *or* letting us change it.
@@ -203,14 +201,14 @@ A handle is an opaque fat pointer [# An opaque pointer is one that the user cann
 By doing this instead of giving raw access to Vale objects, Vale can guarantees that any accidental mistakes in C will not cause Vale code to trigger memory unsafety.
 
 
-This works today! You can read more about it at [Memory Safety, Part 5: Externs and Fearless FFI](vision/safety-5-externs-fearless-ffi).
+This works today! You can read more about it at [Memory Safety, Part 5: Externs and Fearless FFI](/vision/safety-5-externs-fearless-ffi).
 
 
 # Fast Code in Vale
 
 Vale aims to be the *fastest* 100%-memory-safe language. [#perfectsafety]
 
-To do this, we use a blend of single ownership, non-shape-changing memory, and region borrow checking. Read on to learn what these are!
+To do this, we use a blend of single ownership, type stable memory, and region borrow checking. Read on to learn what these are!
 
 <slice>
 #perfectsafety: By 100% memory-safe language, we're referring to languages like Javascript which offer no opportunity for us (or our dependencies) to cause memory unsafety, as opposed to languages like C++ or Rust which offer memory-unsafe operations.
@@ -232,7 +230,7 @@ This makes Vale faster because:
     * RC needs to increment/decrement a reference counter to know.
     * GC needs to periodically scan memory to find which objects are still alive.
 
-This works today! You can read more about it at [Speed, Part 1: Single Ownership](vision/speed-1-single-ownership).
+This works today! You can read more about it at [Speed, Part 1: Single Ownership](/vision/speed-1-single-ownership).
 
 <slice>
 #rustcpp: This is like C++ but memory-safe, and like Rust without the borrow checker's restrictions.
@@ -253,7 +251,7 @@ Vale employs some interesting tricks to make this work in a memory-safe way:
  * Most references also remember an offset to the top of the allocation, for generation-checking purposes.
  * Inline interfaces (aka unions) must be unique references, but can use the region borrow checker for temporary aliasing.
 
-This is planned! Check out [Speed, Part 2: Inline Data](vision/speed-2-inline-data) for more.
+This is planned! Check out [Speed, Part 2: Inline Data](/vision/speed-2-inline-data) for more.
 
 <slice />
 
@@ -280,14 +278,14 @@ Vale also also allows us to temporarily change the default allocator. This is ve
 
 This is all done with zero memory unsafety! Under the hood, it involves some interesting mechanisms, even involving function pointers and xor operations.
 
-This is planned! Check out [Speed, Part 3: Allocators](vision/speed-3-allocators) for more.
+This is planned! Check out [Speed, Part 3: Allocators](/vision/speed-3-allocators) for more.
 
 <slice />
 
 
-## Non-Shape-Changing Regions
+## Type Stable Regions
 
-As mentioned in the *Non-Shape-Changing Memory* section above, some allocators will never reuse any freed object's memory for a new object of a different type.
+As mentioned in the *Type Stable Memory* section above, some allocators will never reuse any freed object's memory for a new object of a different type.
 
 
 Specifically:
@@ -296,10 +294,10 @@ Specifically:
  * An arena allocator doesn't reuse freed objects' memory at all, so it counts too.
 
 
-We can specify, for an entire region, that it only uses non-shape-changing allocators. With this, and the NSCM principle, we can skip _all_ generation checks for anything inside that region.
+We can specify, for an entire region, that it only uses type-stable allocators. With this, and the NSCM principle, we can skip _all_ generation checks for anything inside that region.
 
 
-This is planned! Check out [Speed, Part 4: Non-Shape-Changing Regions](vision/speed-4-non-shape-changing-regions) for more.
+This is planned! Check out [Speed, Part 4: Type-Stable Regions](/vision/speed-4-type-stable-regions) for more.
 
 <slice />
 
@@ -312,7 +310,7 @@ As mentioned in the Region Borrow Checker section above, we can use pure functio
 When we do this, we can employ _much_ more powerful optimizations, and we can skip the vast majority of generation checks.
 
 
-This is planned! Check out [Speed, Part 5: Immutable Regions](vision/speed-5-immutable-regions) for more.
+This is planned! Check out [Speed, Part 5: Immutable Regions](/vision/speed-5-immutable-regions) for more.
 
 <slice />
 
@@ -328,7 +326,7 @@ Basically, for a given scope, we can set a "scope tethered" bit on an object, wh
 During a scope tether's scope, we can access the object (and anything it indirectly finally [# Final in the Java `final` sense, where a reference is fixed. Keep in mind, we can have a final reference to a mutable object.] contains, without any generation checks.
 
 
-This is planned! Check out [Speed, Part 6: Hybrid-Generational Memory](vision/speed-6-hybrid-generational-memory) for more.
+This is planned! Check out [Speed, Part 6: Hybrid-Generational Memory](/vision/speed-6-hybrid-generational-memory) for more.
 
 <slice />
 
@@ -363,7 +361,7 @@ For example, C#'s approach to inline data, `struct`, is opt-in; a user can make 
 There are cases where we can bend this rule: if the compiler can suggest an adjustment that is guaranteed to work.
 
 
-Read more about opt-in complexity, and the features that didn't make it into Vale, in [Simplicity, Part 1: Opt-in Complexity](vision/simplicity-1-opt-in-complexity) for more.
+Read more about opt-in complexity, and the features that didn't make it into Vale, in [Simplicity, Part 1: Opt-in Complexity](/vision/simplicity-1-opt-in-complexity) for more.
 
 <slice />
 
@@ -379,7 +377,7 @@ For example:
  * We can use a new allocator with our existing code, we don't have to refactor to explicitly allocate from it.
 
 
-Read more about features' blast radius, and the features that didn't make it into Vale, in [Simplicity, Part 2: Limited Blast Radius](vision/simplicity-2-limited-blast-radius) for more.
+Read more about features' blast radius, and the features that didn't make it into Vale, in [Simplicity, Part 2: Limited Blast Radius](/vision/simplicity-2-limited-blast-radius) for more.
 
 <slice />
 
@@ -399,7 +397,7 @@ There are cases where we can bend this rule: if the visual indicator is in the s
 For example, Vale will call an object's `drop` if you say `defer drop(x);` somewhere above.
 
 
-Read more about this principle, and the features that didn't make it into Vale, in [Simplicity, Part 3: Avoid Mutable Magic](vision/simplicity-3-avoid-mutable-magic) for more.
+Read more about this principle, and the features that didn't make it into Vale, in [Simplicity, Part 3: Avoid Mutable Magic](/vision/simplicity-3-avoid-mutable-magic) for more.
 
 <slice />
 
