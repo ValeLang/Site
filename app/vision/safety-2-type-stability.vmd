@@ -202,7 +202,7 @@ fn main() export {
   println(path);
 }
 
-fn findPath<'b, 'r>(
+fn findPath<'b, 'r>( «annotations»
   game 'r &Game,
   from 'r Location,
   to 'r Location)
@@ -213,10 +213,19 @@ List<Location> 'b {
 ```
 >>>>
 
+
+Note how `findPath` doesn't mention `'pool` at all. `findPath` is completely decoupled from the allocator it will be using.
+
+This means we can 
+
+
 <slice>
 #pool: Vale's `pool` allocator is similar to the `malloc` + free-list approach, except it pulls from a [slab](https://en.wikipedia.org/wiki/Slab_allocation) instead.
 
 This is much faster than `malloc`, and when the region goes out of scope, we can just blast away the entire slab instead of calling `free` for each object.
+
+
+#annotations: These `'r` and `'b` annotations are shown here for clarity, but the `pure` keyword can actually infer every one of these.
 </slice>
 
 
@@ -435,13 +444,13 @@ If that is not the case, and the object is not `uni`que (or automatically determ
 <slice/>
 
 
-# Conclusion
+# Summary
 
-Vale uses type stability to eliminate a lot of memory management overhead.
+Vale uses type stability to eliminate a lot of memory management overhead, in a way that's flexible and decoupled from our actual logic.
 
 Type stability usually has some drawbacks, but Vale addresses them with its other features, such as unique references, region borrow checker, pure functions, and shape stability.
 
-Additionally, it combines type stability and generational references to make hybrid-generational memory, which automatically borrows entire hierarchies of objects for temporary zero-cost access.
+Additionally, Vale combines type stability and generational references to make hybrid-generational memory, which automatically borrows entire hierarchies of objects for temporary zero-cost access.
 
 
 This is a core part of Vale's vision, and we're looking forward to exploring these new techniques and bringing them to programmers worldwide!
