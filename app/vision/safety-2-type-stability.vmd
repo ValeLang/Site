@@ -1,8 +1,6 @@
 ---
 title: Type Stability
-subtitle: Vale's Vision, Memory Safety Part 2
-author: Evan Ovadia
-date: August 31 2021
+subtitle: Vale's Vision: Memory Safety, Part 2
 realm: blog
 path: blog/generational-references
 layout: annotated
@@ -10,53 +8,402 @@ namespace: c-blog m-annotated
 ---
 
 
-Vale sometimes gets memory safety from type stability.
+Welcome to the [Vale's Vision](/vision/vision) series, where we describe where Vale is going and how we plan to get there!
+
+For those unfamiliar, *Vale* is a programming language that combines new memory management techniques in order to be easy to learn, memory safe, deterministic, and fast.
 
 
-With *type stability*, we can have memory safety without the usual costs:
-
- * without run-time aliasing costs (like with reference counting)
- * without dereferencing costs (like with generational references)
- * without added complexity (like with borrow checking)
- * without run-time pauses (like with tracing garbage collection)
- * without extra copies or bounds checking [#bounds] (like in Rust programs)
-
-It is *memory-safe to mutably alias* [#mutablyalias] a type-stable object. [#incompatible]
+One of those new memory management techniques is *type stability,* where an object's memory is only ever reused for the same type.
 
 
+Type stability lets us have memory safety without the usual costs! It doesn't have:
+
+ * garbage collection's run-time pauses, [#gcistgc]
+ * reference counting's incrementing and decrementing costs,
+ * a borrow checker's extra copies or bounds checking, [#bounds],
+ * generational references' generation checks.
+
+
+With type stability, it is *memory-safe to mutably alias any object,* [#mutablyalias] which makes our programs wonderfully easy to write.
+
+
+Keep reading to learn how it works, and where Vale will use it to make our programs faster.
 
 
 # What is Type Stability?
 
+## Simple Type Stability
 
-An object is type-stable as long as we only reuse its memory for an object of the same type.
-
-
-
-There are many ways we can know an object is type-stable:
-
- * In type-stable regions, we know we're only using type-stable allocators.
- * With pure functions, we know that all pre-existing memory is immutable, and therefore type-stable.
- * For a given scope, we can scope-tether an object, so the allocator doesn't reuse its memory for a different type.
+Imagine we had a basic C program that used `malloc`, but had a special `free` function that, instead of returning the memory to the OS, just adds it to a free-list specifically for that object's type.
 
 
+We say that every allocation in this system is "type stable", because its memory is *only ever reused for the same type.*
 
 
-
-As long as we aren't reusing an object's memory for an object type, then the object is shape-stable.
-
-An object is *shape-stable* as long as its memory isn't reused for another type.
-
-It is memory-safe to mutably alias [#mutablyalias] a shape-stable object. An object is shape-stable as long as its memory isn't reused for an object of an incompatible shape.
+Our program is now *memory safe*, because if we accidentally use-after-free, it's still we're accessing something of the same type as the original object.
 
 
+<slice>
+#mutablyalias: To mutably alias an object means we can have multiple references to an object, and can use any of them to modify the object.
+
+#gcistgc: In this page, when we say GC, we mean tracing garbage collection.
+
+#bounds: A common strategy for working with the borrow checker is to put objects in a centrally reachable collection such as `Vec` or `HashMap`, and refer to it with an index or ID. To "dereference" that index or ID, we need to perform a bounds check.
+</slice>
+
+## This is familiar!
+
+We do something similar to this with arrays in C, C++, and Rust all the time!
 
 
+<<<<
+Here's an example in C++.
 
 
-Every approach has a tradeoff, and type stability is no different:
+We have a vector of `Spaceship`, and a local `int myShipIndex` which refers to a specific ship.
 
- * It can sometimes use more memory than other approaches.
- * Some objects can't go on the stack.
-    * This is mitigated by a linked stack, explained below.
 
+Then, we remove the Spaceship from the array. `myShipIndex` now refers to a Spaceship that doesn't exist, it's a "dangling index" so to speak.
+
+
+But if we _do_ accidentally use `myShipIndex` to index into the array, it's still memory safe, because we're still accessing a `Spaceship`.
+
+
+This is a great alternative to reference counting or tracing garbage collection, because the only run-time overhead is a bounds-check, whenever we want to "dereference" the index.
+
+
+This is also a common technique in Rust, as the borrow checker recognizes it as a memory-safe pattern.
+////
+```c++
+struct Engine {
+  int fuel;
+  // ... (constructor, etc.)
+};
+struct Spaceship {
+  Engine engine;
+  // ... (constructor, etc.)
+};
+int main() {
+  vector<Spaceship> ships;
+  // ... (add initial ships, etc.)
+
+  // Add our new ship:
+  int myShipIndex = ships.size();
+  ships.emplace_back(
+      Spaceship(Engine(30)));
+
+  // Destroy the ship.
+  ships.pop_back();
+  // Now, myShipIndex is "dangling"
+
+  // ... (perhaps even replace it)
+
+  // Using myShipIndex is weird, but
+  // it's still memory safe!
+  int fuel =
+    ships[myShipIndex].engine.fuel;
+  cout << fuel << endl;
+}
+```
+>>>>
+
+
+Our simple `malloc` + free-list strategy above is similar; if we use-after-free, we're still accessing something of the same type, so it's memory safe.
+
+
+# The Benefits
+
+We've explained only simple type-stable approach so far, but we already see a lot of benefits.
+
+
+*There's no aliasing costs.*
+
+In some approaches like reference counting, we need to store a counter for every object, to increment it whenever we make a new reference, and decrement it whenever we release a reference.
+
+That counter makes sure that we don't give an object back to `free` until we're sure that there are no more references to it, to prevent use-after-free.
+
+However, with type-stability, use-after-free is memory-safe, so it doesn't need a counter!
+
+
+*There's no run-time pauses.*
+
+With tracing garbage collection, we occasionally need to freeze the current thread, so we can see what objects the thread can indirectly reach, so it can reuse all the unreachable memory.
+
+Tracing garbage collection will make sure that we don't reuse an object's memory until nothing can indirectly access it, and therefore don't use-after-free.
+
+However, with type-stability, use-after-free is memory-safe, so it doesn't need a tracing garbage collector!
+
+
+*There's no extra copies or bounds checking.*
+
+In Rust, the borrow checker's lack of mutable aliasing often means we store our objects in a centrally reachable place, usually a `Vec` or a `HashMap`.
+
+This is a useful design pattern, but it does incur a bounds-check whenever we need to "dereference" the index or key to get a reference to the object. [# In idiomatic Rust, if we need to refer to an object for longer than a certain scope, or while someone else might mutate it, we generally must refer to it via an index or an ID.] This bounds-checking is fortunately usually fairly cheap, but [sometimes it can add up](https://ceronman.com/2021/07/22/my-experience-crafting-an-interpreter-with-rust/).
+
+Another workaround is to copy data, instead of putting it in a centrally reachable place.
+
+However, with type-stability, it's safe to mutably alias objects, so it doesn't need to incur bounds checking or copying costs!
+
+
+*There's no dereferencing costs.*
+
+With [generational references](/vision/safety-1-generational-references), we sometimes have to "generation check", to assert that our reference's generation matches the allocation's current generation which is changed whenever the object is `free`d.
+
+That assertion will make sure we don't access an object after it's `free`d, because use-after-free is normally memory-unsafe.
+
+However, with type-stability, use-after-free is memory-safe, so we don't need to assert anything!
+
+This page explains how type stability is an _alternative_ to generational references. However, Vale actually combines generational references and type stability for its [hybrid-generational memory](/vision/speed-6-hybrid-generational-memory).
+
+
+Type stability also has some drawbacks, which we'll explain further below. First, let's explore how Vale uses type-stability to speed up our programs.
+
+
+# Type-Stable Regions
+
+As explained in the [previous page](/vision/safety-1-generational-references), Vale can use generational references for memory safety: whenever we free an object, we increment its generation, ensuring that dereferencing any remaining references to it will fail an assertion.
+
+
+However, with the region borrow checker, we can designate that a certain call should use only type-stable allocators for anything it allocates.
+
+
+<<<<
+Here, we're calling `findPath`, and telling it to use a `'pool` allocator.
+
+
+Vale will recognize that the `'pool` allocator is a type-stable one, and compile `findPath` so that it skips generation checks for any new objects.
+
+////
+```vale
+fn main() {
+  game = makeGame(...);
+  // Call findPath, make it
+  // use a pool.
+  path =
+    'pool findPath(
+      &game,
+      Location(1, 2),
+      Location(8, 9));
+  println(path);
+}
+```
+>>>>
+
+
+# Pure Functions
+
+In the above `findPath` example, it will skip generation checks on any new objects because it knows that it's using type-stable allocators.
+
+
+However, it also skips generation checks on a lot of pre-existing objects too!
+
+
+<<<<
+This is because `findPath` is a *pure* function.
+
+
+Pure functions use the [region borrow checker](safety-3-region-borrow-checker) to ensure that no pre-existing memory can change.
+////
+```vale
+fn findPath(
+  game &Game,
+  from Location,
+  to Location)
+List<Location> pure 'b {
+  ...
+}
+```
+>>>>
+
+
+If memory can't change at all, then its shape can't change, which means it's type-stable.
+
+
+This knowledge helps the compiler eliminate a _lot_ of generation checks. [# It eliminates every generation check, except when load a non-owning reference field from an immutable non-unique struct. In that rare case, the compiler might perform a generation check.]
+
+
+# Hybrid-Generational Memory
+
+Vale uses something called [hybrid-generational memory](/vision/speed-6-hybrid-generational-memory), which is a blend of generational references and type stability.
+
+
+Hybrid-generational memory adds a technique called *scope tethering*, where every object has a bit which instructs the allocator to not reuse this allocation (or any indirectly finally-owned allocations) for another type, until after the scope tether bit is cleared again.
+
+
+With this knowledge, Vale can effectively "borrow" the allocation (and its entire indirectly finally-owned hierarchy!) for zero cost access.
+
+
+This is similar to how Rust programs do a bounds check to "dereference" an index to temporarily borrow something from a `Vec`. In that sense, generational references and type stability have enabled an automatic Rust, so to speak!
+
+
+You can read more about this at [Hybrid-Generational Memory](/vision/speed-6-hybrid-generational-memory).
+
+
+# Vale Addresses the Drawbacks
+
+The above `malloc` + free-list approach has some drawbacks, which Vale addresses.
+
+
+## Allocators
+
+We've been talking in terms of `malloc`, which can be pretty slow.
+
+However, Vale lets use use type stability with any allocator we'd like. Read more at [Allocators](/vision/speed-3-allocators)!
+
+
+## Memory Usage
+
+This approach restricts when we can reuse memory, which means memory will be reused less often.
+
+
+This is similar to C++ and Rust programs where we have `vector`s (or `Vec`s) which keep growing and never shrink.
+
+
+However, this works well for us, because we opt-in to type-stability on a per-region basis, usually for the scope of a function call.
+
+So, we recommend using type stability for most function calls, unless they don't return immediately.
+
+
+One can also benefit from manually making a type-stable region, if it contains a lot of allocations and few types.
+
+
+## Unions
+
+In C and C++, a *union* is a chunk of memory whose type can change at run-time.
+
+
+<<<<
+For example, this union `MyUnion` can contain either a `Spaceship` or a `Satellite`.
+
+
+In this `main`, our `MyUnion` starts out with a `Satellite`.
+
+
+Then, we change it to hold a `Spaceship`.
+
+
+Unions are similar to interfaces, in that their actual "contained" type is not known until run-time.
+////
+```c++
+struct Spaceship {
+  int fuel;
+  // ...
+};
+struct Satellite {
+  string name;
+  // ...
+};
+union MyUnion {
+  Spaceship ship;
+  Satellite sat;
+};
+void main() {
+  MyUnion u;
+  u.sat = Satellite("Zed");
+
+  // Now has a Spaceship
+  u.ship = Spaceship(1337);
+}
+```
+>>>>
+
+
+Unions are fundamentally *not type-stable*, and could cause memory unsafety in our simple `malloc` + free-list approach.
+
+
+<<<<
+In this code, we are dereferencing a `Satellite*` that points to memory that is no longer a `Spaceship`.
+
+
+This might have caused a segmentation fault in the simple `malloc` + free-list approach, because the code expects a string (the `name` in `Satellite`) but that memory has already been overwritten by an int (the `fuel` in `Spaceship`).
+////
+```
+void main() {
+  MyUnion u;
+  u.sat = Satellite("Zed");
+  Satellite* ptr = &u.sat;
+
+  // Now has a Spaceship
+  u.ship = Spaceship(1337);
+
+  cout << ptr->name << endl;
+}
+```
+>>>>
+
+<slice>
+</slice>
+
+
+There is a solution though! With Vale's `uni`que keyword, unions become memory safe.
+
+
+We would say `u uni MyUnion = Satellite("Zed");`.
+
+
+When we have a unique reference to an object, [# We say unique "reference" here, but the object still lives inside the containing object. In a way, the reference is zero bytes wide and points right after itself.] it's usually the _only_ reference to the object, except:
+
+ * It's safe to _temporarily_ mutably alias a `uni` field of a `uni` object.
+ * We can use a pure function to make it immutable, so we can copy and alias it.
+ * If the compiler sees that we haven't modified anything yet, it will let us hold an alias to the object.
+ * We can always copy the object!
+
+
+Read more at [Unique Unions](/vision/unique-unions)!
+
+
+## Stack allocations
+
+A normal C program reuses memory on the stack for different types all the time.
+
+
+<<<<
+Here, we're calling `funcA`, which uses some space on the stack to hold its `int i`.
+
+
+Once `funcA` exits, `funcB` can reuse that same space on the stack.
+
+
+It's very likely that `funcB`'s' `string s` will be in the same memory that `funcA`'s `int i` was in.
+
+
+This is unfortunate, because that violates type stability.
+////
+```c++
+void funcA() {
+  int i = 5;
+  cout << i << endl;
+}
+void funcB() {
+  string s = "hello";
+  cout << s << endl;
+}
+void main() {
+  funcA();
+  funcB();
+}
+```
+>>>>
+
+
+`uni`que references are a solution for this, in the same ways they helped unions! You can read more at [Unique Unions](/vision/unique-unions).
+
+
+The compiler can also mitigate this with *shape stability*, which is more relaxed than type stability, and pretends that any two non-pointers are the same type.
+
+With shape stability, we can put anything on the stack, as long as it (recursively) only contains primitives, inline structs, and optionals. [# Optionals are a special case, they're the only union that's type-stable.]
+
+
+If that is not the case, and the object is not `uni`que (or automatically determined to be `uni`que) then Vale will put the object on the heap. [# Luckily, the heap is quite fast, because we have those free-lists handy!]
+
+
+# Conclusion
+
+Vale uses type stability to eliminate a lot of memory management overhead.
+
+Type stability usually has some drawbacks, but Vale addresses them with its other features, such as unique references, region borrow checker, pure functions, and shape stability.
+
+Additionally, it combines type stability and generational references to make hybrid-generational memory, which automatically borrows entire hierarchies of objects for temporary zero-cost access.
+
+
+This is a core part of Vale's vision, and we're looking forward to exploring these new techniques and bringing them to programmers worldwide!
