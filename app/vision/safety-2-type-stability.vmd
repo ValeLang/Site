@@ -18,10 +18,10 @@ One of those new memory management techniques is *type stability,* where an obje
 
 Type stability lets us have memory safety without the usual costs! It doesn't have:
 
- * garbage collection's run-time pauses, [#gcistgc]
- * reference counting's incrementing and decrementing costs,
- * a borrow checker's extra copies or bounds checking, [#bounds],
- * generational references' generation checks.
+ * Garbage collection's run-time pauses [#gcistgc]
+ * Reference counting's incrementing and decrementing costs
+ * A borrow checker's extra copies or bounds checking [#bounds],
+ * Generational references' generation checks
 
 
 With type stability, it is *memory-safe to mutably alias any object,* [#mutablyalias] which makes our programs wonderfully easy to write.
@@ -110,6 +110,8 @@ int main() {
 
 Our simple `malloc` + free-list strategy above is similar; if we use-after-free, we're still accessing something of the same type, so it's memory safe.
 
+<slice/>
+
 
 # The Benefits
 
@@ -158,6 +160,8 @@ This page explains how type stability is an _alternative_ to generational refere
 
 Type stability also has some drawbacks, which we'll explain further below. First, let's explore how Vale uses type-stability to speed up our programs.
 
+<slice/>
+
 
 # Type-Stable Regions
 
@@ -168,14 +172,25 @@ However, with the region borrow checker, we can designate that a certain call sh
 
 
 <<<<
-Here, we're calling `findPath`, and telling it to use a `'pool` allocator.
+Here, `main` is calling `findPath` in a way which makes `findPath` completely type-stable.
 
 
-Vale will recognize that the `'pool` allocator is a type-stable one, and compile `findPath` so that it skips generation checks for any new objects.
+Specifically, it's instructing `findPath` to use the (type-stable) `'pool` [#pool] allocator.
 
+
+`findPath` knows about two regions:
+
+ * `'r`, the region of all the parameters.
+ * `'b`, which it uses for allocations, because it's in the `'b {` position.
+
+
+Vale recognizes that the `'pool` allocator is a type-stable one, so will compile `findPath` so that it skips generation checks for anything in `'b`.
+
+
+Vale sees that we're using a type-stable allocator for region `'b`, so it knows it doesn't need generation checks for the `'b` region.
 ////
 ```vale
-fn main() {
+fn main() export {
   game = makeGame(...);
   // Call findPath, make it
   // use a pool.
@@ -186,8 +201,23 @@ fn main() {
       Location(8, 9));
   println(path);
 }
+
+fn findPath<'b, 'r>(
+  game 'r &Game,
+  from 'r Location,
+  to 'r Location)
+List<Location> 'b {
+  explored = Set<Location>();
+  // ...
+}
 ```
 >>>>
+
+<slice>
+#pool: Vale's `pool` allocator is similar to the `malloc` + free-list approach, except it pulls from a [slab](https://en.wikipedia.org/wiki/Slab_allocation) instead.
+
+This is much faster than `malloc`, and when the region goes out of scope, we can just blast away the entire slab instead of calling `free` for each object.
+</slice>
 
 
 # Pure Functions
@@ -195,31 +225,32 @@ fn main() {
 In the above `findPath` example, it will skip generation checks on any new objects because it knows that it's using type-stable allocators.
 
 
-However, it also skips generation checks on a lot of pre-existing objects too!
+However, it also skips generation checks on a lot of pre-existing objects too, with the `pure` keyword.
 
 
 <<<<
-This is because `findPath` is a *pure* function.
+Here, we're adding `pure` to `findPath`, which causes two things to happen:
 
+ * Vale prevents us from modifying anything in region `'r`.
+ * Vale knows that `'r` is immutable, and therefore type-stable.
 
-Pure functions use the [region borrow checker](safety-3-region-borrow-checker) to ensure that no pre-existing memory can change.
 ////
 ```vale
-fn findPath(
-  game &Game,
-  from Location,
-  to Location)
+fn findPath<'b, 'r>(
+  game 'r &Game,
+  from 'r Location,
+  to 'r Location)
 List<Location> pure 'b {
-  ...
+  explored = Set<Location>();
+  // ...
 }
 ```
 >>>>
 
 
-If memory can't change at all, then its shape can't change, which means it's type-stable.
-
-
 This knowledge helps the compiler eliminate a _lot_ of generation checks. [# It eliminates every generation check, except when load a non-owning reference field from an immutable non-unique struct. In that rare case, the compiler might perform a generation check.]
+
+<slice/>
 
 
 # Hybrid-Generational Memory
@@ -238,6 +269,8 @@ This is similar to how Rust programs do a bounds check to "dereference" an index
 
 You can read more about this at [Hybrid-Generational Memory](/vision/speed-6-hybrid-generational-memory).
 
+<slice/>
+
 
 # Vale Addresses the Drawbacks
 
@@ -249,6 +282,8 @@ The above `malloc` + free-list approach has some drawbacks, which Vale addresses
 We've been talking in terms of `malloc`, which can be pretty slow.
 
 However, Vale lets use use type stability with any allocator we'd like. Read more at [Allocators](/vision/speed-3-allocators)!
+
+<slice/>
 
 
 ## Memory Usage
@@ -265,6 +300,8 @@ So, we recommend using type stability for most function calls, unless they don't
 
 
 One can also benefit from manually making a type-stable region, if it contains a lot of allocations and few types.
+
+<slice/>
 
 
 ## Unions
@@ -331,9 +368,6 @@ void main() {
 ```
 >>>>
 
-<slice>
-</slice>
-
 
 There is a solution though! With Vale's `uni`que keyword, unions become memory safe.
 
@@ -351,6 +385,8 @@ When we have a unique reference to an object, [# We say unique "reference" here,
 
 Read more at [Unique Unions](/vision/unique-unions)!
 
+<slice/>
+
 
 ## Stack allocations
 
@@ -367,7 +403,7 @@ Once `funcA` exits, `funcB` can reuse that same space on the stack.
 It's very likely that `funcB`'s' `string s` will be in the same memory that `funcA`'s `int i` was in.
 
 
-This is unfortunate, because that violates type stability.
+This is unfortunate, because it violates type stability: we're accidentally reusing an `int`'s memory for a `string`.
 ////
 ```c++
 void funcA() {
@@ -395,6 +431,8 @@ With shape stability, we can put anything on the stack, as long as it (recursive
 
 
 If that is not the case, and the object is not `uni`que (or automatically determined to be `uni`que) then Vale will put the object on the heap. [# Luckily, the heap is quite fast, because we have those free-lists handy!]
+
+<slice/>
 
 
 # Conclusion
