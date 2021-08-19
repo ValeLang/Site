@@ -20,7 +20,7 @@ Type stability lets us have memory safety without the usual costs! It doesn't ha
 
  * Garbage collection's run-time pauses [#gcistgc]
  * Reference counting's incrementing and decrementing costs
- * A borrow checker's extra copies or bounds checking [#bounds],
+ * A borrow checker's extra copies or bounds checking [#bounds]
  * Generational references' generation checks
 
 
