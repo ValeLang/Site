@@ -164,7 +164,7 @@ Type stability also has some drawbacks, which we'll explain further below. First
 As explained in the [previous page](/vision/safety-1-generational-references), Vale can use generational references for memory safety: whenever we free an object, we increment its generation, ensuring that dereferencing any remaining references to it will fail an assertion.
 
 
-However, with the region borrow checker, we can designate that a certain call should use only type-stable allocators for anything it allocates.
+However, with the region borrow checker, we can designate that a certain call should use only type-stable allocators for anything it allocates, rather than relying on generation checks for memory safety.
 
 
 <<<<
