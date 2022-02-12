@@ -39,38 +39,7 @@ if [ $MODE == "build" ] ; then
     mkdir build/images
     mkdir build/guide
     mkdir build/vision
-    mkdir build/blog
     mkdir build/releases
-  fi
-fi
-
-if [ $TARGET == "raii-next-steps" ] || [ $TARGET == "all" ] ; then
-  echo "Doing raii-next-steps"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/raii-next-steps app/blog/raii-next-steps.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/raii-next-steps app/blog/raii-next-steps.vmd
-  if [ $? != 0 ]; then
-    echo "Failed!"
-    exit 1
-  fi
-fi
-
-if [ $TARGET == "cross-platform-core-vision" ] || [ $TARGET == "all" ] ; then
-  echo "Doing cross-platform-core-vision"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/cross-platform-core-vision app/blog/cross-platform-core-vision.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/cross-platform-core-vision app/blog/cross-platform-core-vision.vmd
-  if [ $? != 0 ]; then
-    echo "Failed!"
-    exit 1
-  fi
-fi
-
-if [ $TARGET == "zero-cost-refs-regions" ] || [ $TARGET == "all" ] ; then
-  echo "Doing zero-cost-refs-regions"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/zero-cost-refs-regions app/blog/zero-cost-refs-regions.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/zero-cost-refs-regions app/blog/zero-cost-refs-regions.vmd
-  if [ $? != 0 ]; then
-    echo "Failed!"
-    exit 1
   fi
 fi
 
@@ -104,43 +73,10 @@ if [ $TARGET == "vision-safety-type-stability" ] || [ $TARGET == "all" ] ; then
   fi
 fi
 
-if [ $TARGET == "generational-references" ] || [ $TARGET == "all" ] ; then
-  echo "Doing generational-references"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/generational-references app/blog/generational-references.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/generational-references app/blog/generational-references.vmd
-  if [ $? != 0 ]; then
-    echo "Failed!"
-    exit 1
-  fi
-  if [ $MODE == "build" ] ; then
-    cp build/blog/generational-references build/blog/generational-memory
-  fi
-fi
-
-if [ $TARGET == "hybrid-generational-memory" ] || [ $TARGET == "all" ] ; then
-  echo "Doing hybrid-generational-memory"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/hybrid-generational-memory app/blog/hybrid-generational-memory.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/hybrid-generational-memory app/blog/hybrid-generational-memory.vmd
-  if [ $? != 0 ]; then
-    echo "Failed!"
-    exit 1
-  fi
-fi
-
-if [ $TARGET == "hgm-static-analysis-part-1" ] || [ $TARGET == "all" ] ; then
-  echo "Doing hgm-static-analysis-part-1"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/hgm-static-analysis-part-1 app/blog/hgm-static-analysis-part-1.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/hgm-static-analysis-part-1 app/blog/hgm-static-analysis-part-1.vmd
-  if [ $? != 0 ]; then
-    echo "Failed!"
-    exit 1
-  fi
-fi
-
-if [ $TARGET == "beyond-rust-innovations" ] || [ $TARGET == "all" ] ; then
-  echo "Doing beyond-rust-innovations"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/beyond-rust-innovations app/blog/beyond-rust-innovations.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/beyond-rust-innovations app/blog/beyond-rust-innovations.vmd
+if [ $TARGET == "vision-speed-single-ownership" ] || [ $TARGET == "all" ] ; then
+  echo "Doing vision-speed-single-ownership"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/speed-1-single-ownership app/vision/speed-1-single-ownership.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/vision/speed-1-single-ownership app/vision/speed-1-single-ownership.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -149,8 +85,8 @@ fi
 
 if [ $TARGET == "comparisons" ] || [ $TARGET == "all" ] ; then
   echo "Doing comparisons"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/comparisons app/blog/comparisons.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/comparisons app/blog/comparisons.vmd
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/comparisons app/comparisons.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/comparisons app/comparisons.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -159,8 +95,8 @@ fi
 
 if [ $TARGET == "fearless" ] || [ $TARGET == "all" ] ; then
   echo "Doing fearless"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/fearless app/blog/fearless.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/fearless app/blog/fearless.vmd
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/fearless app/fearless.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/fearless app/fearless.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -301,16 +237,6 @@ if [ $TARGET == "roadmap" ] || [ $TARGET == "all" ] ; then
   cp app/roadmap/*.css build
 fi
 
-if [ $TARGET == "surprising-weak-refs" ] || [ $TARGET == "all" ] ; then
-  echo "Doing surprising-weak-refs"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/surprising-weak-refs app/blog/surprising-weak-refs.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --stdlib_dir $STDLIB/src --out build/blog/surprising-weak-refs app/blog/surprising-weak-refs.vmd
-  if [ $? != 0 ]; then
-    echo "Failed!"
-    exit 1
-  fi
-fi
-
 if [ $MODE == "build" ] ; then
   echo "Copying..."
   cp app/*.css build
@@ -318,7 +244,6 @@ if [ $MODE == "build" ] ; then
   cp app/components/*.js build/components
   cp app/components/*.png build/components
   cp app/images/* build/images
-  cp app/blog/*.svg build/blog
 fi
 
 echo "Done!"

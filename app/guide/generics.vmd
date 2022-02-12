@@ -36,11 +36,11 @@ Because of this, we can't call `crazyIvan` on the longer ship!
 ////
 ```vale
 interface ISpaceship {
-  fn length(virtual this &ISpaceship) int; «this»
-  fn honk(virtual this &ISpaceship) void;
+  func length(virtual this &ISpaceship) int; «this»
+  func honk(virtual this &ISpaceship) void;
 }
 
-fn longerShip(
+func longerShip(
     a &ISpaceship,
     b &ISpaceship)
 &ISpaceship {
@@ -52,18 +52,18 @@ fn longerShip(
 }
 
 struct Raza { ... }
-fn length(r &Raza impl ISpaceship) int { 4 }
-fn honk(r &Raza impl ISpaceship) { ... }
+func length(r &Raza impl ISpaceship) int { 4 }
+func honk(r &Raza impl ISpaceship) { ... }
 impl ISpaceship for Raza;
 
 struct Firefly { ... }
-fn length(f &Firefly impl ISpaceship) int { 3 }
-fn honk(f &Firefly impl ISpaceship) { ... }
+func length(f &Firefly impl ISpaceship) int { 3 }
+func honk(f &Firefly impl ISpaceship) { ... }
 impl ISpaceship for Firefly;
 
-fn crazyIvan(f &Firefly) { ... }
+func crazyIvan(f &Firefly) { ... }
 
-fn main() export {
+exported func main() {
   flametail = Firefly(...);
   serenity = Firefly(...);
   ship = longerShip(
@@ -77,7 +77,7 @@ fn main() export {
 >>>>
 
 <slice>
-#this: In future versions, this can be shortened to just `fn length(this) int;`.
+#this: In future versions, this can be shortened to just `func length(this) int;`.
 </slice>
 
 
@@ -96,11 +96,11 @@ In this case, we're calling it like `longerShip<Firefly>(...)`, which specifies 
 ////
 ```vale
 interface ISpaceship {
-  fn length(virtual self &ISpaceship) int;
-  fn honk(virtual self &ISpaceship);
+  func length(virtual self &ISpaceship) int;
+  func honk(virtual self &ISpaceship);
 }
 
-fn longerShip<T> «contract»
+func longerShip<T> «contract»
 (a &T, b &T) &T {
   if (a.length() > b.length()) {
     ret a;
@@ -111,16 +111,16 @@ fn longerShip<T> «contract»
 
 struct Raza { ... }
 impl ISpaceship for Raza;
-fn length(r &Raza impl ISpaceship) int { 4 }
-fn honk(r &Raza impl ISpaceship) { ... }
+func length(r &Raza impl ISpaceship) int { 4 }
+func honk(r &Raza impl ISpaceship) { ... }
 
 struct Firefly { ... }
-fn length(f &Firefly impl ISpaceship) int { 3 }
-fn honk(f &Firefly impl ISpaceship) { ... }
-fn crazyIvan(f &Firefly) { ... }
+func length(f &Firefly impl ISpaceship) int { 3 }
+func honk(f &Firefly impl ISpaceship) { ... }
+func crazyIvan(f &Firefly) { ... }
 impl ISpaceship for Firefly;
 
-fn main() export {
+exported func main() {
   flametail = Firefly(...);
   serenity = Firefly(...);
   ship =
@@ -155,7 +155,7 @@ struct Flock<T>
   ships List<T>;
 }
 
-fn main() export {
+exported func main() {
   f = Flock<Firefly>(List<Firefly>());
   f.ships!.add(Firefly(...));
   f.ships!.add(Firefly(...));
@@ -166,7 +166,7 @@ fn main() export {
   // Firefly.
   firstShip.crazyIvan();
 }
-```: `import stdlib.collections.*; struct Firefly {} fn crazyIvan(f &Firefly) {}`
+```: `import stdlib.collections.*; struct Firefly {} func crazyIvan(f &Firefly) {}`
 >>>>
 
 <slice/>

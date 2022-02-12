@@ -86,7 +86,7 @@ Vale's region borrow checker doesn't have the mutability xor aliasability restri
 
 Vale makes a few concessions here:
 
- * It's centered around single ownership ([moreso than C++ and Rust](/blog/raii-next-steps)), in a way that isn't complicated by the orthogonal complexity burdens of C++ (difficult syntax and compiler errors) or Rust (the borrow checker).
+ * It's centered around single ownership ([moreso than C++ and Rust](https://verdagon.dev/blog/raii-next-steps)), in a way that isn't complicated by the orthogonal complexity burdens of C++ (difficult syntax and compiler errors) or Rust (the borrow checker).
  * Vale is statically typed, which isn't as easy as a dynamically typed language like Javascript (in the short term, at least).
  * Vale does have more advanced features, such as `inl`, the region borrow checker, and mutability. However, you can write entire programs without ever needing to know these, they're just for optimization. [# This principle is called "gradual complexity." Other languages that do this well are C#, Swift, and Go.]
 
@@ -106,22 +106,22 @@ Vale is 100% safe, like Javascript, and much safer than Rust and C++.
     * It allows bugs in `unsafe` code (and FFI [# This stands for Foreign Function Interface, and refers to how Rust can call into C code.]) to trigger memory unsafety in safe Rust code.
     * A Rust program will bring a lot of `unsafe` code in via dependencies.
 
-Vale has no `unsafe`, and uses extern isolation to make it so bugs in C code can't trigger memory unsafety in Vale code. You can read more about this at [Absolute Safety in Vale](/blog/fearless).
+Vale has no `unsafe`, and uses extern isolation to make it so bugs in C code can't trigger memory unsafety in Vale code. You can read more about this at [Absolute Safety in Vale](https://verdagon.dev/blog/fearless).
 
 <slice/>
 
 
 # Fast
 
-Vale aims to be as fast as Rust, almost as fast as C++, and much faster than Javascript. [# Until we finish [HGM](/blog/hybrid-generational-memory) and have benchmarks, this is a goal, not a claim.]
+Vale aims to be as fast as Rust, almost as fast as C++, and much faster than Javascript. [# Until we finish [HGM](https://verdagon.dev/blog/hybrid-generational-memory) and have benchmarks, this is a goal, not a claim.]
 
  * Javascript uses dynamic typing and garbage collection, which both cause some overhead.
- * Rust is very fast. The borrow checker indirectly incurs only a little run-time overhead. [# See [Beyond Rust: Innovations in Safety, Speed, and Flexibility](/blog/beyond-rust-innovations) for more on the borrow checker's indirect run-time overhead.]
+ * Rust is very fast. The borrow checker indirectly incurs only a little run-time overhead. [# See [Beyond Rust: Innovations in Safety, Speed, and Flexibility](https://verdagon.dev/blog/beyond-rust-innovations) for more on the borrow checker's indirect run-time overhead.]
  * C++ is the fastest. It lets you do anything you want, with zero overhead.
 
-Vale's [hybrid-generational memory](/blog/hybrid-generational-memory) uses [generational references](/blog/generational-references) and scope tethering to make very fast code, with very little run-time overhead. [# This is still being implemented, but you can read about the design at [Hybrid-Generational Memory](/blog/hybrid-generational-memory)!]
+Vale's [hybrid-generational memory](https://verdagon.dev/blog/hybrid-generational-memory) uses [generational references](https://verdagon.dev/blog/generational-references) and scope tethering to make very fast code, with very little run-time overhead. [# This is still being implemented, but you can read about the design at [Hybrid-Generational Memory](https://verdagon.dev/blog/hybrid-generational-memory)!]
 
-Vale also uses [regions](/blog/zero-cost-refs-regions) to make it much easier to harness alternate allocation strategies.
+Vale also uses [regions](https://verdagon.dev/blog/zero-cost-refs-regions) to make it much easier to harness alternate allocation strategies.
 
 In practice, Vale could be:
 
@@ -129,7 +129,7 @@ In practice, Vale could be:
  * Slower, because the default behavior is to let the compiler use aggressive static analysis to decide whether something's "inline" or on the heap. [# This behavior keeps single ownership and move semantics easy.] [# One can override this with the `inl` or `yon` keywords for a specific allocation. (`yon` is a temporary name, we're still weighing better keywords.)] [# Vale could have a file- or function-level compiler directive to require `inl` or `yon` keywords on every allocation.]
  * About the same!
 
-For more thoughts on Rust and Vale (and other languages), check out [Beyond Rust: Innovations in Safety, Speed, and Flexibility](/blog/beyond-rust-innovations)!
+For more thoughts on Rust and Vale (and other languages), check out [Beyond Rust: Innovations in Safety, Speed, and Flexibility](https://verdagon.dev/blog/beyond-rust-innovations)!
 
 
 # Intended Use Cases
@@ -146,7 +146,7 @@ Vale's combination of speed, safety, and ease are universally useful, but it wil
 
  * Servers. Servers handle a lot of untrusted input, so 100% safety is critical. Vale aims to be the fastest 100%-safe language.
  * Games, because it's extremely fast, with memory safety to prevent odd bugs, while still being easy and flexible enough to allow quick iterating and innovating.
-    * When a game needs maximum performance and cares less about safety, one can switch to unsafe mode, to get C++'s speed. [# With [regions](/blog/zero-cost-refs-regions), it could be faster than C++ in some cases.]
+    * When a game needs maximum performance and cares less about safety, one can switch to unsafe mode, to get C++'s speed. [# With [regions](https://verdagon.dev/blog/zero-cost-refs-regions), it could be faster than C++ in some cases.]
  * Web/Android/iOS apps, because of its cross-compilability and easy interop with host environments. [# See [Seamless Speed, Safety, and Reuse Without Frameworks](cross-platform-core-vision) for more on the apps case.]
 
 

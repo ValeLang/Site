@@ -108,7 +108,7 @@ addMoonWithRandomMass(
     mass!: Int;
   }
 
-  fn addMoonWithRandomMass(
+  func addMoonWithRandomMass(
       planet: &Planet,
       moonName: Str) {
     let mass = hash(moonName);
@@ -116,7 +116,7 @@ addMoonWithRandomMass(
       Moon(name, mass));
   }
 
-  fn hash(s: Str) {
+  func hash(s: Str) {
     let chars = s.split("");
     let ints = chars..toInt();`} {this.noteAnchor("map")}{`
     ret ints.fold(0, +);`} {this.noteAnchor("reducer")}{`
@@ -151,7 +151,7 @@ mySS.root.planets.0.moons.0.mass = 50;`}
 {`superstructure MySuperstructure {
   ...
 
-  fn setPlanetAndMoonMass(
+  func setPlanetAndMoonMass(
       planet: &Planet, planetMass: Int,
       moon: &Moon, moonMass: Int) {
     planet.mass = planetMass;
@@ -250,7 +250,7 @@ mySS.root.bases.1.turrets.append(shootybob);`}
 {`superstructure MySuperstructure {
   ...
 
-  fn moveTurret(turret: &Turret, fromBase: &Base, toBase: &Base) {
+  func moveTurret(turret: &Turret, fromBase: &Base, toBase: &Base) {
     let turretOwningRef = fromBase.turrets.remove(fromBase.turrets.find(turret));
     toBase.turrets.append(turretOwningRef);
   }
@@ -288,7 +288,7 @@ moveTurret(shootybob, &mySS.root.bases.0, &mySS.root.bases.1);`}
 {`superstructure MySuperstructure {
   ...
 
-  fn addMoonWithRandomMass(
+  func addMoonWithRandomMass(
       planet: &Planet,
       moonName: Str) {
     let mass = hash(moonName);
@@ -296,7 +296,7 @@ moveTurret(shootybob, &mySS.root.bases.0, &mySS.root.bases.1);`}
       Moon(name, mass));
   }
 
-  fn hash(s: Str) {
+  func hash(s: Str) {
     let chars = s.split("");
     let ints = chars..toInt();
     ret ints.fold(0, +);
@@ -378,7 +378,7 @@ addMoonWithRandomMass(
   root struct Room {
     messages: List:String;
   }
-  fn addMsg(room: &Room, message: Str) {
+  func addMsg(room: &Room, message: Str) {
     room.messages.append(message);
   }
 }`}
@@ -411,7 +411,7 @@ addMoonWithRandomMass(
                     <Snippet>
 {``}<div className={ns("comment")}>{`// Server
 `}</div>{`
-fn main() export {
+func main() export {
   let charSS =
     ChatModel(Room(List()))));
 
@@ -447,7 +447,7 @@ fn main() export {
                     <Snippet>
 {``}<div className={ns("comment")}>{`// Client
 `}</div>{`
-fn main() export {
+func main() export {
 `}<div className={ns("comment")}>{`  // Make the client.
 `}</div>{`  let sssc =
     SimpleSuperstructureClient(

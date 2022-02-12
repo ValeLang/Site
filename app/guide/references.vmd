@@ -22,7 +22,7 @@ An owning reference keeps an object alive. When a struct has no owning reference
 Every mutable struct has exactly one owning reference pointing to it. [#ownership]
 ////
 ```vale
-fn main() export {
+exported func main() {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
 
@@ -49,7 +49,7 @@ struct Vec3 imm {
   y int;
   z int;
 }
-fn main() export {
+exported func main() {
   firstRef = Vec3(3, 4, 5);
   otherRef = &firstRef;
   // Can use both freely.
@@ -71,7 +71,7 @@ This is used to influence when the struct is `drop`ped, to keep it alive for lon
 In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
 ////
 ```vale
-fn main() export {
+exported func main() {
   a = Spaceship(); «alocal»
   b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
@@ -84,10 +84,10 @@ fn main() export {
 It works the same way when passing an owning reference to a function.
 ////
 ```vale
-fn foo(b Spaceship) {
+func foo(b Spaceship) {
   println(b.name);
 }
-fn main() export {
+exported func main() {
   a = Spaceship("Raza");
   foo(a); // Move a into foo's b
   // Can't use a now.
@@ -113,9 +113,10 @@ On the next line, `a` is destroyed, but the owning reference that it contained s
 
 # Non-Owning References
 
-Vale has two kinds of non-owning references:
+Vale has three [# Soon to be two; we'll be removing the pointer reference soon, once HGM is complete.] kinds of non-owning references:
 
- * The *Constraint Reference*, which halts the program when we deallocate the struct it's pointing at (in development and testing). [# Specifically, in assist mode, see below.]
+ * The *Pointer Reference*, which asserts the target object is live when we dereference it.
+ * The *Borrow Reference*, which asserts the target object is live when we make a borrow ref local variable (and then "tethers" the object so it's not freed).
  * The *Weak Reference*, which becomes null when we deallocate the struct it's pointing at.
 
 These are explained in more detail below.
@@ -125,109 +126,67 @@ Note that there are no shared-ownership references [# Like C++'s `shared_ptr` or
 <slice />
 
 
-## Constraint References
+## Pointer References
 
 <<<<
-We can use constraint references to *detect when we accidentally destroy an object we're still pointing at.* [# A constraint reference is similar to a foreign key constraint in SQL: it prevents us from deallocating the object it points to.]
+The most basic kind of reference is a *pointer* reference.
 
-This behavior helps us find logic errors. [# This behavior is turned off in production, see resilient mode below.] [# This behavior is *not* a memory safety feature. Vale's memory safety comes from resilient mode's [hybrid-generational memory](/blog/hybrid-generational-memory).]
+Whenever we dereference a pointer reference, the program asserts that the target object is still alive.
 
-To make a constraint reference, use the & symbol.
+To make a pointer reference, use the `*` symbol.
 
-In this example, we're making a constraint reference to `ship` and giving it to the `foo` function.
+In this example, we're making a pointer reference to `ship` and giving it to the `foo` function.
 ////
 ```vale
 struct Spaceship {
   name str;
   numWings int;
 }
-fn foo(s &Spaceship) {
+func foo(s *Spaceship) {
   println(s.name);
 }
-fn main() export {
+exported func main() {
+  ship = Spaceship("Serenity", 2);
+  foo(*ship);
+}
+```: `import stdlib.*;`
+>>>>
+
+
+## Borrow References
+
+<<<<
+The drawback to the above pointer references is that they cause an assert every time we dereference an object.
+
+A borrow reference will instead do the assert once, when we make a local (or parameter) borrow reference.
+
+Additionally, when we try to deallocate an object, the program asserts that there are no borrow references pointing at it. [# A borrow reference is similar to a foreign key constraint in SQL: it prevents us from deallocating the object it points to.]
+
+To make a borrow reference, use the & symbol.
+
+In this example, we're making a borrow reference to `ship` and giving it to the `foo` function.
+////
+```vale
+struct Spaceship {
+  name str;
+  numWings int;
+}
+func foo(s &Spaceship) {
+  println(s.name);
+}
+exported func main() {
   ship = Spaceship("Serenity", 2);
   foo(&ship);
 }
 ```: `import stdlib.*;`
 >>>>
 
-For example, if we have an open UI dialog for editing an entry in a given spreadsheet, the dialog would want a constraint reference to the entry. [# A constraint reference is the best kind of reference to use here. A weak reference just delays the halt until we try to dereference it. It's often better to catch bugs sooner.]
-
-<<<<
-If we delete an object while a constraint reference is pointing to it, the program halts and shows which constraint reference was violated. [# Planned feature; see [Roadmap](/roadmap)!]
-
-In this example, Vale detects that shipCRef becomes a dangling [# Dangling means pointing to a deallocated struct.] pointer and halts the program so the developer can fix it.
-
-To avoid the program halting:
-
- * Keep the object alive for longer.
- * Get rid of the constraint reference sooner. [# For example, by copying the needed data out. In this example, we could have copied into a `wings` local.]
- * If the reference doesn't actually require the object to be alive, use a weak reference instead.
-////
-```vale
-struct Spaceship {
-  name str;
-  wings int;
-}
-fn takeAndDestroy(ship Spaceship) {
-  println("Name: " + ship.name);
-
-  // Ship destroyed here, so
-  // constraint violated here.
-}
-fn main() export {
-  // ship contains an owning ref
-  ship = Spaceship("Serenity", 2);
-  // shipCRef contains a constraint ref
-  shipCRef = &ship;
-
-  // Moves ship into function.
-  takeAndDestroy(ship);
-
-  println("Wings: " + shipCRef.wings);
-}
-```stdout
-Name: Serenity
-Error: Dangling pointers detected!«extrainfo»
-```: `import stdlib.*;`
->>>>
-
-<slice>
-#extrainfo: Soon, there will be more details printed out here, like:
-```
-Dead object:
-  takeAndDestroy::ship main.vale:5:19
-Dangling pointers:
-  main::shipCRef main.vale:13:3
-Continue? [y,N]
-```
-</slice>
-
-
-### Constraint Modes
-
-We can also configure Vale to have different behavior for constraint references.
-
- * Assist mode behaves as previously described; it halts when we *make* dangling references.
-    * Assist mode is slower, because it uses reference counting.
- * Resilient mode halts when we *dereference* dangling references. [# In the last example, the program would instead have crashed on the final println, because that's when the `shipCRef` constraint ref is used.]
-    * Resilient mode uses [hybrid-generational memory](/blog/hybrid-generational-memory) which uses some memory per-object but is incredibly fast.
- * Unsafe mode turns off all protections, and compiles them to raw pointers.
-
-Different modes will be useful at different times.
-
- * Most apps will want to release in resilient mode, but develop and test in assist mode to reduce their risk of *halts*.
- * Games (for example) will release in unsafe mode, but develop and test in assist mode to reduce their risk of *memory unsafety*. [#betterthancpp]
-
-<slice>
-#betterthancpp: This is safer than C++, because we can do our testing in assist mode, giving us more confidence that we aren't even _making_ any pointers dangle, which makes us even more confident that we wouldn't accidentally _dereference_ any dangling pointers.
-</slice>
-
+<slice/>
 
 
 ## Read-only or Read-write References
 
-A constraint reference can either be *read-only* (e.g. `&Spaceship`) or *read-write* (e.g. `&!Spaceship`).
+A reference can either be *read-only* (e.g. `&Spaceship`) or *read-write* (e.g. `&!Spaceship`).
 
 We can get a read-only reference to an object with `&`, like `&ship`.
 
@@ -236,14 +195,14 @@ We can get a read-write reference to an object with `&!`, like `&!ship`.
 <<<<
 We can't use a readonly reference to change an object. This example would fail to compile:
 ////
-```Vale
+```vale
 struct Spaceship {
   fuel int;
 }
-fn main() export {
+exported func main() {
   ship = Spaceship(10);
   readonlyRef = &ship;
-  mut readonlyRef.fuel = 20; // error
+  set readonlyRef.fuel = 20; // error
 }
 ```: notest
 >>>>
@@ -253,16 +212,16 @@ Note that even if _we_ have a read-only reference to a ship, _someone else_ can 
 
 In this example, `mut readwriteRef.fuel = 20;` is changing the object, even though we have a read-only reference `readonlyRef` to it.
 ////
-```Vale
+```vale
 struct Spaceship {
   fuel int;
 }
-fn main() export {
+exported func main() {
   ship = Spaceship(10);
   readonlyRef = &ship;
 
   readwriteRef = &!ship;
-  mut readwriteRef.fuel = 20;
+  set readwriteRef.fuel = 20;
 
   println(readonlyRef.fuel);
 }
@@ -284,23 +243,23 @@ In these situations, we use *weak references*.
 
 A weak reference will set itself to null when the object it's pointing at is destroyed.
 
-We can make a weak reference with `&&`.
+We can make a weak reference with `**`.
 
-To use a weak reference, call `lock`, which will return an optional constraint reference (`?&Spaceship`). We can then check if it contains a `&Spaceship` or is empty.
+To use a weak reference, call `lock`, which will return an optional pointer reference (`?*Spaceship`). We can then check if it contains a `&*Spaceship` or is empty.
 
-In other words, we cannot reach into a struct through a weak reference directly; we must lock it to try to make it into a constraint reference first.
+In other words, we cannot reach into a struct through a weak reference directly; we must lock it to try to make it into a pointer reference first.
 
-In this example, we're making a `o` constraint reference from the `ship.origin` weak reference.
+In this example, we're making a `o` pointer reference from the `ship.origin` weak reference.
 ////
 ```vale
-struct Base weakable {
+weakable struct Base {
   name str;
 }
 struct Spaceship {
   name str;
-  origin &&Base;
+  origin **Base;
 }
-fn printShipBase(ship &Spaceship) {
+func printShipBase(ship &Spaceship) {
   maybeOrigin = lock(ship.origin); «lock»«iflet»
   if (not maybeOrigin.isEmpty()) { «mat»
     o = maybeOrigin.get();
@@ -309,9 +268,9 @@ fn printShipBase(ship &Spaceship) {
     println("Ship base unknown!");
   }
 }
-fn main() export {
+exported func main() {
   base = Base("Zion");
-  ship = Spaceship("Neb", &&base);
+  ship = Spaceship("Neb", **base);
 
   printShipBase(&ship);
 
@@ -355,7 +314,7 @@ struct Spaceship {
   name str;
   numWings int;
 }
-fn main() export {
+exported func main() {
   ship = inl Spaceship("Enterprise", 4);
   println(ship.name);
 }
@@ -382,7 +341,7 @@ struct Spaceship {
   name str;
   engine inl Engine;
 }
-fn main() export {
+exported func main() {
   ship = Spaceship(
       "Serenity",
       inl Engine("TCB", 10));

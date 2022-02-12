@@ -29,7 +29,7 @@ The pattern on the left receives incoming data from the expression on the right.
 To the left of this `=` is a pattern that stores the incoming data into a local named a.
 ////
 ```vale
-fn main() export {
+exported func main() {
   a = 3 + 4;
 }
 ```
@@ -49,9 +49,9 @@ struct Vec3 imm {
   y int;
   z int;
 }
-fn makeVec() Vec3 { Vec3(3, 4, 5) }
+func makeVec() Vec3 { Vec3(3, 4, 5) }
 
-fn main() export {
+exported func main() {
   // Without destructure pattern:
   tempVec = makeVec();
   a = tempVec.x;
@@ -59,10 +59,10 @@ fn main() export {
   c = tempVec.z;
 
   // Equivalent, using destructure:
-  Vec3(d, e, f) = makeVec();
+  Vec3[d, e, f] = makeVec();
 
   // Equivalent; can leave off the type:
-  (g, h, i) = makeVec();
+  [g, h, i] = makeVec();
 
   println("a: " + a);
   println("d: " + d);
@@ -94,7 +94,7 @@ Here, we're using destructuring for this function's parameters.
 // Using above Vec3
 
 // Without destructuring:
-fn refuelA(
+func refuelA(
     vec Vec3,
     len int) Vec3 {
   Vec3(
@@ -104,8 +104,8 @@ fn refuelA(
 }
 
 // With destructuring:
-fn refuelB(
-    Vec3(x, y, z),
+func refuelB(
+    Vec3[x, y, z],
     len int) Vec3 {
   Vec3(x * len, y * len, z * len)
 }
@@ -123,7 +123,7 @@ Here, we're using a match statement to check what the user entered.
 In patterns, `_` matches any incoming data and discards it.
 ////
 ```
-fn main() export {
+exported func main() {
   mat inputInt() {
     1 { println("One!"); }
     2 { println("Two!"); }
@@ -147,7 +147,7 @@ impl ISpaceship for Firefly;
 struct Raza { name str; fuel int; }
 impl ISpaceship for Raza;
 
-fn main() export {
+exported func main() {
   serenity = Firefly("Serenity", 2);
 
   mat serenity {

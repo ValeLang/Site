@@ -27,20 +27,20 @@ We can, using *interfaces*!
 ////
 ```vale
 struct Human { ... }
-fn hop(s &Human) { ... }
-fn skip(s &Human) { ... }
+func hop(s &Human) { ... }
+func skip(s &Human) { ... }
 
-fn hopscotch(s &Human) {
+func hopscotch(s &Human) {
   s.hop();
   s.skip();
   s.hop();
 }
 
 struct DarkElf { ... }
-fn hop(s &DarkElf) { ... }
-fn skip(s &DarkElf) { ... }
+func hop(s &DarkElf) { ... }
+func skip(s &DarkElf) { ... }
 
-fn main() export {
+exported func main() {
   wulfgar = Human(...);
   hopscotch(&wulfgar);
 }
@@ -59,27 +59,27 @@ Last, we change `hopscotch` to take in a `&Bipedal`, and now we can call it with
 ////
 ```vale
 interface Bipedal {
-  fn hop(virtual b &Bipedal) void; «bettersyntax»
-  fn skip(virtual b &Bipedal) void;
+  func hop(virtual b &Bipedal) void; «bettersyntax»
+  func skip(virtual b &Bipedal) void;
 }
 
 struct Human { ... }
-fn hop(h &Human impl Bipedal) { ... }
-fn skip(h &Human impl Bipedal) { ... }
+func hop(h &Human impl Bipedal) { ... }
+func skip(h &Human impl Bipedal) { ... }
 impl Bipedal for Human;
 
-fn hopscotch(b &Bipedal) {
+func hopscotch(b &Bipedal) {
   b.hop();
   b.skip();
   b.hop();
 }
 
 struct DarkElf { ... }
-fn hop(s &DarkElf impl Bipedal) { ... }
-fn skip(s &DarkElf impl Bipedal) { ... }
+func hop(s &DarkElf impl Bipedal) { ... }
+func skip(s &DarkElf impl Bipedal) { ... }
 impl Bipedal for DarkElf;
 
-fn main() export {
+exported func main() {
   wulfgar = Human(...);
   hopscotch(&wulfgar);
   drizzt = DarkElf(...);
@@ -106,10 +106,10 @@ In this example, we're giving it a lambda for its `launch` method.
 ////
 ```vale
 interface IShip {
-  fn launch(virtual ship &IShip);
+  func launch(virtual ship &IShip);
 }
 
-fn main() export {
+exported func main() {
   x = IShip({ println("Launching!"); });
   // x is an unnamed substruct which
   // implements IShip.
@@ -140,16 +140,16 @@ The current syntax is closer to the way Vale internally thinks about interfaces.
 ////
 ```
 interface Bipedal {
-  fn hop(self) void;
-  fn skip(self) void;
+  func hop(self) void;
+  func skip(self) void;
 }
 
 struct Human {
   ...
 
   impl Bipedal {
-    fn hop(&self impl) { ... }
-    fn skip(&self impl) { ... }
+    func hop(&self impl) { ... }
+    func skip(&self impl) { ... }
   }
 }
 ```
@@ -197,7 +197,7 @@ In this example, when we call `MaybeInt(7)`, the compiler finds that the `SomeIn
 ```vale
 // Using above MaybeInt/NoInt/SomeInt
 
-fn main() export {
+exported func main() {
   x = MaybeInt(7);
   // x is of type SomeInt.
 
@@ -220,7 +220,7 @@ We normally call a function by name, such as the `MaybeInt(7)` above. However, i
 ```vale
 // Using above MaybeInt/NoInt/SomeInt
 
-fn main() export {
+exported func main() {
   // These statements are equivalent:
   x MaybeInt = MaybeInt(7);
   x MaybeInt = (7);
@@ -234,9 +234,9 @@ This saves a lot of typing when calling functions.
 ```vale
 // Using above MaybeInt/NoInt/SomeInt
 
-fn foo(m MaybeInt) { ... }
+func foo(m MaybeInt) { ... }
 
-fn main() export {
+exported func main() {
   foo(SomeInt(7));
   // Equivalent, calling sealed
   // interface constructor:

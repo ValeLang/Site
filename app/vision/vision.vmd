@@ -113,7 +113,7 @@ This works because we know nobody will change the object's type. [#inlint]
 ```vale
 struct Spaceship { engine Engine; }
 struct Engine { fuel! int; }
-fn main() export {
+exported func main() {
    ship = Spaceship(Engine(1337));
    alias_a = &!ship;
    alias_b = &!ship;

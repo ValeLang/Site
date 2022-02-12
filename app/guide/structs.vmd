@@ -27,7 +27,7 @@ struct Spaceship {
   numWings int;
 }
 
-fn main() export {
+exported func main() {
   ship = Spaceship("Serenity", 2);
   println(ship.name);
 }
@@ -49,11 +49,11 @@ struct Spaceship {
   name str;
   numWings int;
 }
-fn Spaceship() Spaceship {
+func Spaceship() Spaceship {
   Spaceship("Serenity", 2)
 }
 
-fn main() export {
+exported func main() {
   ship = Spaceship();
   println(ship.name);
 }
@@ -72,7 +72,7 @@ Every mutable struct has exactly one owning reference at any given time. [# Ther
 When we create a mutable struct, we get the owning reference to it. When the owning reference disappears, the struct is automatically deallocated (via `drop`, explained below).
 ////
 ```vale
-fn main() export {
+exported func main() {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
 
@@ -102,7 +102,7 @@ We can make another reference to a struct with the `&` symbol. It will be a non-
 In this example, the type of `owningRef` is `Spaceship`, and the type of `nonOwningRef` is `&Spaceship`.
 ////
 ```vale
-fn main() export {
+exported func main() {
   owningRef = Spaceship("Serenity", 2);
   nonOwningRef = &owningRef;
 }
@@ -122,7 +122,7 @@ This is used to influence when the struct is `drop`ped, to keep it alive for lon
 In this example, the `a` local is giving up the owning reference, and we're putting it into the `b` local.
 ////
 ```vale
-fn main() export {
+exported func main() {
   a = Spaceship("Serenity", 2); «alocal»
   b = a; // Move the ship from a to b.
   // b now owns the Spaceship.
@@ -135,10 +135,10 @@ fn main() export {
 It works the same way when passing an owning reference to a function.
 ////
 ```vale
-fn foo(b Spaceship) {
+func foo(b Spaceship) {
   println(b.name);
 }
-fn main() export {
+exported func main() {
   a = Spaceship("Serenity", 2);
   // Move the Spaceship from a
   // into foo's b
@@ -168,7 +168,7 @@ Here we can see where the implicit call to `drop` is.
 `drop` is called when the owning reference goes away, which in this case is `ship`.
 ////
 ```vale
-fn main() export {
+exported func main() {
   ship = Spaceship("Serenity", 2);
   // ship is an owning reference
 
@@ -178,7 +178,7 @@ fn main() export {
 }
 
 // Implicit:
-// fn drop(s Spaceship) {
+// func drop(s Spaceship) {
 //   destruct s; «destruct» // frees
 // }
 ```: `import stdlib.*; struct Spaceship { name str; fuel int; }`
@@ -193,11 +193,11 @@ We can specify our own `drop` function. A custom drop could be used to:
 Rule of thumb: if something must happen at some point in the future, put it in a drop function. Vale will make sure that it's not forgotten. [#raii]
 
 <slice>
-#drop: Drop functions also appear in C++ ("destructors") and Rust. Vale's drop functions are like those but more flexible: they can return values and even take extra parameters. In those cases, they must be called manually. See [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for more!
+#drop: Drop functions also appear in C++ ("destructors") and Rust. Vale's drop functions are like those but more flexible: they can return values and even take extra parameters. In those cases, they must be called manually. See [The Next Steps for Single Ownership and RAII](https://verdagon.dev/blog/raii-next-steps) for more!
 
 #destruct: The destruct keyword is syntactic sugar for a "move destructure" pattern, see [Pattern Matching](/guide/patterns) for more.
 
-#raii: This is an incredibly powerful pattern, see [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for more.
+#raii: This is an incredibly powerful pattern, see [The Next Steps for Single Ownership and RAII](https://verdagon.dev/blog/raii-next-steps) for more.
 </slice>
 
 
@@ -212,7 +212,7 @@ Because of that, we can have multiple owning references to it, like Java or Pyth
 
 Vale also automatically derives the functions `println`, `str`, `hash`, `==`, and more.
 
-Immutable structs cannot have drop functions. [# See [The Next Steps for Single Ownership and RAII](/blog/raii-next-steps) for the reasoning behind this.]
+Immutable structs cannot have drop functions. [# See [The Next Steps for Single Ownership and RAII](https://verdagon.dev/blog/raii-next-steps) for the reasoning behind this.]
 ////
 ```vale
 struct Spaceship imm {
@@ -220,7 +220,7 @@ struct Spaceship imm {
   numWings int;
 }
 
-fn main() export {
+exported func main() {
   ship = Spaceship("Serenity", 2);
   ship2 = ship;
   println(ship.numWings);
@@ -250,7 +250,7 @@ We normally call a function by name, such as the `Spaceship("Serenity", 2)` abov
 ```vale
 // Using above Spaceship struct
 
-fn main() export {
+exported func main() {
   // These statements are equivalent:
   x Spaceship = Spaceship("Raza", 2);
   x Spaceship = ("Raza", 2);
@@ -264,9 +264,9 @@ This saves a lot of typing when calling functions.
 ```vale
 // Using above Spaceship struct
 
-fn foo(s Spaceship) { ... }
+func foo(s Spaceship) { ... }
 
-fn main() export {
+exported func main() {
   // These statements are equivalent:
   foo(Spaceship("Raza", 2));
   foo(("Raza", 2));

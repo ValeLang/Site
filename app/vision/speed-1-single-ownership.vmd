@@ -1,3 +1,40 @@
+---
+title: Single Ownership
+subtitle: Vale's Vision: Speed, Part 1
+realm: vision
+path: vision/speed-1-single-ownership
+layout: annotated
+namespace: c-blog m-annotated
+---
 
-it means we can use the stack
-it means no branching whenever we let go of an object
+
+Welcome to the [Vale's Vision](/vision/vision) series, where we describe where Vale is going and how we plan to get there!
+
+For those unfamiliar, *Vale* is a programming language that combines new memory management techniques in order to be easy to learn, memory safe, deterministic, and fast.
+
+
+This page talks about the first ingredient to Vale's speed: *single ownership.*
+
+Single ownership is when we *keep track of who is responsible for destroying an object.*
+
+
+# Single Ownership in Vale
+
+reference the two single ownership articles
+
+whirlwind tour of how it works
+
+ * `ship Spaceship = ...` is an inline value.
+ * `ship ^Spaceship = ...` is an *owning reference* to something in the heap.
+ * `ship &Spaceship = ...` is a *non-owning reference* to something in the heap.
+    * We also call this a *borrow reference*, for reasons we'll explain later.
+
+talk about how its the way to get speed *and* safety.
+
+talk about how its not that difficult.
+
+talk about how it gives us RAII which is pretty awesome.
+
+we want to show everyone that single ownership can be easy.
+
+(continue here)
