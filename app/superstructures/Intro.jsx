@@ -237,7 +237,7 @@ class Page extends React.Component {
                     <Snippet>
 {``}<div className={ns("comment")}>{`// Server
 `}</div>{`
-fn main() export {
+func main() export {
   let mySS =
     MySuperstructure(
      SolarSystem(
@@ -279,7 +279,7 @@ fn main() export {
                     <Snippet>
 {``}<div className={ns("comment")}>{`// Client
 `}</div>{`
-fn main() export {
+func main() export {
 `}<div className={ns("comment")}>{`  // Make the client.
 `}</div>{`  let sssc =
     SimpleSuperstructureClient(

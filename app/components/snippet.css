@@ -76,6 +76,10 @@
   font-weight: normal;
   color: #FFFFFF;
 }
+.c-snippet .While {
+  font-weight: normal;
+  color: #FF8040;
+}
 .c-snippet .Lookup {
   font-weight: normal;
   color: #FFFFFF;

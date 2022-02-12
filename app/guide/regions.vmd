@@ -48,19 +48,19 @@ struct Ship {
   size int;
 }
 
-fn biggestShipName<'a ro>(
+func biggestShipName<'a ro>(
   ships 'a &List<Ship>)
 str {
-  biggest! = ships.0;
-  each ships (ship){
+  biggest = ships.0;
+  foreach ship in ships {
     if (ship.size > biggest.size) {
-      mut biggest = ship;
+      set biggest = ship;
     }
   }
   ret biggest.name;
 }
 
-fn main() export {
+exported func main() {
   allShips = List(
     Ship("Serenity", 9),
     Ship("Raza", 7));
@@ -105,7 +105,7 @@ struct Ship {
   from &Base;
 }
 
-fn makeGame() Game {
+func makeGame() Game {
   bases List<Base> = ...;
   ships = List(
     Ship("Serenity", bases.0),
@@ -113,7 +113,7 @@ fn makeGame() Game {
   ret Game(bases, ships);
 }
 
-fn main() export {
+exported func main() {
   mutex = Mutex('a makeGame());
 
   // Open for reading
@@ -125,7 +125,7 @@ fn main() export {
   // Open for writing
   rwLock = mutex.rwlock();
   rwGame = lock.root;
-  mut rwGame.ships.0.from =
+  set rwGame.ships.0.from =
     rwGame.bases.0;
   drop(rwLock);
 }
@@ -176,7 +176,7 @@ struct Curve {
   origin Vec2;
   scale Vec2;
 }
-fn getYForX(curve &Curve, x float) {
+func getYForX(curve &Curve, x float) {
   origin.y + scale.y * pow(
     x * scale.x + origin.x, 2)
 }
@@ -184,16 +184,16 @@ fn getYForX(curve &Curve, x float) {
 struct Drawable {
   segments List<Vec2>;
 }
-fn segmentify(curve &Curve) Drawable {
+func segmentify(curve &Curve) Drawable {
   results = List<Vec2>();
-  each range(0, 10) (x){
+  foreach x in range(0, 10) {
     y = curve.getYForX(x);
     results.add(Vec2(x, y));
   }
   ret Drawable(results);
 }
 
-fn segmentifyAndSend<'a, 'b>(
+func segmentifyAndSend<'a, 'b>(
     curve 'a &Curve,
     drawables 'b &List<Drawable>) {
   // Assembles Drawable
@@ -238,17 +238,17 @@ Because the return isn't `'a`, the compiler knows that `Drawable` is a regioned 
 Now, `segmentifyAndSend` doesn't cause a secede!
 ////
 ```vale
-fn segmentify<'a>(
+func segmentify<'a>(
     curve 'a &Curve) Drawable {
   results = List<Vec2>();
-  each range(0, 10) (x){
+  foreach x in range(0, 10) {
     y = curve.getYForX(x);
     results.add(Vec2(x, y));
   }
   ret Drawable(results);
 }
 
-fn segmentifyAndSend<'a, 'b>(
+func segmentifyAndSend<'a, 'b>(
     curve 'a &Curve,
     drawables 'b &List<Drawable>) {
   // Assembles Drawable

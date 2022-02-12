@@ -1,0 +1,31 @@
+
+
+monomorphization happens by default, but it doesnt have to, because optimization is really just hints.
+
+
+type erasure is when we ignore those hints.
+
+
+type erasure is particularly cool because it lets us:
+- have faster compile times!
+- distribute pre-built pre-monomorphizing VAST!
+- have smaller code!
+  - do JITs someday?
+  - do profile-guided monomorphization and PGO
+
+
+we can swap out entire new regions without massive amounts of refactoring
+
+
+we can have a config file that fine tunes our memory usage, and it can be completely ignored if we want!
+
+
+
+it gives us cross-compilation!
+
+
+it lets our region implementations evolve as time goes on, because they all have the same semantics
+
+
+it means we can just slide in a more powerful allocator wherever we want, with barely any effort. we dont need to wire things up with bumpalo or Vec!
+
