@@ -29,11 +29,7 @@ Use at your own risk, and report any bugs to the github!
 
 ### 0.1.4 "Valerian" Release
 
-Download:
-
- * Ubuntu: [ValeCompiler-0.1.4.2-Ubuntu.zip](https://github.com/ValeLang/Vale/releases/download/v0.1.4/ValeCompiler-0.1.4.2-Ubuntu.zip)
- * Mac: [ValeCompiler-0.1.4.2-Mac.zip](https://github.com/ValeLang/Vale/releases/download/v0.1.4/ValeCompiler-0.1.4.2-Mac.zip)
- * Windows: [ValeCompiler-0.1.4.2-Win.zip](https://github.com/ValeLang/Vale/releases/download/v0.1.4/ValeCompiler-0.1.4.2-Win.zip)
+You can download binaries from the [releases page](https://github.com/ValeLang/Vale/releases/tag/v0.1.4).
 
 This release adds:
 
