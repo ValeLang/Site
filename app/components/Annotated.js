@@ -8,17 +8,13 @@ const anchors = document.querySelectorAll(".m-annotated.note-anchor");
 
 const urlParams = new URLSearchParams(window.location.search);
 
+const jsEnabled = urlParams.get("nojs") == null;
 
 // Start the window with max 928px to disable this entire script, and stick
 // with isolated margins.
 
 function currentlyWide() {
   return window.matchMedia('screen and (min-width: 929px)').matches;
-}
-
-if (currentlyWide()) {
-  page.classList.remove("nojs");
-  page.classList.add("jsmargined");
 }
 
 function offset(el) {
@@ -82,7 +78,10 @@ function relayoutNotes() {
   // }
 }
 
-if (currentlyWide()) {
+if (jsEnabled && currentlyWide()) {
+  page.classList.remove("nojs");
+  page.classList.add("jsmargined");
+  
   window.addEventListener("load", () => {
     let delay = 50;
     (function relayoutNotesAndScheduleNext() {
