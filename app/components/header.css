@@ -30,7 +30,7 @@ a.header:hover {
 }
 .header.title {
 	font-size: 26pt;
-	font-weight: bold;
+	font-weight: 500;
   color: #D0D0D0;
   position: relative;
   top: -1px;
