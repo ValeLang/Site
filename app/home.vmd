@@ -41,7 +41,7 @@ Read comparisons with [C++, Javascript, and Rust](/comparisons)!
 
 *Recent posts:*
 
- * [Data Races in Python, Despite the Global Interpreter Lock](/blog/python-data-races)
+ * [Data Races in Python, Despite the Global Interpreter Lock](https://verdagon.dev/blog/python-data-races)
  * [Seamless, Fearless, Structured Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency)
  * [Generational References](https://verdagon.dev/blog/generational-references)
  * [Hybrid-Generational Memory](https://verdagon.dev/blog/hybrid-generational-memory)
