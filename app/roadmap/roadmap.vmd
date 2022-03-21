@@ -7,12 +7,12 @@ namespace: roadmap
 ---
 
 <<<<
-Vale is currently version 0.1: it's now a working prototype.
+Vale is currently version 0.2: it's now a usable experimental compiler!
 
-We're currently 60% of the way to version 0.2!
+We're currently 10% of the way to version 0.3.
 ////
  . <span class="icon done"></span> Done
- . <span class="icon todo"></span> Planned for v0.2
+ . <span class="icon todo"></span> Planned for v0.3
  . <span class="icon later"></span> Planned for Later
 >>>>
 
@@ -28,7 +28,7 @@ We're currently 60% of the way to version 0.2!
  . <span class="icon done"></span> Virtual Functions
  . <span class="icon done"></span> Extern Calls
  . <span class="icon done"></span> Overloads
- . <span class="icon done"></span> Pure Functions
+ . <span class="icon todo"></span> Pure Functions
 
 *Structs*
 
@@ -142,19 +142,20 @@ We're currently 60% of the way to version 0.2!
 
 *Regions*
 
- . <span class="icon later"></span> Basics
- . <span class="icon later"></span> Read-only Regions
- . <span class="icon later"></span> Transmigrating
- . <span class="icon later"></span> Seceding
+ . <span class="icon todo"></span> Basics
+ . <span class="icon todo"></span> Read-only Regions
+ . <span class="icon todo"></span> Transmigrating
+ . <span class="icon todo"></span> Seceding
+ . <span class="icon todo"></span> Seamless Concurrency
 
 ////
 
 *Structs*
 
- . <span class="icon later"></span> Derive drop
+ . <span class="icon done"></span> Derive drop
  . <span class="icon later"></span> Explicit auto-drop
  . <span class="icon later"></span> constructor&lt;T&gt;
- . <span class="icon later"></span> Destructor Parameters
+ . <span class="icon done"></span> Destructor Parameters
  . <span class="icon later"></span> Shortcalling
 
 *Interfaces*
@@ -187,7 +188,7 @@ We're currently 60% of the way to version 0.2!
 *Operators*
 
  . <span class="icon later"></span> Bail
- . <span class="icon todo"></span> Map, FlatMap
+ . <span class="icon later"></span> Map, FlatMap
 
 *Allocators*
 
@@ -198,7 +199,7 @@ We're currently 60% of the way to version 0.2!
 
 *LLVM Codegen*
 
- . <span class="icon todo"></span> Continue on panic
+ . <span class="icon later"></span> Continue on panic
  . <span class="icon later"></span> Threading
  . <span class="icon later"></span> Replayability
 
@@ -207,15 +208,15 @@ We're currently 60% of the way to version 0.2!
 *Concurrency*
 
  . <span class="icon later"></span> Coroutines
- . <span class="icon later"></span> Structured Concurrency
+ . <span class="icon todo"></span> Structured Concurrency
  . <span class="icon later"></span> Threads
  . <span class="icon later"></span> Mutexes
 
 *Optimization*
 
  . <span class="icon done"></span> Generational Memory
- . <span class="icon todo"></span> Gen-check Elimination
- . <span class="icon todo"></span> Hybrid-Generational Memory
+ . <span class="icon later"></span> Gen-check Elimination
+ . <span class="icon later"></span> Hybrid-Generational Memory
 
 *Possibilities*
 
