@@ -25,6 +25,13 @@ Here, `main` is calling out into an external C function that reads an int from t
 The `extern func readInt() int;` is telling Vale that the C code will declare a function named `readInt`.
 
 The C code must declare the function with `extern`, so it's visible to Vale.
+
+
+If our vale code is in `src/main.vale`, and we run the program via `valec build myproject=./src`, then we can include the C code in the project by either:
+
+ * Putting the C code inside `src/native/`; it will be automatically included.
+ * Handing it in manually, like `valec build myproject=./src myproject=/some/dir/myccode.c`
+
 ////
 ```vale
 exported func main() {

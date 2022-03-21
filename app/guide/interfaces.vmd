@@ -64,8 +64,8 @@ interface Bipedal {
 }
 
 struct Human { ... }
-func hop(h &Human impl Bipedal) { ... }
-func skip(h &Human impl Bipedal) { ... }
+func hop(h &Human) { ... }
+func skip(h &Human) { ... }
 impl Bipedal for Human;
 
 func hopscotch(b &Bipedal) {
@@ -75,8 +75,8 @@ func hopscotch(b &Bipedal) {
 }
 
 struct DarkElf { ... }
-func hop(s &DarkElf impl Bipedal) { ... }
-func skip(s &DarkElf impl Bipedal) { ... }
+func hop(s &DarkElf) { ... }
+func skip(s &DarkElf) { ... }
 impl Bipedal for DarkElf;
 
 exported func main() {

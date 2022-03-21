@@ -69,6 +69,7 @@ a.header:hover {
 }
 .header .reddit,
 .header .github,
+.header .rss,
 .header .discord {
 	background-size: 100% 100%;
 	background-image: url('../images/reddit_share_circle_64.png');
@@ -86,4 +87,7 @@ a.header:hover {
 }
 .header .github {
 	background-image: url('../images/GitHub-Mark-Light-64px.png');
+}
+.header .rss {
+	background-image: url('../images/rss.png');
 }
