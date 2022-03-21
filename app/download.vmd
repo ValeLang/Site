@@ -7,27 +7,46 @@ layout: onecolumn
 
 ## Here be Dragons!
 
-The Vale compiler is *version 0.1.4*.
+The Vale compiler is *version 0.2.0*.
 
-A 0.x version means:
-
- * It works!
- * ...technically.
- * It's *still just a prototype.*
- * You can make any program in it, but you will probably need to work around some holes.
-
-We've made several-thousand line long programs in it, but there are rough edges:
-
- * Most problems in Vale code have nice compile errors, but not everything. There will be the occasional compiler crash.
- * The compiler is slow. In these early phases, we're prioritizing ease of experimenting over compilation speed, and we're using Scala which is already rather slow.
-
-
-Use at your own risk, and report any bugs to the github!
+This compiler is still experimental, and not production-ready yet. Keep an eye out for 1.0, when it will be suitable for production. Use at your own risk, and report any bugs to the github!
 
 
 ## Releases
 
-### 0.1.4 "Valerian" Release
+### 0.2 "Kuma" Release
+
+You can download binaries from the [releases page](https://github.com/ValeLang/Vale/releases/tag/v0.2.0.0).
+
+This release simplifies the language's syntax:
+
+
+
+
+This release:
+
+ * Enables RAII++, one of Vale's main innovations.
+ * Simplifies the language's syntax:
+    * We no longer need `impl MyInterface` in override function signatures!
+    * There is no longer a readwrite-vs-readonly reference distinction.
+    * There is no longer a borrow-vs-pointer reference distinction.
+    * Improved ownership rules: method calling on a returned value now sends own.
+    * Added postfix borrow!
+ * Compiles a bit faster!
+ * Uses LLVM13 under the hood now.
+
+
+The .zip includes:
+
+ * *valec.exe*, the main compiler program. Use `valec help` for help.
+ * *stdlib* contains the standard library.
+ * *samples*, a collection of small programs written in Vale.
+    * *roguelike.vale* is a program where you are an @ sign and can walk in four directions.
+    * The rest are tiny programs that serve as test cases for the compiler.
+ * `builtins` should be ignored, these are .c files used by the compiler itself.
+
+
+### 0.1.4 "Ember" Release
 
 You can download binaries from the [releases page](https://github.com/ValeLang/Vale/releases/tag/v0.1.4).
 
@@ -39,15 +58,6 @@ This release adds:
  * Better array creation syntax!
  * Better extern boundary, no more `ValeReleaseMessage`
  * A _lot_ of bugfixes!
-
-The .zip includes:
-
- * *valec.exe*, the main compiler program. Use `valec help` for help.
- * *stdlib* contains the standard library.
- * *samples*, a collection of small programs written in Vale.
-    * *roguelike.vale* is a program where you are an @ sign and can walk in four directions.
-    * The rest are tiny programs that serve as test cases for the compiler.
- * `builtins` should be ignored, these are .c files used by the compiler itself.
 
 
 ### 0.1.3 "Cardinal" Release
