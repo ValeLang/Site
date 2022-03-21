@@ -243,9 +243,9 @@ We can make a list with the `List` function. [# Vale's lists are like C#'s `List
 ```vale
 exported func main() {
   l = List<int>();
-  l!.add(1);
-  l!.add(3);
-  l!.add(7);
+  l.add(1);
+  l.add(3);
+  l.add(7);
   foreach x in l { println(x); }
 }
 ```stdout
@@ -264,9 +264,9 @@ When iterating, we can also get the index of the current iteration with the `ent
 ```vale
 exported func main() {
   l = List<int>();
-  l!.add(1);
-  l!.add(3);
-  l!.add(7);
+  l.add(1);
+  l.add(3);
+  l.add(7);
   foreach [i, x] in l.entries() {
     println(i + ": " + x);
   }
@@ -334,7 +334,7 @@ exported func main() {
   n = stdinReadInt(); «inputInt»
   arr = []int(n); «arrtype2»
   foreach i in range(0, n) {
-    push(&!arr, i * 5);
+    push(&arr, i * 5);
   }
   foreach i in range(0, n) {
     println(arr[i]);

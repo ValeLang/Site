@@ -1,0 +1,85 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+   <channel>
+      <title>Vale Articles</title>
+      <link>https://vale.dev/</link>
+      <description>The fast, fearless, and flexible programming language!</description>
+      <lastBuildDate>Mon, 21 Mar 2022 16:15:00 -0500</lastBuildDate>
+      <category>Software/</category>
+      <category>Software Architecture</category>
+      <category>Programming Languages</category>
+      <category>Vale Programming Language</category>
+      <copyright>Copyright 2022 Evan Ovadia</copyright>
+      <atom:link href="http://vale.dev/rss.xml" rel="self" type="application/rss+xml" />
+
+      <!--docs>http://blogs.law.harvard.edu/tech/rss</docs-->
+      <language>en-us</language>
+      <pubDate>Mon, 21 Mar 2022 16:15:00 -0500</pubDate>
+      <webMaster>noreply@verdagon.dev (Evan Ovadia)</webMaster>
+      <!--image>
+         <url>http://www.feedforall.com/ffalogo48x48.gif</url>
+         <title>FeedForAll Sample Feed</title>
+         <link>http://www.feedforall.com/industry-solutions.htm</link>
+         <description>FeedForAll Sample Feed</description>
+         <width>48</width>
+         <height>48</height>
+      </image-->
+
+      <item>
+         <guid>https://verdagon.dev/blog/seamless-fearless-structured-concurrency</guid>
+         <link>https://verdagon.dev/blog/seamless-fearless-structured-concurrency</link>
+         <pubDate>Mon, 21 Mar 2022 16:15:00 -0400</pubDate>
+         <category>Programming Languages</category>
+         <category>Vale Programming Language</category>
+         <title>Seamless, Fearless, and Structured Concurrency</title>
+         <description>We can combine the best parts of different structured concurrency approaches!</description>
+         <author>noreply@verdagon.dev (Evan Ovadia)</author>
+      </item>
+
+
+      <item>
+         <guid>https://verdagon.dev/blog/generational-references</guid>
+         <link>https://verdagon.dev/blog/generational-references</link>
+         <pubDate>Tue, 5 Jan 2021 12:00:00 -0400</pubDate>
+         <category>Programming Languages</category>
+         <category>Vale Programming Language</category>
+         <title>Generational References</title>
+         <description>2.3x faster than reference counting, unoptimized!</description>
+         <author>noreply@verdagon.dev (Evan Ovadia)</author>
+      </item>
+
+
+      <item>
+         <guid>https://verdagon.dev/blog/hybrid-generational-memory</guid>
+         <link>https://verdagon.dev/blog/hybrid-generational-memory</link>
+         <pubDate>Sat, 2 Jan 2021 12:00:00 -0400</pubDate>
+         <category>Programming Languages</category>
+         <category>Vale Programming Language</category>
+         <title>Vale's Hybrid-Generational Memory</title>
+         <description>For speed and simplicity!</description>
+         <author>noreply@verdagon.dev (Evan Ovadia)</author>
+      </item>
+
+
+      <item>
+         <guid>https://verdagon.dev/blog/zero-cost-refs-regions</guid>
+         <link>https://verdagon.dev/blog/zero-cost-refs-regions</link>
+         <pubDate>Wed, 29 Jul 2020 12:00:00 -0400</pubDate>
+         <category>Programming Languages</category>
+         <category>Vale Programming Language</category>
+         <title>Zero-Cost References with Regions in Vale</title>
+         <description>Watch regions eliminate reference-counting overhead!</description>
+         <author>noreply@verdagon.dev (Evan Ovadia)</author>
+      </item>
+
+      <item>
+         <guid>https://verdagon.dev/blog/raii-next-steps</guid>
+         <link>https://verdagon.dev/blog/raii-next-steps</link>
+         <pubDate>Wed, 15 Jul 2020 12:00:00 -0400</pubDate>
+         <category>Programming Languages</category>
+         <category>Vale Programming Language</category>
+         <title>The Next Steps for Single Ownership and RAII</title>
+         <description>How constraint references enable easy safety, speed, and much more powerful RAII!</description>
+         <author>noreply@verdagon.dev (Evan Ovadia)</author>
+      </item>
+   </channel>
+</rss>

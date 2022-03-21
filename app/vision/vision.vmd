@@ -115,8 +115,8 @@ struct Spaceship { engine Engine; }
 struct Engine { fuel! int; }
 exported func main() {
    ship = Spaceship(Engine(1337));
-   alias_a = &!ship;
-   alias_b = &!ship;
+   alias_a = &ship;
+   alias_b = &ship;
    set alias_a.engine.fuel = 73;
    set alias_b.engine.fuel = 42;
 }

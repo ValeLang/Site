@@ -52,13 +52,13 @@ func longerShip(
 }
 
 struct Raza { ... }
-func length(r &Raza impl ISpaceship) int { 4 }
-func honk(r &Raza impl ISpaceship) { ... }
+func length(r &Raza) int { 4 }
+func honk(r &Raza) { ... }
 impl ISpaceship for Raza;
 
 struct Firefly { ... }
-func length(f &Firefly impl ISpaceship) int { 3 }
-func honk(f &Firefly impl ISpaceship) { ... }
+func length(f &Firefly) int { 3 }
+func honk(f &Firefly) { ... }
 impl ISpaceship for Firefly;
 
 func crazyIvan(f &Firefly) { ... }
@@ -111,12 +111,12 @@ func longerShip<T> «contract»
 
 struct Raza { ... }
 impl ISpaceship for Raza;
-func length(r &Raza impl ISpaceship) int { 4 }
-func honk(r &Raza impl ISpaceship) { ... }
+func length(r &Raza) int { 4 }
+func honk(r &Raza) { ... }
 
 struct Firefly { ... }
-func length(f &Firefly impl ISpaceship) int { 3 }
-func honk(f &Firefly impl ISpaceship) { ... }
+func length(f &Firefly) int { 3 }
+func honk(f &Firefly) { ... }
 func crazyIvan(f &Firefly) { ... }
 impl ISpaceship for Firefly;
 
@@ -157,8 +157,8 @@ struct Flock<T>
 
 exported func main() {
   f = Flock<Firefly>(List<Firefly>());
-  f.ships!.add(Firefly(...));
-  f.ships!.add(Firefly(...));
+  f.ships.add(Firefly(...));
+  f.ships.add(Firefly(...));
 
   firstShip = f.ships.get(0);
   // This works because the compiler

@@ -113,9 +113,8 @@ On the next line, `a` is destroyed, but the owning reference that it contained s
 
 # Non-Owning References
 
-Vale has three [# Soon to be two; we'll be removing the pointer reference soon, once HGM is complete.] kinds of non-owning references:
+Vale has two kinds of non-owning references:
 
- * The *Pointer Reference*, which asserts the target object is live when we dereference it.
  * The *Borrow Reference*, which asserts the target object is live when we make a borrow ref local variable (and then "tethers" the object so it's not freed).
  * The *Weak Reference*, which becomes null when we deallocate the struct it's pointing at.
 
@@ -126,41 +125,9 @@ Note that there are no shared-ownership references [# Like C++'s `shared_ptr` or
 <slice />
 
 
-## Pointer References
-
-<<<<
-The most basic kind of reference is a *pointer* reference.
-
-Whenever we dereference a pointer reference, the program asserts that the target object is still alive.
-
-To make a pointer reference, use the `*` symbol.
-
-In this example, we're making a pointer reference to `ship` and giving it to the `foo` function.
-////
-```vale
-struct Spaceship {
-  name str;
-  numWings int;
-}
-func foo(s *Spaceship) {
-  println(s.name);
-}
-exported func main() {
-  ship = Spaceship("Serenity", 2);
-  foo(*ship);
-}
-```: `import stdlib.*;`
->>>>
-
-
 ## Borrow References
 
 <<<<
-The drawback to the above pointer references is that they cause an assert every time we dereference an object.
-
-A borrow reference will instead do the assert once, when we make a local (or parameter) borrow reference.
-
-Additionally, when we try to deallocate an object, the program asserts that there are no borrow references pointing at it. [# A borrow reference is similar to a foreign key constraint in SQL: it prevents us from deallocating the object it points to.]
 
 To make a borrow reference, use the & symbol.
 
@@ -186,11 +153,11 @@ exported func main() {
 
 ## Read-only or Read-write References
 
-A reference can either be *read-only* (e.g. `&Spaceship`) or *read-write* (e.g. `&!Spaceship`).
+A reference can either be *read-only* (e.g. `&Spaceship`) or *read-write* (e.g. `&Spaceship`).
 
 We can get a read-only reference to an object with `&`, like `&ship`.
 
-We can get a read-write reference to an object with `&!`, like `&!ship`.
+We can get a read-write reference to an object with `&`, like `&ship`.
 
 <<<<
 We can't use a readonly reference to change an object. This example would fail to compile:
@@ -220,7 +187,7 @@ exported func main() {
   ship = Spaceship(10);
   readonlyRef = &ship;
 
-  readwriteRef = &!ship;
+  readwriteRef = &ship;
   set readwriteRef.fuel = 20;
 
   println(readonlyRef.fuel);
@@ -245,11 +212,11 @@ A weak reference will set itself to null when the object it's pointing at is des
 
 We can make a weak reference with `**`.
 
-To use a weak reference, call `lock`, which will return an optional pointer reference (`?*Spaceship`). We can then check if it contains a `&*Spaceship` or is empty.
+To use a weak reference, call `lock`, which will return an optional borrow reference (`?&Spaceship`). We can then check if it contains a `&*Spaceship` or is empty.
 
-In other words, we cannot reach into a struct through a weak reference directly; we must lock it to try to make it into a pointer reference first.
+In other words, we cannot reach into a struct through a weak reference directly; we must lock it to try to make it into a borrow reference first.
 
-In this example, we're making a `o` pointer reference from the `ship.origin` weak reference.
+In this example, we're making a `o` borrow reference from the `ship.origin` weak reference.
 ////
 ```vale
 weakable struct Base {
@@ -305,7 +272,7 @@ These are planned features for Vale. See the [roadmap](/roadmap) for plans!
 *Inlining* is used for optimization.
 
 <<<<
-By default, a reference is a pointer, to something on the heap. [# Vale uses escape analysis to automatically inline every local that doesn't get moved into a global or parameter. The `inl` keyword is useful to force it, when optimizing.] A reference can instead be a value on the stack ("inline"), by using the `inl` keyword.
+By default, a reference is a pointer, to something on the heap. [# Vale uses escape analysis to automatically inline every local that doesn't get moved into a global or parameter. The `^` keyword is useful to force it, when optimizing.] A reference can instead be a value on the stack ("inline"), by using the `^` keyword.
 
 Inline objects are much faster to allocate and deallocate, but cannot be moved.
 ////
@@ -315,7 +282,7 @@ struct Spaceship {
   numWings int;
 }
 exported func main() {
-  ship = inl Spaceship("Enterprise", 4);
+  ship = ^Spaceship("Enterprise", 4);
   println(ship.name);
 }
 ```stdout
@@ -324,13 +291,13 @@ Enterprise
 >>>>
 
 <<<<
-`inl` is most often used in structs. [# Vale can even inline interfaces if they're `sealed`, resulting in something similar to tagged unions in C, or enums in Rust. See Interfaces for more.]
+`^` is most often used in structs. [# Vale can even inline interfaces if they're `sealed`, resulting in something similar to tagged unions in C, or enums in Rust. See Interfaces for more.]
 
-When we use `inl` in a struct, the member's memory is here inside the containing struct's memory.
+When we use `^` in a struct, the member's memory is here inside the containing struct's memory.
 
 In this example, the `Engine`'s memory is inside the `Spaceship`'s memory. This makes `Spaceship` bigger, and avoids allocation/deallocation overhead.
 
-In a way, `inl` means "It should live here, not somewhere else."
+In a way, `^` means "It should live here, not somewhere else."
 ////
 ```vale
 struct Engine {
@@ -339,12 +306,12 @@ struct Engine {
 }
 struct Spaceship {
   name str;
-  engine inl Engine;
+  engine ^Engine;
 }
 exported func main() {
   ship = Spaceship(
       "Serenity",
-      inl Engine("TCB", 10));
+      ^Engine("TCB", 10));
   println(ship.name);
 }
 ```: `import stdlib.*;`
