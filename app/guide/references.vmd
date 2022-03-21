@@ -151,56 +151,6 @@ exported func main() {
 <slice/>
 
 
-## Read-only or Read-write References
-
-A reference can either be *read-only* (e.g. `&Spaceship`) or *read-write* (e.g. `&Spaceship`).
-
-We can get a read-only reference to an object with `&`, like `&ship`.
-
-We can get a read-write reference to an object with `&`, like `&ship`.
-
-<<<<
-We can't use a readonly reference to change an object. This example would fail to compile:
-////
-```vale
-struct Spaceship {
-  fuel int;
-}
-exported func main() {
-  ship = Spaceship(10);
-  readonlyRef = &ship;
-  set readonlyRef.fuel = 20; // error
-}
-```: notest
->>>>
-
-<<<<
-Note that even if _we_ have a read-only reference to a ship, _someone else_ can modify the object using a read-write reference.
-
-In this example, `mut readwriteRef.fuel = 20;` is changing the object, even though we have a read-only reference `readonlyRef` to it.
-////
-```vale
-struct Spaceship {
-  fuel int;
-}
-exported func main() {
-  ship = Spaceship(10);
-  readonlyRef = &ship;
-
-  readwriteRef = &ship;
-  set readwriteRef.fuel = 20;
-
-  println(readonlyRef.fuel);
-}
-```stdout
-20
-```: `import stdlib.*;`
->>>>
-
-All references to immutable structs are automatically read-only.
-
-
-
 ## Weak References
 
 <<<<
