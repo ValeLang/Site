@@ -117,40 +117,30 @@ if [ $TARGET == "download" ] || [ $TARGET == "all" ] ; then
   fi
 fi
 
-if [ $TARGET == "introduction" ] || [ $TARGET == "all" ] ; then
-  echo "Doing introduction"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/introduction app/guide/introduction.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/introduction app/guide/introduction.vmd
+if [ $TARGET == "collections" ] || [ $TARGET == "all" ] ; then
+  echo "Doing collections"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/collections app/guide/collections.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/collections app/guide/collections.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
   fi
 fi
 
-if [ $TARGET == "structs" ] || [ $TARGET == "all" ] ; then
-  echo "Doing structs"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/structs app/guide/structs.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/structs app/guide/structs.vmd
+if [ $TARGET == "externs" ] || [ $TARGET == "all" ] ; then
+  echo "Doing externs"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/externs app/guide/externs.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/externs app/guide/externs.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
   fi
 fi
 
-if [ $TARGET == "references" ] || [ $TARGET == "all" ] ; then
-  echo "Doing references"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/references app/guide/references.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/references app/guide/references.vmd
-  if [ $? != 0 ]; then
-    echo "Failed!"
-    exit 1
-  fi
-fi
-
-if [ $TARGET == "interfaces" ] || [ $TARGET == "all" ] ; then
-  echo "Doing interfaces"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/interfaces app/guide/interfaces.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/interfaces app/guide/interfaces.vmd
+if [ $TARGET == "functions" ] || [ $TARGET == "all" ] ; then
+  echo "Doing functions"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/functions app/guide/functions.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/functions app/guide/functions.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -167,10 +157,50 @@ if [ $TARGET == "generics" ] || [ $TARGET == "all" ] ; then
   fi
 fi
 
+if [ $TARGET == "interfaces" ] || [ $TARGET == "all" ] ; then
+  echo "Doing interfaces"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/interfaces app/guide/interfaces.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/interfaces app/guide/interfaces.vmd
+  if [ $? != 0 ]; then
+    echo "Failed!"
+    exit 1
+  fi
+fi
+
+if [ $TARGET == "introduction" ] || [ $TARGET == "all" ] ; then
+  echo "Doing introduction"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/introduction app/guide/introduction.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/introduction app/guide/introduction.vmd
+  if [ $? != 0 ]; then
+    echo "Failed!"
+    exit 1
+  fi
+fi
+
+if [ $TARGET == "modules" ] || [ $TARGET == "all" ] ; then
+  echo "Doing modules"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/modules app/guide/modules.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/modules app/guide/modules.vmd
+  if [ $? != 0 ]; then
+    echo "Failed!"
+    exit 1
+  fi
+fi
+
 if [ $TARGET == "patterns" ] || [ $TARGET == "all" ] ; then
   echo "Doing patterns"
   echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/patterns app/guide/patterns.vmd
   eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/patterns app/guide/patterns.vmd
+  if [ $? != 0 ]; then
+    echo "Failed!"
+    exit 1
+  fi
+fi
+
+if [ $TARGET == "references" ] || [ $TARGET == "all" ] ; then
+  echo "Doing references"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/references app/guide/references.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/references app/guide/references.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -187,10 +217,20 @@ if [ $TARGET == "regions" ] || [ $TARGET == "all" ] ; then
   fi
 fi
 
-if [ $TARGET == "externs" ] || [ $TARGET == "all" ] ; then
-  echo "Doing externs"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/externs app/guide/externs.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/externs app/guide/externs.vmd
+if [ $TARGET == "structs" ] || [ $TARGET == "all" ] ; then
+  echo "Doing structs"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/structs app/guide/structs.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/structs app/guide/structs.vmd
+  if [ $? != 0 ]; then
+    echo "Failed!"
+    exit 1
+  fi
+fi
+
+if [ $TARGET == "unsafe" ] || [ $TARGET == "all" ] ; then
+  echo "Doing unsafe"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/unsafe app/guide/unsafe.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/guide/unsafe app/guide/unsafe.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -229,6 +269,16 @@ if [ $TARGET == "roadmap" ] || [ $TARGET == "all" ] ; then
     exit 1
   fi
   cp app/roadmap/*.css build
+fi
+
+if [ $TARGET == "project" ] || [ $TARGET == "all" ] ; then
+  echo "Doing project"
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/project app/project.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/project app/project.vmd
+  if [ $? != 0 ]; then
+    echo "Failed!"
+    exit 1
+  fi
 fi
 
 if [ $MODE == "build" ] ; then

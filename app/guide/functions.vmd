@@ -1,0 +1,97 @@
+---
+title: Functions
+path: guide/functions
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: [Collections](/guide/collections)
+series-entry: []()
+series-entry: [Modules](/guide/modules)
+series-entry: [Structs](/guide/structs)
+series-entry: [References](/guide/references)
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: [Generics](/guide/generics)
+series-entry: [Patterns](/guide/patterns)
+series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs)
+series-entry: [Unsafe](/guide/unsafe)
+---
+
+<<<<
+Here we have a simple function that `ret`urns the argument plus two.
+////
+```vale
+func add2(x int) int {
+  ret x + 2;
+}
+exported func main() {
+  println("Half-Life " + add2(1));
+}
+```stdout
+Half-Life 3
+```: `import stdlib.*;`
+>>>>
+
+<<<<
+If a block has only one line, we can leave off the `ret` and the semicolon.
+////
+```vale
+func add2(x int) int { x + 2 }
+```: `exported func main() {}`
+>>>>
+
+<<<<
+We can also make a *lambda*, a function inside another one. [# See the Tuples section below for an example of how lambdas are super useful.]
+////
+```vale
+exported func main() {
+  add2 = (x int) => { x + 2 };
+  println("Half-Life " + add2(1));
+}
+```: `import stdlib.*;`
+>>>>
+
+<<<<
+We can leave the type off of a lambda's parameter, to make it shorter. [# Taking out the parameter's type makes this a "generic" lambda, see [generics](/guide/generics) for more.]
+////
+```vale
+exported func main() {
+  add2 = (x) => { x + 2 };
+  println("Half-Life " + add2(1));
+}
+```: `import stdlib.*;`
+>>>>
+
+<<<<
+We can shorten lambdas with the *almighty underscore*, which declares and immediately uses an implicit parameter.
+////
+```vale
+exported func main() {
+  add2 = { _ + 2 };
+  println("Half-Life " + add2(1));
+}
+```: `import stdlib.*;`
+>>>>
+
+<<<<
+In Vale, functions and methods are the same thing, [#ufcs] so these two calls are exactly equivalent. [# Include vstl/list.vale for the `split` function.]
+////
+```vale
+exported func main() {
+  s1 = "Hail Hydra!".split(" ");
+  s2 = split("Hail Hydra!", " ");
+}
+```: `import stdlib.*; import stdlib.stringutils.*; import stdlib.collections.*;`
+>>>>
+
+<slice>
+#ufcs: This is known as Universal Function Call Syntax. This makes method chaining nicer, for example
+
+`a.f(3).g(true).h("Yendor")`
+
+as opposed to
+
+`h(g(f(a, 3), true), "Yendor")`.
+</slice>
+

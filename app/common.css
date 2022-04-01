@@ -1,6 +1,6 @@
 
 b {
-  font-weight:  500;
+  font-weight: bold;
 }
 
 .page {
@@ -13,6 +13,14 @@ b {
 }
 
 .subtitle {
+  opacity: .6;
+}
+
+.donate-link {
+  opacity: .9;
+}
+
+.metadata .separator {
   opacity: .6;
 }
 
@@ -199,7 +207,7 @@ h5 {
   border: 2px solid #FFE0C0;
 }
 
-.sponsor {
+.donate-button {
   appearance: none;
   background-color: rgb(246, 248, 250);
   color: black !important;
@@ -243,11 +251,11 @@ h5 {
   white-space: nowrap
 }
 
-a.sponsor:hover {
+a.donate-button:hover {
   text-decoration: none;
 }
 
-.sponsor svg {
+.donate-button svg {
   box-sizing: border-box;
   color: rgb(191, 57, 137);
   color-scheme: light;

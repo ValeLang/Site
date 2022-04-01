@@ -5,6 +5,9 @@ layout: annotated
 namespace: m-annotated
 series-name: Vale Language Guide
 series-entry: [Introduction](/guide/introduction)
+series-entry: [Collections](/guide/collections)
+series-entry: [Functions](/guide/functions)
+series-entry: [Modules](/guide/modules)
 series-entry: []()
 series-entry: [References](/guide/references)
 series-entry: [Interfaces](/guide/interfaces)
@@ -12,6 +15,7 @@ series-entry: [Generics](/guide/generics)
 series-entry: [Patterns](/guide/patterns)
 series-entry: [Regions](/guide/regions)
 series-entry: [Externs and Exports](/guide/externs)
+series-entry: [Unsafe](/guide/unsafe)
 ---
 
 <<<<
@@ -235,6 +239,28 @@ exported func main() {
 <slice new-color="afterword">
 #small:  Small immutable structs (32b or less) are copied and passed by-value. Larger objects use *SNRC* (strategic nonatomic reference counting) to free themselves.
 </slice>
+
+
+
+# Tuples
+
+<<<<
+A tuple is a simple struct, whose members are named 0, 1, 2, etc.
+
+We can make a tuple in Vale with parentheses (like `(5, true, 42)`), and can access them with a dot like `arr.0`.
+////
+```vale
+exported func main() {
+  arr = (5, true, 42);
+  println("Babylon " + arr.0);
+}
+```stdout
+Babylon 5
+```: `import stdlib.*;`
+>>>>
+
+<slice/>
+
 
 
 # Planned Features
