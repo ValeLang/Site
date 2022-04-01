@@ -1,0 +1,78 @@
+---
+title: About the Vale Language Project
+path: project
+layout: onecolumn
+---
+
+
+# The Vale Language Project
+
+
+The Vale programming language is part of *Vale Language Project*, which is about exploring, discovering, and publishing new programming language mechanisms that enable speed, safety, and ease of use.
+
+
+*The world needs more exploration here!* Currently, most programming language research is is in:
+
+ * High-overhead languages involving reference counting and tracing garbage collection.
+ * Complex languages (Ada/Spark, Coq, Rust, Haskell, etc.) which impose a higher complexity burden on the average programmer.
+
+These are useful, but there is a *vast field of possibilities* in between, waiting to be explored!
+
+
+Our aim is to explore that space, discover what it has to offer, and make *speed and safety easier than ever before.*
+
+
+In this quest, we've discovered a lot of new techniques:
+
+ * [Region Borrow Checking](/blog/zero-cost-refs-regions), which adds mutable aliasing support to a Rust-like borrow checker.
+ * [Generational Memory](/blog/generational-references), for a language to ensure an object still exists at the time of dereferencing.
+ * [Hybrid-Generational Memory](/blog/hybrid-generational-memory), which ensures that nobody destroys an object too early, for better optimizations.
+
+
+These techniques have also opened up some new emergent possibilities:
+
+ * [Seamless concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency), the ability to launch multiple threads that can access any pre-existing data without data races, without the need for refactoring the code or the data.
+ * Object pools and bump-allocators that are memory-safe and decoupled, so no refactoring needed.
+ * [Fearless FFI](/blog/fearless#safe-externs), which allows us to call into C without risk of accidentally corrupting Vale objects.
+ * Deterministic replayability, to record all inputs and replay execution. Goodbye races and heisenbugs!
+ * [Higher RAII](/blog/raii-next-steps), a form of linear typing that enables destructors with parameters and returns.
+
+
+We also gain a lot of inspiration from other languages, and are finding new ways to combine their techniques:
+
+ * We can mix an `unsafe` block with Fearless FFI to make a much safer systems programming language!
+ * We can mix Erlang's isolation benefits with functional reactive programming to make much more resilient programs!
+ * We can mix region borrow checking with Pony's `iso` to support shared mutability.
+
+...plus a lot more interesting ideas to explore!
+
+
+The Vale programming language is only one combination of the features we've found. Our goal is to publish all the techniques we've found, even the ones that couldn't fit in Vale, so that other languages can make strides in this area.
+
+
+Our medium-term goals:
+
+ * Publish the Language Simplicity Manifesto, a collection of principles to keep programming languages' learning curves down.
+ * Publish the Memory Safety Grimoire, a collection of "memory safety building blocks" that languages can potentially use to make new memory models, just like Vale combined generational references and scope tethering.
+ * Prototype the Region Borrow Checker in Vale, to show the world that shared mutability can work with borrow checking!
+ * Prototype Hybrid-Generational Memory in Vale, to see how fast and easy we can make single ownership.
+
+
+We aim to publish articles biweekly on all of these topics, and inspire the next generation of fast, safe, and easy programming languages.
+
+
+If you want to support our work, please consider [sponsoring us on GitHub](https://github.com/sponsors/ValeLang)!
+
+With enough sponsorship, we can:
+
+ * Work on this full-time.
+ * Turn the Vale Language Project into a 501(c)(3) non-profit organization.
+ * Make Vale into a production-ready language, and push it into the mainstream!
+
+
+<a href="https://github.com/sponsors/ValeLang" class="donate-button">
+   <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-heart icon-sponsor mr-1 color-fg-sponsors">
+      <path fill-rule="evenodd" d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25zm0 0l.345.666a.752.752 0 01-.69 0L8 14.25z"></path>
+   </svg>
+   Sponsor us on GitHub!
+</a>

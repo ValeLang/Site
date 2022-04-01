@@ -5,6 +5,9 @@ layout: annotated
 namespace: m-annotated
 series-name: Vale Language Guide
 series-entry: [Introduction](/guide/introduction)
+series-entry: [Collections](/guide/collections)
+series-entry: [Functions](/guide/functions)
+series-entry: [Modules](/guide/modules)
 series-entry: [Structs](/guide/structs)
 series-entry: []()
 series-entry: [Interfaces](/guide/interfaces)
@@ -12,6 +15,7 @@ series-entry: [Generics](/guide/generics)
 series-entry: [Patterns](/guide/patterns)
 series-entry: [Regions](/guide/regions)
 series-entry: [Externs and Exports](/guide/externs)
+series-entry: [Unsafe](/guide/unsafe)
 ---
 
 # Owning Reference
@@ -160,7 +164,7 @@ In these situations, we use *weak references*.
 
 A weak reference will set itself to null when the object it's pointing at is destroyed.
 
-We can make a weak reference with `**`.
+We can make a weak reference with `&&`.
 
 To use a weak reference, call `lock`, which will return an optional borrow reference (`?&Spaceship`). We can then check if it contains a `&*Spaceship` or is empty.
 
@@ -174,7 +178,7 @@ weakable struct Base {
 }
 struct Spaceship {
   name str;
-  origin **Base;
+  origin &&Base;
 }
 func printShipBase(ship &Spaceship) {
   maybeOrigin = lock(ship.origin); «lock»«iflet»
@@ -187,7 +191,7 @@ func printShipBase(ship &Spaceship) {
 }
 exported func main() {
   base = Base("Zion");
-  ship = Spaceship("Neb", **base);
+  ship = Spaceship("Neb", &&base);
 
   printShipBase(&ship);
 
@@ -208,7 +212,7 @@ Ship base unknown!
 
 This would specifically check if that `?&Spaceship` is the one-member subclass (`Some<&Spaceship>`) and if so, assigns its member to `o`. This is a conditional destructure, see [Pattern Matching](/guide/patterns) for more.
 
-#mat: In future versions, we could also use a `mat` (match statement) here to check whether the `?&Spaceship` contained anything.
+#mat: In future versions, we could also use a `match` (match statement) here to check whether the `?&Spaceship` contained anything.
 </slice>
 
 

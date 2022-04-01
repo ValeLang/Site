@@ -1,0 +1,69 @@
+---
+title: Unsafe
+path: guide/unsafe
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: [Collections](/guide/collections)
+series-entry: [Functions](/guide/functions)
+series-entry: [Modules](/guide/modules)
+series-entry: [Structs](/guide/structs)
+series-entry: [References](/guide/references)
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: [Generics](/guide/generics)
+series-entry: [Patterns](/guide/patterns)
+series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs)
+series-entry: []()
+---
+
+
+! These features aren't implemented yet. Until then, we have `--region-override unsafe` [# This will turn off all generation checks across the program. Use with care!] and extern functions.
+
+
+Memory safety always has run-time costs, no matter what language we're in. [# With garbage collection and reference counting the cost is obvious, and surprisingly, even borrow checking indirectly causes run-time overhead: it centralizes objects such that we need to perform bounds checks and hashing more often than other paradigms.] In Vale, the primary run-time cost is in *generation checks*, when the code will check that a reference still points to a valid object.
+
+
+There are a lot of ways to avoid generation checks:
+
+ * The compiler completely skips generation checks into immutable regions, because it knows no objects in there have been destroyed. [# See [Zero-Cost References with Regions in Vale](https://verdagon.dev/blog/zero-cost-refs-regions) for more on this.]
+ * The compiler uses a lot of static analysis to automatically skips a lot of generation checks even in non-immutable regions.
+ * Hybrid-generational memory will do some checks ahead of time, and then keeps objects alive to the end of a scope so we don't have to generation check them again. [# See [Hybrid-Generational Memory](https://verdagon.dev/blog/hybrid-generational-memory) for more on this.]
+ * "Unsafe" features (more on this below).
+
+
+Between those first three, generation checks are likely a negligible source of overhead, especially since they rarely cause CPU cache misses, and their branching is perfectly predicted.
+
+
+But if you need that extra bit of performance, keep reading!
+
+
+# Beware!
+
+*Warning!* There are risks to using any of the below features. If you access an object that's already been destroyed, you'll likely corrupt memory.
+
+Corrupting memory doesn't just cause bugs, it also means your program becomes *nondeterministic* and cannot use deterministic replayability.
+
+
+
+Also note that these features are *completely ignored* in any dependencies by default, for security reasons. You'll need to explicitly whitelist every single module that the compiler should allow unsafe operations and FFI for, using the `--unsafe_whitelist` flag like `--unsafe_whitelist that_module`
+
+
+
+# The Unsafe Operator
+
+The unsafe operator `!!` can be used to skip any run-time overhead.
+
+ * `myObject.aField` might perform a generation check on `myObject` but `myObject!!.aField` won't.
+ * `myObject[someIndex]` will assert `someIndex < myObject.len()` but `myObject!![someIndex]` won't.
+
+
+Any function that uses `!!` must be annotated with the `unsafe` keyword.
+
+
+# Unsafe Override
+
+We'll be able to turn off all generation checks for a certain module with the `--unsafe_force` flag, like `--unsafe_force my_module`.
+
+This will be useful to measure the overall memory-safety overhead for your program.

@@ -5,6 +5,9 @@ layout: annotated
 namespace: m-annotated
 series-name: Vale Language Guide
 series-entry: [Introduction](/guide/introduction)
+series-entry: [Collections](/guide/collections)
+series-entry: [Functions](/guide/functions)
+series-entry: [Modules](/guide/modules)
 series-entry: [Structs](/guide/structs)
 series-entry: [References](/guide/references)
 series-entry: []()
@@ -12,6 +15,7 @@ series-entry: [Generics](/guide/generics)
 series-entry: [Patterns](/guide/patterns)
 series-entry: [Regions](/guide/regions)
 series-entry: [Externs and Exports](/guide/externs)
+series-entry: [Unsafe](/guide/unsafe)
 ---
 
 <<<<
@@ -179,7 +183,7 @@ impl SomeInt for MaybeInt;
 Because the compiler knows all the implementing structs up-front, it:
 
  * Can be inlined. [#inlsealed]
- * Checks that `mat` statements consider all substructs.
+ * Checks that `match` statements consider all substructs.
  * Generates sealed interface constructors.
 
 <slice>

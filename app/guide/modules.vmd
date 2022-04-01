@@ -1,0 +1,117 @@
+---
+title: Modules
+path: guide/modules
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: [Collections](/guide/collections)
+series-entry: [Functions](/guide/functions)
+series-entry: []()
+series-entry: [Structs](/guide/structs)
+series-entry: [References](/guide/references)
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: [Generics](/guide/generics)
+series-entry: [Patterns](/guide/patterns)
+series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs)
+series-entry: [Unsafe](/guide/unsafe)
+---
+
+
+When we run:
+
+`valec build mymodule=~/myprogram.vale --output_dir=build`
+
+the `mymodule=~/myprogram.vale` is adding `~/myprogram.vale` to a new module named `mymodule`. A module is a grouping of source code. [# This is like Java projects or C++ translation units.] We can also:
+
+ * Have multiple files in the same module: `valec build mymodule=~/foo.vale mymodule=~/bar.vale`.
+ * Specify an entire folder: `valec build mymodule=src` will use everything in the `src` folder.
+
+Either way, all our code will be in one big `mymodule` module. By default, code in a module can use any other code defined in the same module.
+
+
+
+# Using a Library
+
+To use a library, it must be somewhere on your disk. Usually, this means cloning it from github, like so:
+
+`git clone https://github.com/ValeLang/SimpleTerrain ~/SimpleTerrain`
+
+
+To use it from your program:
+
+ * Add `import simpleterrain.*;` to the top of the file that will be using the library's functions.
+ * Run your normal `valec build` command with `simpleterrain=~/SimpleTerrain/src` added to it. [# Note how the module name, simpleterrain, doesn't need to match the folder name, `SimpleTerrain`. You can use anything you want for the module name.]
+
+
+For example:
+
+```vale
+import simpleterrain.*;
+
+exported func main() {
+  my_terrain = MakeSimpleTerrain(1337, 40, 16); «terrainargs»
+  my_terrain.display();
+}
+```stdout
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+```
+
+
+
+There's a special module, `stdlib`, which is automatically added to every build command as if we added `stdlib=~/Vale/stdlib/src`. It contains a lot of common tools such as lists, hash maps, and functions like `sqrt`.
+
+
+<slice>
+#terrainargs: If you're curious: this makes a 40x16 with a [random seed]() of 1337. If you change the 1337 to another number, you'll get different 40x16 terrain!
+</slice>
+
+
+
+# Namespaces
+
+Some modules (such as the standard library) are very large so they've been divided into several directories, also known as "namespaces".
+
+
+The standard library has a List class in the `stdlib/src/collections/list` directory. We need to import each namespace specifically, so to use a List we would type `import stdlib.collections.list.*;`. [# Currently, we're only able to import entire namespaces at a time, hence the `.*` at the end. In the future, we'll be able to import specific items.] at the top of the file that wants to use List, like:
+
+
+```vale
+import stdlib.collections.list.*;
+
+exported func main() {
+  myList = List<int>().add(4).add(2);
+  foreach i in myList {
+    print(i);
+  }
+}
+```stdout
+42
+```
+
+
+You can do this for own module too! For example, if you had this:
+
+ * `src` directory
+    * `foo.vale`
+    * `bar` directory
+       * `baz.vale`
+
+Then `foo.vale` could say `import mymodule.bar.*;` to use the code from `baz.vale`.
+

@@ -1,0 +1,228 @@
+---
+title: Introduction
+path: guide/introduction
+layout: annotated
+namespace: m-annotated
+series-name: Vale Language Guide
+series-entry: [Introduction](/guide/introduction)
+series-entry: []()
+series-entry: [Functions](/guide/functions)
+series-entry: [Modules](/guide/modules)
+series-entry: [Structs](/guide/structs)
+series-entry: [References](/guide/references)
+series-entry: [Interfaces](/guide/interfaces)
+series-entry: [Generics](/guide/generics)
+series-entry: [Patterns](/guide/patterns)
+series-entry: [Regions](/guide/regions)
+series-entry: [Externs and Exports](/guide/externs)
+series-entry: [Unsafe](/guide/unsafe)
+---
+
+# Lists
+
+<<<<
+
+We can make a list with the `List` function. [# Vale's lists are like C#'s `List`, Java's `ArrayList` or C++'s `vector`; it's an array list, not a linked list.]
+
+////
+
+```vale
+exported func main() {
+  l = List<int>();
+  l.add(1);
+  l.add(3);
+  l.add(7);
+  foreach x in l {
+    println(x);
+  }
+}
+```stdout
+1
+3
+7
+```: `import stdlib.collections.*;`
+>>>>
+
+
+# Loops
+
+<<<<
+
+As seen above, we can loop with the `foreach` statement.
+
+We can loop over many things: lists, arrays, even integer ranges:
+
+////
+
+```vale
+exported func main() {
+  foreach x in range(0, 3) {
+    println(x);
+  }
+}
+```stdout
+0
+1
+2
+```: `import stdlib.*; import stdlib.math.*;`
+
+>>>>
+
+<slice/>
+
+
+<<<<
+
+When iterating over collections, we can also get the index of the current iteration with the `entries()` function.
+
+////
+
+```vale
+exported func main() {
+  l = List<int>();
+  l.add(1);
+  l.add(3);
+  l.add(7);
+  foreach [i, x] in l.entries() {
+    println(i + ": " + x);
+  }
+}
+```stdout
+0: 1
+1: 3
+2: 7
+```: `import stdlib.*; import stdlib.collections.*;`
+>>>>
+
+<slice/>
+
+
+
+# Arrays
+
+One doesn't often need arrays because Lists are easier, but arrays can sometimes be faster.
+
+
+There are two kinds of arrays in Vale:
+
+ * Static-sized arrays, where the size is known at compile time.
+ * Runtime-sized arrays, where the size is known only at run time.
+
+
+## Static-sized Arrays
+
+<<<<
+
+If you know size is known at compile-time, then you can use a static-sized array.
+
+
+`[#5]int` is a static-sized array of 5 integers.
+
+
+There are three ways to make one:
+
+ * Specify the values: `[#5][0, 2, 4, 6, 8]`.
+     * The size is optional, `[#][0, 2, 4, 6, 8]` is also valid.
+ * Specify a "fill function": `[#5](i => i * 2)`, see example.
+
+
+To access the element at index 3 in an array `arr`, we use `arr[3]`. Note that the first element is index 0, so index 3 is the fourth element.
+
+
+////
+```vale
+exported func main() {
+  arr = [#5](i => i * 2);
+  foreach i in range(0, 5) {
+    println(arr[i]);
+  }
+}
+```stdout
+0
+2
+4
+6
+8
+```: `import stdlib.*;`
+>>>>
+
+<slice/>
+
+
+## Runtime-sized Arrays
+
+<<<<
+
+A runtime-sized array is like a List, in that its size can change. However, its _capacity_ cannot change. [# This may seem unusual coming from other languages. This decision helps us not need default values for our elements.]
+
+
+`[]int` is a runtime-sized array of integers.
+
+
+To make a new runtime-sized array, we use the `[]type(capacity)` syntax:
+
+ * `[]` means we're making a runtime-sized array.
+ * The `type` parameter is the type of the elements.
+ * The `capacity` parameter is how many elements this array can hold.
+
+
+To access the element at index 3 in an array `arr`, we use `arr[3]`. Note that the first element is index 0, so index 3 is the fourth element.
+
+
+////
+```vale
+exported func main() {
+  n = stdinReadInt(); «inputInt»
+  arr = []int(n); «arrtype2»
+  foreach i in range(0, n) {
+    push(&arr, i * 5);
+  }
+  foreach i in range(0, n) {
+    println(arr[i]);
+  }
+}
+```stdin
+3
+```stdout
+0
+5
+10
+```: `import stdlib.*; import stdlib.math.*; import stdlib.stdin.*;`
+>>>>
+
+
+
+<<<<
+
+We can also populate it with a function, with the `[]type(capacity, func)` syntax.
+
+The `func` will be called for each element.
+
+In this example, `x => x * 5` is the function that will populate the array.
+
+////
+```vale
+exported func main() {
+  n = stdinReadInt();
+  arr = [](n, x => x * 5);
+  foreach i in range(0, n) {
+    println(arr[i]);
+  }
+}
+```stdin
+3
+```stdout
+0
+5
+10
+```: `import stdlib.*; import stdlib.math.*; import stdlib.stdin.*;`
+>>>>
+
+
+<slice new-color="afterword">
+#inputInt: `stdinReadInt` reads an integer from the user's keyboard. In this example, the user is entering 3.
+
+stdinReadInt is temporary and experimental, expect the stdin/stdout API to change soon.
+
+#arrtype2: The type of `arr` here is `[]int`.
+</slice>
