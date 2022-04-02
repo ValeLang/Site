@@ -266,7 +266,7 @@ extern func sumBytes(arr #[]int) int;
 
 exported func main() int {
   a = #[](5, x => x);
-  ret sumBytes(a);
+  return sumBytes(a);
 }
 ```c
 #include <stdint.h>
