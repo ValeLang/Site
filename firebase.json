@@ -23,6 +23,26 @@
         "type": 302
       },
       {
+        "source": "/blog/raii-next-steps",
+        "destination": "https://verdagon.dev/blog/raii-next-steps",
+        "type": 302
+      },
+      {
+        "source": "/blog/zero-cost-refs-regions",
+        "destination": "https://verdagon.dev/blog/zero-cost-refs-regions",
+        "type": 302
+      },
+      {
+        "source": "/blog/hybrid-generational-memory",
+        "destination": "https://verdagon.dev/blog/hybrid-generational-memory",
+        "type": 302
+      },
+      {
+        "source": "/blog/generational-references",
+        "destination": "https://verdagon.dev/blog/generational-references",
+        "type": 302
+      },
+      {
         "source": "/releases/ValeCompiler-0.1.0.0-Linux.zip",
         "destination": "https://firebasestorage.googleapis.com/v0/b/valesite.appspot.com/o/ValeCompiler-0.1.0.0-Linux.zip?alt=media&token=65aeb1a4-c4fa-4877-a1cd-8a1b638538b2",
         "type": 302
