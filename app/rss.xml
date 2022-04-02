@@ -25,6 +25,17 @@
       </image-->
 
       <item>
+         <guid>https://verdagon.dev/blog/surprising-weak-refs</guid>
+         <link>https://verdagon.dev/blog/surprising-weak-refs</link>
+         <pubDate>Thu, 31 Mar 2022 16:15:00 -0400</pubDate>
+         <category>Programming Languages</category>
+         <category>Vale Programming Language</category>
+         <title>Surprising Weak-Ref Implementations: Swift, Obj-C, C++, Rust, and Vale</title>
+         <description>Such shenanigans, right under our noses!</description>
+         <author>noreply@verdagon.dev (Evan Ovadia)</author>
+      </item>
+
+      <item>
          <guid>https://verdagon.dev/blog/higher-raii-7drl</guid>
          <link>https://verdagon.dev/blog/higher-raii-7drl</link>
          <pubDate>Mon, 22 Mar 2022 16:15:00 -0400</pubDate>
