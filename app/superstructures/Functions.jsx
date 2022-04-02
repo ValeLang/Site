@@ -119,7 +119,7 @@ addMoonWithRandomMass(
   func hash(s: Str) {
     let chars = s.split("");
     let ints = chars..toInt();`} {this.noteAnchor("map")}{`
-    ret ints.fold(0, +);`} {this.noteAnchor("reducer")}{`
+    return ints.fold(0, +);`} {this.noteAnchor("reducer")}{`
   }
 }`}
                     </Snippet>
@@ -299,7 +299,7 @@ moveTurret(shootybob, &mySS.root.bases.0, &mySS.root.bases.1);`}
   func hash(s: Str) {
     let chars = s.split("");
     let ints = chars..toInt();
-    ret ints.fold(0, +);
+    return ints.fold(0, +);
   }
 }`}
                     </Snippet>

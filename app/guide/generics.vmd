@@ -49,9 +49,9 @@ func longerShip(
     b &ISpaceship)
 &ISpaceship {
   if (a.length() > b.length()) {
-    ret a;
+    return a;
   } else {
-    ret b;
+    return b;
   }
 }
 
@@ -107,9 +107,9 @@ interface ISpaceship {
 func longerShip<T> «contract»
 (a &T, b &T) &T {
   if (a.length() > b.length()) {
-    ret a;
+    return a;
   } else {
-    ret b;
+    return b;
   }
 }
 

@@ -61,7 +61,7 @@ str {
       set biggest = ship;
     }
   }
-  ret biggest.name;
+  return biggest.name;
 }
 
 exported func main() {
@@ -114,7 +114,7 @@ func makeGame() Game {
   ships = List(
     Ship("Serenity", bases.0),
     Ship("Raza", bases.1));
-  ret Game(bases, ships);
+  return Game(bases, ships);
 }
 
 exported func main() {
@@ -194,7 +194,7 @@ func segmentify(curve &Curve) Drawable {
     y = curve.getYForX(x);
     results.add(Vec2(x, y));
   }
-  ret Drawable(results);
+  return Drawable(results);
 }
 
 func segmentifyAndSend<'a, 'b>(
@@ -249,7 +249,7 @@ func segmentify<'a>(
     y = curve.getYForX(x);
     results.add(Vec2(x, y));
   }
-  ret Drawable(results);
+  return Drawable(results);
 }
 
 func segmentifyAndSend<'a, 'b>(
