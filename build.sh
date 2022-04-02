@@ -284,6 +284,7 @@ fi
 if [ $MODE == "build" ] ; then
   echo "Copying..."
   cp app/*.css build
+  cp app/rss.xml build
   cp app/components/*.css build/components
   cp app/components/*.js build/components
   cp app/components/*.png build/components
