@@ -25,9 +25,9 @@
       </image-->
 
       <item>
-         <guid>verdagon.dev/blog/yak-shave-language-engine-game</guid>
-         <link>verdagon.dev/blog/yak-shave-language-engine-game</link>
-         <pubDate>Thu, 4 Mar 2022 12:15:00 -0400</pubDate>
+         <guid>https://verdagon.dev/blog/yak-shave-language-engine-game</guid>
+         <link>https://verdagon.dev/blog/yak-shave-language-engine-game</link>
+         <pubDate>Thu, 4 Apr 2022 12:15:00 -0400</pubDate>
          <category>Programming Languages</category>
          <category>Vale Programming Language</category>
          <title>A Tale of Yak Shaving: Accidentally Making a Language, for an Engine, for a Game</title>
