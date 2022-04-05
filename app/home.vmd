@@ -38,9 +38,12 @@ Read comparisons with [C++, Javascript, and Rust](/comparisons)!
 
 *Thank you to our sponsors!*
 
- * Ivo Balbaert ($5/mo)
+ * [Joseph Jaoudi](https://github.com/linkmonitor) ($25/mo)
+ * [Ivo Balbaert](https://github.com/Ivo-Balbaert/) ($5/mo)
+ * [Kevin Navero](https://github.com/solstice333/) ($5/mo)
+ * Ilya Seletsky ($5/mo)
  * Jean Juang ($100)
- * Michael Mears ($42)
+ * Kim Shook ($20)
 
 <a href="https://github.com/sponsors/ValeLang" class="donate-button">
   <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-heart icon-sponsor mr-1 color-fg-sponsors">
@@ -106,7 +109,7 @@ Hello Mars!
 
 
 
-Vale is at version 0.1, see the [Roadmap](/roadmap) for what's next!
+Vale is at version 0.2, see the [Roadmap](/roadmap) for what's next!
 
 
 Vale is [open for contributions](/contribute), thank you to our team of [contributors](/contributors)!
