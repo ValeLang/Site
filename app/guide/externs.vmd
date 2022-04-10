@@ -298,32 +298,3 @@ This design also enables *deterministic replayability*, a coming feature that al
 It could also record the order in which we lock mutexes and receive messages, to *unerringly replay race conditions*. Heisenbugs could be a thing of the past!
 
 
-
-<slice new-color="afterword" />
-
-# Does Vale have an unsafe block?
-
-In a language with FFI, it's a pretty good question.
-
-
-There are two purposes for `unsafe` blocks:
-
- * Performance, to get around the language's memory safety measures.
- * Low-level operations, such as interacting with hardware.
-
-
-For the former, Vale will allow us to skip generation checks, scope tethers, and bounds checking with the `$` operator. [# This isn't implemented yet, stay tuned.] For security, the `$` is ignored for dependencies unless we explicitly whitelist them.
-
-For the latter, we can call into extern C code.
-
-So it's not clear yet that Vale _needs_ unsafe blocks.
-
-
-If we don't have unsafe blocks:
-
- * We keep the language simple.
- * We keep open the option to do *universal cross-compiling* to compile our Vale code to JVM, JS, or any other language; we simply need to define our externs in those languages instead of C. No language has ever accomplished this, and Vale could be the first.
-
-
-Or, if we decide to not go that direction, we could offer `unsafe` blocks for convenience. If we do, Vale code would likely still communicate with `unsafe` blocks the same way it does with extern C today, to maintain Fearless FFI and deterministic replayability.
-
