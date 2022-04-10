@@ -4,7 +4,7 @@ subtitle: 2.3x faster than reference counting, unoptimized!
 author: Evan Ovadia
 date: Jan 5 2021
 realm: vision
-path: vision/safety-1-generational-references
+path: vision/safety-generational-references
 layout: annotated
 namespace: c-blog m-annotated
 ---

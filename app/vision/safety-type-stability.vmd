@@ -2,7 +2,7 @@
 title: Type Stability
 subtitle: Vale's Vision: Memory Safety, Part 2
 realm: vision
-path: vision/safety-2-type-stability
+path: vision/safety-type-stability
 layout: annotated
 namespace: c-blog m-annotated
 ---
@@ -19,7 +19,7 @@ One of those new memory management techniques is *type stability,* where an obje
 
 # Type-Stable Regions
 
-As explained in the [previous page](/vision/safety-1-generational-references), Vale can use generational references for memory safety: whenever we free an object, we increment its generation, ensuring that dereferencing any remaining references to it will fail an assertion.
+As explained in the [previous page](/vision/safety-generational-references), Vale can use generational references for memory safety: whenever we free an object, we increment its generation, ensuring that dereferencing any remaining references to it will fail an assertion.
 
 
 However, with the region borrow checker, we can designate that a certain call should use only type-stable allocators for anything it allocates, rather than relying on generation checks for memory safety.
@@ -113,7 +113,7 @@ This knowledge helps the compiler eliminate a _lot_ of generation checks. [# It 
 
 # Hybrid-Generational Memory
 
-Vale uses something called [hybrid-generational memory](/vision/speed-6-hybrid-generational-memory), which is a blend of generational references and type stability.
+Vale uses something called [hybrid-generational memory](/vision/speed-hybrid-generational-memory), which is a blend of generational references and type stability.
 
 
 Hybrid-generational memory adds a technique called *scope tethering*, where every object has a bit which instructs the allocator to not reuse this allocation (or any indirectly finally-owned allocations) for another type, until after the scope tether bit is cleared again.
@@ -125,7 +125,7 @@ With this knowledge, Vale can effectively "borrow" the allocation (and its entir
 This is similar to how Rust programs do a bounds check to "dereference" an index to temporarily borrow something from a `Vec`. In that sense, generational references and type stability have enabled an automatic Rust, so to speak!
 
 
-You can read more about this at [Hybrid-Generational Memory](/vision/speed-6-hybrid-generational-memory).
+You can read more about this at [Hybrid-Generational Memory](/vision/speed-hybrid-generational-memory).
 
 <slice/>
 
@@ -139,7 +139,7 @@ The above `malloc` + free-list approach has some drawbacks, which Vale addresses
 
 We've been talking in terms of `malloc`, which can be pretty slow.
 
-However, Vale lets use use type stability with any allocator we'd like. Read more at [Allocators](/vision/speed-3-allocators)!
+However, Vale lets use use type stability with any allocator we'd like. Read more at [Allocators](/vision/speed-allocators)!
 
 <slice/>
 

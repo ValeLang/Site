@@ -49,8 +49,8 @@ fi
 
 if [ $TARGET == "vision-safety-generational-references" ] || [ $TARGET == "all" ] ; then
   echo "Doing vision-safety-generational-references"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/safety-1-generational-references app/vision/safety-1-generational-references.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/safety-1-generational-references app/vision/safety-1-generational-references.vmd
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/safety-generational-references app/vision/safety-generational-references.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/safety-generational-references app/vision/safety-generational-references.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -59,8 +59,8 @@ fi
 
 if [ $TARGET == "vision-safety-type-stability" ] || [ $TARGET == "all" ] ; then
   echo "Doing vision-safety-type-stability"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/safety-2-type-stability app/vision/safety-2-type-stability.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/safety-2-type-stability app/vision/safety-2-type-stability.vmd
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/safety-type-stability app/vision/safety-type-stability.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/safety-type-stability app/vision/safety-type-stability.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
@@ -69,8 +69,8 @@ fi
 
 if [ $TARGET == "vision-speed-single-ownership" ] || [ $TARGET == "all" ] ; then
   echo "Doing vision-speed-single-ownership"
-  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/speed-1-single-ownership app/vision/speed-1-single-ownership.vmd
-  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/speed-1-single-ownership app/vision/speed-1-single-ownership.vmd
+  echo $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/speed-single-ownership app/vision/speed-single-ownership.vmd
+  eval $VMD_SITE_GEN/build/vmdsitegen $MODE --compiler_dir $VALESTROM --out build/vision/speed-single-ownership app/vision/speed-single-ownership.vmd
   if [ $? != 0 ]; then
     echo "Failed!"
     exit 1
