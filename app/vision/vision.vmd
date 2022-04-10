@@ -164,28 +164,6 @@ This is planned! Check out [Memory Safety, Part 3: Region Borrow Checker](/visio
 <slice />
 
 
-## Unique Unions
-
-Vale allows us to have unions on the stack and in objects, by adhering to the Unique Unions principle, which states:
-
-> A mutable object can only contain a varying union via a unique reference. [#bcvrbc]
-
-
-Vale will offer tools to more easily work with unique references:
-
- * Temporary unique aliasing via Region Borrow Checker
- * Automatic deep copying
- * Unique swapping
-
-
-This is planned! You can read more at [Memory Safety, Part 4: Unique Unions](/vision/safety-4-unique-unions).
-
-<slice>
-#bcvrbc: Rust's borrow checker accomplishes this by letting us either have immutable aliases to the object *or* letting us change it.
-
-Vale's region borrow checker accomplishes this in a similar way, but at a region level.
-</slice>
-
 
 ## Externs and Fearless FFI
 

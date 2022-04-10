@@ -137,6 +137,26 @@ exported func main() {
 >>>>
 
 
+# Pure Block
+
+One can establish a pure region inside another function with a `pure` block.
+
+```vale
+struct Ship { fuel int; }
+func addAndPrint(ships List<Ship>) {
+  ships.add(Ship(10));
+  pure {
+    foreach ship in ships {
+      println(ship.fuel);
+    }
+    // Cannot ships.add(Ship(15)) here.
+  }
+}
+```
+
+Inside the pure block, we cannot mutate any pre-existing data, but any accesses to that data are completely free and have zero overhead.
+
+
 # Regions are Hierarchical
 
 One region cannot "open" another to gain access to it. Rather, we make a new region that has access to them both.
