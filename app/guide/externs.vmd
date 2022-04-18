@@ -169,6 +169,9 @@ Every member of an `exported` immutable struct must be of an `exported` type.
 Immutable and mutable structs behave differently when exported, read on to learn how.
 
 
+<slice />
+
+
 ## Immutable Structs
 
 When we send an immutable struct from Vale into C, we're actually sending a *copy*. [# Instance structs do not incur this cost. More on that below!]
@@ -251,6 +254,9 @@ extern int mvtest_halfFuel(mvtest_ShipRef s) {
 >>>>
 
 
+<slice />
+
+
 # Arrays
 
 To use a Vale array in C, we must give it a name, using the `export` statement, like in this example.
@@ -283,6 +289,8 @@ ValeInt vtest_sumBytes(vtest_ImmIntArray* arr) {
 }
 ```
 
+
+<slice />
 
 
 # Fearless FFI

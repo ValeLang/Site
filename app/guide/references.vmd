@@ -226,9 +226,9 @@ These are planned features for Vale. See the [roadmap](/roadmap) for plans!
 *Inlining* is used for optimization.
 
 <<<<
-By default, a reference is a pointer, to something on the heap. [# Vale uses escape analysis to automatically inline every local that doesn't get moved into a global or parameter. The `^` keyword is useful to force it, when optimizing.] A reference can instead be a value on the stack ("inline"), by using the `^` keyword.
+In these early days of Vale, objects are always on the heap. Soon, objects will by default be "inline", which means contained on the stack or inside their containing struct. Objects can be put on the heap with the `^` keyword.
 
-Inline objects are much faster to allocate and deallocate, but cannot be moved.
+This example puts the `Spaceship` on the heap.
 ////
 ```vale
 struct Spaceship {
@@ -241,33 +241,6 @@ exported func main() {
 }
 ```stdout
 Enterprise
-```: `import stdlib.*;`
->>>>
-
-<<<<
-`^` is most often used in structs. [# Vale can even inline interfaces if they're `sealed`, resulting in something similar to tagged unions in C, or enums in Rust. See Interfaces for more.]
-
-When we use `^` in a struct, the member's memory is here inside the containing struct's memory.
-
-In this example, the `Engine`'s memory is inside the `Spaceship`'s memory. This makes `Spaceship` bigger, and avoids allocation/deallocation overhead.
-
-In a way, `^` means "It should live here, not somewhere else."
-////
-```vale
-struct Engine {
-  model str;
-  fuel int;
-}
-struct Spaceship {
-  name str;
-  engine ^Engine;
-}
-exported func main() {
-  ship = Spaceship(
-      "Serenity",
-      ^Engine("TCB", 10));
-  println(ship.name);
-}
 ```: `import stdlib.*;`
 >>>>
 

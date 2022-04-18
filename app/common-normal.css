@@ -27,3 +27,24 @@
 .c-toc.root {
   display: none;
 }
+
+
+
+.previous-and-next {
+  display: flex;
+  width: 100%;
+}
+.previous {
+  flex-grow: 1;
+  text-align: left;
+}
+.previous::before {
+  content:  "<< ";
+}
+.next {
+  flex-grow: 1;
+  text-align: right;
+}
+.next::after {
+  content:  " >>";
+}

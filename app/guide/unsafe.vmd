@@ -69,46 +69,24 @@ This will be useful to measure the overall memory-safety overhead for your progr
 
 
 
-# The Pure Unsafe Block
+# The Unsafe Block
 
-! It's not certain whether this is possible with today's tools. It might need some mighty LLVM sorcery to do this securely. [# To do this securely, we might need to completely separate the safe region from the unsafe region, and even have them operate on _two different stacks at the same time._ Such a thing might not be possible with LLVM, or might need to be implemented as a post-optimizer LLVM pass.]
+The `unsafe` block will establish a new region in which we can do unsafe operations. Specifically, it will use the normal heap (`malloc` and `free`), and it will have a normal stack like C does.
 
-The unsafe block will establish a new region in which we can do unsafe operations.
+The `unsafe` block uses the region borrow checker to keep these separate from the normal surrounding region.
 
-To prevent the block it from corrupting objects outside the block, it must also be pure.
-
-
-Pure unsafe blocks have zero memory-safety overhead:
-
- * Objects inside the block are not memory safe, and the compiler does no checking on the memory.
- * We can read objects from outside the block with zero checking.
-
-
-```
-struct Ship { fuel! int; }
-exported func main() {
-  ship = Ship(42);
-  unsafe pure {
-    // Any Vale code can go in here.
-
-    println(ship.fuel);
-
-    // ...as long as it doesn't modify
-    // any pre-existing data.
-    //   set ship.fuel = 0; <-- Error
+<<<<
+In this example, `safeShip` is in the safe region, and `notSafeShip` is in the unsafe region.
+////
+```vale
+func main() {
+  safeShip = Spaceship(1337);
+  unsafe block {
+    notSafeShip = Spaceship(1448);
+    ...
   }
 }
 ```
+>>>>
 
-Note that pure unsafe blocks do not have different semantics than pure blocks; the unsafe is just an optimization control, and will be disabled if anyone depends on this code.
-
-Note that, like regular pure blocks, we can use channels and mutexes to get around the purity restrictions.
-
-Pure unsafe blocks are useful because they have better interoperability with other languages. A struct in an unsafe region won't have the usual 8 bytes of memory safety metadata that it would in a safe region. This means we can give C a pointer to our vale objects, if they are inside unsafe blocks.
-
-
-TBD whether unsafe blocks are run during deterministic replaying. Probably not, because nondeterminism can creep in via FFI. We'll likely treat it like we do externs currently: during the recording run, we record all data that comes from FFI and unsafe blocks, and then just use that when we replay it.
-
-TBD whether structs in unsafe regions are binary compatible with C. If not, we might opt-in to that on a per-type basis.
-
-TBD how unsafe blocks might interact with universal cross-compilation (JVM, JS, etc). It's likely that we'll need to choose one or the other.
+Similar to [Fearless FFI](/guide/externs#fearless-ffi), whenever the unsafe region has a reference to a safe region's object, it will be scrambled. When we try to use it again, it will be unscrambled and checked. This way, bugs inside the unsafe region don't corrupt memory in the safe region.

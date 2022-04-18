@@ -11,14 +11,11 @@ namespace: c-blog m-annotated
 
 Vale was created to be the first *fast*, *safe*, and *easy* programming language.
 
-
 <<<<
+
 Generally, languages today have one or two, but not all three.
 
-This article will dive into the details and compare these languages.
-
-
-Note that Vale is *not finished*, it's only at v0.1. We make it clear in the asides when we're talking about the design, rather than the implementation.
+This article will dive into the details and compare these languages' designs!
 
 ////
 <div class="comparison">
@@ -59,43 +56,57 @@ Note that Vale is *not finished*, it's only at v0.1. We make it clear in the asi
 </div>
 >>>>
 
-Keep in mind, this article is written with love; I picked these three languages because they're my favorite in some way:
+
+This article is meant to explain our vision for Vale, so will reference a lot of the final designs. *We'll make it clear when we're talking about the current implementation versus what we have planned.*
+
+We hope to have all of these completed and benchmarked by late 2023. We're grateful for your interest and support as we create all this!
+
+
+<slice/>
+
+
+# Comparing with Love
+
+We picked these three languages because they're our favorites in some way:
 
  * C++ has the feeling of raw power and freedom!
  * Javascript is like a soft autumn breeze, easy and refreshing. [# (I hope this isn't quoted on PCJ!)]
  * Programming in Rust feels like an addictive puzzle game! [# It's fun to push the borrow checker's boundaries, especially when traits and closures are involved!]
 
-This post is not meant to criticize, just an honest comparison. Also note that these are just my opinions, and not objective truths!
+This post is not meant to criticize, just an honest comparison. Also note that these are only opinions, and not objective truths!
 
 <slice/>
 
 
 # Easy
 
-Vale aims to be safe and fast _while also remaining easy_. [# Vale is still v0.2 (a prototype), and its tooling (compiler, debugging, IDE support, etc.) is very young. This section factors in only the language semantics.]
+Vale aims to be safe and fast _while also remaining easy_.
 
 To get a sense of what easy means:
 
  * Javascript is very easy. It only takes a few days to learn enough to make a medium-sized program in Javascript. It recently became even easier with the `class` keyword, to avoid the (usually) unintuitive prototypal inheritance.
  * C++ is very difficult. If one sticks to the more modern features and avoids multiple inheritance, it might only take a few months to become comfortable enough with C++ to be able to write a medium-sized program. However, to write a _safe_ program in C++ is nearly impossible. One can get very close, with good use of smart pointers, valgrind, asan, etc, but it's still difficult to avoid undefined behavior.
- * Rust is also very difficult. It's as complex as C++, but throws it all at the programmer at once. Unless you're brilliant (or come from certain backgrounds which fit well with Rust's restrictions), it's going to take you many months to learn what patterns the borrow checker likes, what kinds of tricks to use to work around it, and when to give up and re-architect your program. Eventually, you internalize these things, at which point it has "clicked".
+ * Rust is also very difficult. It's as complex as C++, and throws it all at the programmer at once. Unless you're brilliant (or come from certain backgrounds which fit well with Rust's restrictions), it's going to take you many months to learn what patterns the borrow checker likes, what kinds of tricks to use to work around it, and when to give up and re-architect your program. Eventually, you internalize these things, at which point it has "clicked".
+
 
 Vale is 100% safe, which removes most of C++'s difficulties.
 
-Vale's "region borrow checker" doesn't have the mutability-xor-aliasability restriction, which is the source of Rust's difficulties.
+Vale's "region borrow checker" doesn't impose the mutability-xor-aliasability restriction on every object, which is the source of Rust's difficulties.
+
 
 Vale also has some innovations to make parallelism and concurrency easier:
 
- * Its design allows for "deterministic replayability", which helps us reproduce race conditions and other bugs. Heisenbugs could be a thing of the past!
- * Its [Seamless, Fearless, and Structured Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency) allows us to add structured concurrency without needing to refactor any existing code or data.
+ * Its planned "deterministic replayability" would help us reproduce race conditions and other bugs. Heisenbugs could be a thing of the past!
+ * Its planned [Seamless, Fearless, and Structured Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency) would allow us to add structured concurrency without needing to refactor any existing code or data.
+
 
 Vale does make a few concessions here:
 
  * It's centered around single ownership ([moreso than C++ and Rust](https://verdagon.dev/blog/raii-next-steps)), in a way that isn't complicated by the orthogonal complexity burdens of C++ (difficult syntax and compiler errors) or Rust (the borrow checker).
  * Vale is statically typed, which isn't as easy as a dynamically typed language like Javascript (in the short term, at least).
- * Vale does have more advanced features, such as allocators and the region borrow checker. However, you can write entire programs without ever needing to know these, they're just for optimization. [# This principle is called "gradual complexity." Other languages that do this well are C#, Swift, and Go.]
+ * Vale would have more advanced features, such as allocators and the region borrow checker. However, you can write entire programs without ever needing to know these, they're just for optimization. [# This principle is called "gradual complexity." Other languages that do this well are C#, Swift, and Go.]
 
-In the end, Vale is almost as easy as Javascript, and _much_ easier than Rust and C++.
+In the end, Vale is almost as easy as Javascript, and much easier than Rust and C++.
 
 <slice/>
 
@@ -104,52 +115,61 @@ In the end, Vale is almost as easy as Javascript, and _much_ easier than Rust an
 
 Vale is 100% memory-safe and data-race-safe, like Javascript, and safer than Rust and C++.
 
- * C++ is completely unsafe. By default, the code you write will risk a lot of memory unsafety. There are ways to mitigate it (the aforementioned smart pointers, valgrind, asan), but most C++ code will be unsafe.
+ * C++ is completely unsafe. By default, the code you write will risk a lot of memory unsafety. There are ways to mitigate it (the aforementioned smart pointers, valgrind, asan), but it takes a lot of discipline.
  * Javascript is entirely sandboxed, and never shares memory with unsafe code. [# Specifically, Javascript can use FFI into other languages with webassembly, but it doesn't share memory with them, it only sends immutable values back and forth.] You can largely trust Javascript code that someone else wrote. We do it all the time, with our browsers.
  * Rust is somewhere between. It's safe by default, except:
     * It has `unsafe` code which allow unsafe operations.
     * It allows bugs in `unsafe` code (and FFI [# This stands for Foreign Function Interface, and refers to how Rust can call into C code.]) to trigger memory unsafety in safe Rust code.
     * A Rust program will bring a lot of `unsafe` code in via dependencies.
 
-Vale has no `unsafe`, and uses extern isolation to make it so bugs in C code can't trigger memory unsafety in Vale code. You can read more about this at [Absolute Safety in Vale](/fearless).
+Vale plans to have a [memory-safe unsafe block](https://vale.dev/guide/unsafe#the-unsafe-block), as odd as that sounds; it will use the region borrow checker to keep the safe region's data separate from the unsafe region's data, and allowing safe communication between them.
+
+Vale's generation check override operator `!!` is disabled by default, and can be enabled on a per-module basis.
 
 <slice/>
 
 
 # Fast
 
-Vale aims to be as fast as Rust and C++, and much faster than Javascript. [# Until we finish [HGM](https://verdagon.dev/blog/hybrid-generational-memory) and have benchmarks, this is an aim, not a claim.]
+! Note: Generational References are complete and stable, but the rest of this section is talking about Vale's final design. We hope to have all of these completed and benchmarked by mid-2023. We're grateful for your interest and support as we create all this!
+
+Vale aims to be as fast as Rust and C++, and much faster than Javascript.
 
  * Javascript uses dynamic typing and garbage collection, which both cause some overhead.
  * Rust is very fast. The borrow checker indirectly incurs only a little run-time overhead. [# The borrow checker influences our programs to put more objects into centralized `Vec`s and `HashMap`s, which incur more bounds checking and hashing costs than other languages would in the same situation.]
  * C++ is the fastest. It lets you do anything you want, with zero overhead.
 
-Vale's [hybrid-generational memory](https://verdagon.dev/blog/hybrid-generational-memory) uses [generational references](https://verdagon.dev/blog/generational-references) and scope tethering to make very fast code, with very little run-time overhead. [# This is still being implemented, but you can read about the design at [Hybrid-Generational Memory](https://verdagon.dev/blog/hybrid-generational-memory)!]
+We think we've found a way to get Rust and C++'s speed, while still remaining easy.
 
-Vale also uses [regions](https://verdagon.dev/blog/zero-cost-refs-regions) to enable immutability optimizations and make it much easier to harness alternate allocation strategies.
+Basically, we start with [Generational References](https://verdagon.dev/blog/generational-references), and then remove the vast majority of the generation checks by using:
 
-In practice, Vale could be faster or slower than the equivalent Rust or C++ program. We'll see, once hybrid-generational memory and regions are implemented!
+ * *Object permissions* such as `iso` and `uni` to inform the type system that these objects have no aliases, to skip all generation checks for those objects.
+ * [Hybrid-Generational Memory](https://verdagon.dev/blog/hybrid-generational-memory), which combines multiple generation checks into one ahead of time.
+ * The [Region Borrow Checker](https://verdagon.dev/blog/zero-cost-refs-regions) to temporarily turn any pre-existing data immutable, to skip generation checks when accessing them.
+
+By our estimation, a surprisingly high percentage of functions drop to zero memory-safety overhead when we use these three techniques together [as in this snippet](https://verdagon.dev/blog/yak-shave-language-engine-game#the-good-parts), and we estimate the remaining generation checks are only about as common as the extra bounds checking that Rust does compared to other languages.
+
+Vale also aims to enable memory-safe allocators and make them easy to use. It's quite possible that the average Vale program might be faster than the average C++ program.
 
 
 # Intended Use Cases
 
-It's important to keep in mind that Vale, C++, Rust, and JS have different strengths which makes them suitable for different use cases.
+Vale, C++, Rust, and JS have different strengths which makes them excel in different use cases.
 
 Compared to Vale:
 
  * *Javascript* is very simple: dynamically typed and garbage collected. This could make it better than Vale for scripting and prototyping.
  * *Rust* imposes a lot of extra complexity on the programmer, but makes memory handling more explicit. This is better for things like embedded development or other overly-memory-constrained environments.
- * *C++*'s strength is in the freedom it gives the programmer, to get maximum speed. Vale has an unsafe mode with zero overhead to get equivalent speed. However, C++ allows low-level unsafe operations where Vale does not, so it would be better than Vale for cases that need unsafe low-level operations. [# Vale instead uses FFI to call into another language (such as C, C++, or Rust) to do the low-level operations for it.]
+ * *C++*'s strength is in the absolute freedom it gives the programmer and its access to low-level memory tricks, which is vital in e.g. AAA games.
 
 Vale's combination of speed, safety, and ease are universally useful, but it will particularly shine for:
 
- * Servers, because Vale's 100% safety helps them handle the untrusted input from the user, and because its [Seamless, Fearless, and Structured Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency) allow us to have concurrency easier than ever before.
+ * Servers, because its 100% safety helps handle the untrusted input from the user, and its [Seamless, Fearless, and Structured Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency) makes concurrency easier than ever before.
  * Games, because it's extremely fast, with memory safety to prevent odd bugs, while still being easy and flexible enough to allow quick iterating and innovating.
-    * When a game needs maximum performance and cares less about safety, one can switch to unsafe mode, to get C++'s speed. [# With [regions](https://verdagon.dev/blog/zero-cost-refs-regions), it could be faster than C++ in some cases.]
  * Web/Android/iOS apps, because Vale's [Higher RAII](https://verdagon.dev/blog/higher-raii-7drl) is an invaluable tool for complex systems with a lot of state.
 
 
-I hope you enjoyed this article, and as always, feel free to leave any comments in the [r/vale](http://reddit.com/r/vale) subreddit or swing by our [discord server](https://discord.gg/SNB8yGH)!
+We hope you enjoyed this article, and as always, feel free to leave any comments in the [r/vale](http://reddit.com/r/vale) subreddit or swing by our [discord server](https://discord.gg/SNB8yGH)!
 
 
 If you're as excited about Vale as we are, please consider sponsoring us!
