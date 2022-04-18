@@ -145,7 +145,7 @@ One can establish a pure region inside another function with a `pure` block.
 struct Ship { fuel int; }
 func addAndPrint(ships List<Ship>) {
   ships.add(Ship(10));
-  pure {
+  pure block {
     foreach ship in ships {
       println(ship.fuel);
     }
