@@ -70,6 +70,7 @@ Vale is part of the [Vale Language Project](/project), which explores, discovers
 
 *Recent posts:*
 
+ * [On Removing Let and Let Mut](https://verdagon.dev/blog/0.2/on-removing-let-let-mut)
  * [A Tale of Yak Shaving: Accidentally Making a Language, for an Engine, for a Game
 ](https://verdagon.dev/blog/yak-shave-language-engine-game)
  * [Surprising Weak-Ref Implementations: Swift, Obj-C, C++, Rust, and Vale](https://verdagon.dev/blog/surprising-weak-refs)
