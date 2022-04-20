@@ -25,6 +25,17 @@
       </image-->
 
       <item>
+         <guid>https://verdagon.dev/blog/0.2/on-removing-let-let-mut</guid>
+         <link>https://verdagon.dev/blog/0.2/on-removing-let-let-mut</link>
+         <pubDate>Wed, 20 Apr 2022 12:15:00 -0400</pubDate>
+         <category>Programming Languages</category>
+         <category>Vale Programming Language</category>
+         <title>On Removing Let and Let Mut</title>
+         <description>So small a thing, yet such an improvement!</description>
+         <author>noreply@verdagon.dev (Evan Ovadia)</author>
+      </item>
+
+      <item>
          <guid>https://verdagon.dev/blog/yak-shave-language-engine-game</guid>
          <link>https://verdagon.dev/blog/yak-shave-language-engine-game</link>
          <pubDate>Thu, 4 Apr 2022 12:15:00 -0400</pubDate>
