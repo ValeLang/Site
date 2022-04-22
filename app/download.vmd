@@ -5,27 +5,21 @@ layout: onecolumn
 ---
 
 
-## Here be Dragons!
-
-The Vale compiler is *version 0.2.0*.
+The Vale compiler is *version 0.1.4*.
 
 This compiler is still experimental, and not production-ready yet. Keep an eye out for 1.0, when it will be suitable for production. Use at your own risk, and report any bugs to the github!
 
 
-## Releases
+# Releases
 
-### 0.2 "Kuma" Release
+## 0.2 "Kuma" Release (Beta)
 
 You can download binaries from the [releases page](https://github.com/ValeLang/Vale/releases/tag/v0.2.0.0).
-
-This release simplifies the language's syntax:
-
-
 
 
 This release:
 
- * Enables RAII++, one of Vale's main innovations.
+ * Enables Higher RAII, one of Vale's main innovations.
  * Simplifies the language's syntax:
     * We no longer need `impl MyInterface` in override function signatures!
     * There is no longer a readwrite-vs-readonly reference distinction.
@@ -46,7 +40,7 @@ The .zip includes:
  * `builtins` should be ignored, these are .c files used by the compiler itself.
 
 
-### 0.1.4 "Ember" Release
+## 0.1.4 "Ember" Release
 
 You can download binaries from the [releases page](https://github.com/ValeLang/Vale/releases/tag/v0.1.4).
 
@@ -60,7 +54,7 @@ This release adds:
  * A _lot_ of bugfixes!
 
 
-### 0.1.3 "Cardinal" Release
+## 0.1.3 "Cardinal" Release
 
 Download:
 
@@ -91,7 +85,7 @@ The .zip includes:
  * `builtins` should be ignored, these are .c files used by the compiler itself.
 
 
-### 0.1.2 "Maya" Release
+## 0.1.2 "Maya" Release
 
 Download:
 
@@ -106,7 +100,7 @@ This release adds:
  * A _lot_ of bugfixes! Special thanks (again!) to Ivo Balbaert for searching and finding so many bugs.
 
 
-### 0.1.1 "Ivo" Release
+## 0.1.1 "Ivo" Release
 
 Download:
 
@@ -121,7 +115,7 @@ This release adds:
  * More functions and classes to the standard library.
 
 
-### 0.1.0 "Eevee" Release
+## 0.1.0 "Eevee" Release
 
 Linux: [ValeCompiler-0.1.0.0-Linux.zip](releases/ValeCompiler-0.1.0.0-Linux.zip)
 
