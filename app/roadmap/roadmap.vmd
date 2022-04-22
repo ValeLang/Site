@@ -7,9 +7,9 @@ namespace: roadmap
 ---
 
 <<<<
-Vale is currently version 0.2: it's now a usable experimental compiler!
+Vale is currently version 0.1.4: it's now a usable experimental compiler!
 
-We're currently 10% of the way to version 0.3.
+We're currently 90% of the way to version 0.2.
 ////
  . <span class="icon done"></span> Done
  . <span class="icon todo"></span> Planned for v0.3

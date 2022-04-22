@@ -14,9 +14,9 @@ path: home
 
 Vale's goal is to show the world that *speed and safety can be easy!* Vale is:
 
- * *Fast:* Vale is an AOT compiled language that uses the new [generational references](https://verdagon.dev/blog/generational-references) technique, enabling memory-safe control over data layout.
+ * *Fast:* Vale is an AOT compiled, statically-typed language that uses the new [generational references](https://verdagon.dev/blog/generational-references) technique for memory-safe control over data layout.
  * *Fearless:* It is the [safest native language](/fearless), using region isolation and "Fearless FFI" to keep extern code's bugs from affecting Vale objects.
- * *Flexible:* Its new take on [regions](/guide/regions) enables alternate memory management and allocation strategies, with the planned [region borrow checker](https://verdagon.dev/blog/zero-cost-refs-regions) enabling easy interop between them, and eliminating the vast majority of generational references' overhead.
+ * *Flexible:* Its new take on [regions](/guide/regions) will enable alternate memory management and allocation strategies, with the planned [region borrow checker](https://verdagon.dev/blog/zero-cost-refs-regions) enabling easy interop between them, and eliminating the vast majority of generational references' overhead.
 
 
 Read comparisons with [C++, Javascript, and Rust](/comparisons)!
@@ -24,66 +24,35 @@ Read comparisons with [C++, Javascript, and Rust](/comparisons)!
 
 *Featuring*:
 
+ * [Single Ownership](/guide/references), move semantics, [Higher RAII](https://verdagon.dev/blog/higher-raii-7drl)
  * [Statically Typed](/guide/introduction) with type inference.
- * [Ownership](/guide/references), move semantics, and deterministic destruction.
- * [Memory Safe](/guide/references#nonowning), using constraint and weak references.
- * [Generics](/guide/generics), including virtual generics.
+ * [Memory Safe](/guide/references#nonowning) with [generational references](https://verdagon.dev/blog/generational-references)
+ * [Generics](/guide/generics) and const generics
  * [Universal Function Call Syntax](/guide/introduction#functions)
  * [Mutable and Immutable Objects](/guide/structs#mutability)
- * [Patterns](/guide/patterns): Destructuring, Parameters, Extractors
+ * [Patterns](/guide/patterns) with destructuring
  * [Regions](/guide/regions) for different allocation strategies. (planned!)
  * [Interface Constructors](/guide/interfaces#sealedconstructors) (planned!)
 
 
-*Thank you to our sponsors!*
+*Upcoming Features:*
 
- * [Joseph Jaoudi](https://github.com/linkmonitor) ($25/mo)
- * [Ivo Balbaert](https://github.com/Ivo-Balbaert/) ($5/mo)
- * [Kevin Navero](https://github.com/solstice333/) ($5/mo)
- * Ilya Seletsky ($5/mo)
- * Jean Juang ($100)
- * Kim Shook ($20)
+We have some ambitious goals, to bring several new ideas into the programming world:
 
-<a href="https://github.com/sponsors/ValeLang" class="donate-button">
-  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-heart icon-sponsor mr-1 color-fg-sponsors">
-    <path fill-rule="evenodd" d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25zm0 0l.345.666a.752.752 0 01-.69 0L8 14.25z"></path>
-  </svg>
-  Sponsor us on GitHub!
-</a>
+ * A [region borrow checker](https://verdagon.dev/blog/zero-cost-refs-regions) to eliminate memory-safety overhead.
+ * [Seamless Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency) for parallelism without added complexity!
+ * [Perfect Replayability](https://verdagon.dev/blog/next-perfect-replayability) to completely eliminate heisenbugs, even in the presence of multithreading!
+ * [Fearless FFI](https://verdagon.dev/blog/next-fearless-ffi) to keep external code from corrupting Vale memory, and mitigate supply chain attacks.
+ * [Higher RAII](https://verdagon.dev/blog/higher-raii-7drl), which helps us remember to call any function at some point in the future.
 
+
+Vale is at version 0.1.4, see the [Roadmap](/roadmap) for what's next!
+
+
+Vale is [open for contributions](/contribute), thank you to our team of [contributors](/contributors)!
 
 
 ////
-
-Vale is part of the [Vale Language Project](/project), which explores, discovers, and publishes new programming language mechanisms that enable speed, safety, and ease of use.
-
-
-<center>
-  <a href="https://github.com/sponsors/ValeLang" class="donate-button">
-    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-heart icon-sponsor mr-1 color-fg-sponsors">
-      <path fill-rule="evenodd" d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25zm0 0l.345.666a.752.752 0 01-.69 0L8 14.25z"></path>
-    </svg>
-    Sponsor us on GitHub!
-  </a>
-</center>
-
-
-*Recent posts:*
-
- * [On Removing Let and Let Mut](https://verdagon.dev/blog/0.2/on-removing-let-let-mut)
- * [A Tale of Yak Shaving: Accidentally Making a Language, for an Engine, for a Game
-](https://verdagon.dev/blog/yak-shave-language-engine-game)
- * [Surprising Weak-Ref Implementations: Swift, Obj-C, C++, Rust, and Vale](https://verdagon.dev/blog/surprising-weak-refs)
- * [Vale's Higher RAII, the pattern that saved me a vital 5 hours in the 7DRL Challenge](https://verdagon.dev/blog/higher-raii-7drl)
- * [Data Races in Python, Despite the Global Interpreter Lock](https://verdagon.dev/blog/python-data-races)
- * [Seamless, Fearless, Structured Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency)
- * [Generational References](https://verdagon.dev/blog/generational-references)
- * [Hybrid-Generational Memory](https://verdagon.dev/blog/hybrid-generational-memory)
- * [Zero Cost References with Regions](https://verdagon.dev/blog/zero-cost-refs-regions)
- * [Next Steps for Single Ownership and RAII](https://verdagon.dev/blog/raii-next-steps)
- * [Announcing Vale!](https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/)
-
-Follow along via our [RSS feed](/rss.xml) or the [r/Vale](https://reddit.com/r/vale) subreddit!
 
 
 ```vale
@@ -110,10 +79,57 @@ Hello Mars!
 
 
 
-Vale is at version 0.2, see the [Roadmap](/roadmap) for what's next!
+Vale is part of the [Vale Language Project](/project), which explores, discovers, and publishes new programming language mechanisms that enable speed, safety, and ease of use.
 
 
-Vale is [open for contributions](/contribute), thank you to our team of [contributors](/contributors)!
+<center>
+  <a href="https://github.com/sponsors/ValeLang" class="donate-button">
+    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-heart icon-sponsor mr-1 color-fg-sponsors">
+      <path fill-rule="evenodd" d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25zm0 0l.345.666a.752.752 0 01-.69 0L8 14.25z"></path>
+    </svg>
+    Sponsor us on GitHub!
+  </a>
+</center>
+
+
+
+*Recent posts:*
+
+ * [On Removing Let and Let Mut](https://verdagon.dev/blog/on-removing-let-let-mut)
+ * [A Tale of Yak Shaving: Accidentally Making a Language, for an Engine, for a Game
+](https://verdagon.dev/blog/yak-shave-language-engine-game)
+ * [Surprising Weak-Ref Implementations: Swift, Obj-C, C++, Rust, and Vale](https://verdagon.dev/blog/surprising-weak-refs)
+ * [Vale's Higher RAII, the pattern that saved me a vital 5 hours in the 7DRL Challenge](https://verdagon.dev/blog/higher-raii-7drl)
+ * [Data Races in Python, Despite the Global Interpreter Lock](https://verdagon.dev/blog/python-data-races)
+ * [Seamless, Fearless, Structured Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency)
+ * [Generational References](https://verdagon.dev/blog/generational-references)
+ * [Hybrid-Generational Memory](https://verdagon.dev/blog/hybrid-generational-memory)
+ * [Zero Cost References with Regions](https://verdagon.dev/blog/zero-cost-refs-regions)
+ * [Next Steps for Single Ownership and RAII](https://verdagon.dev/blog/raii-next-steps)
+ * [Announcing Vale!](https://www.reddit.com/r/ProgrammingLanguages/comments/hplj2i/vale/)
+
+Follow along via our [RSS feed](/rss.xml) or the [r/Vale](https://reddit.com/r/vale) subreddit!
+
+
+<center>
+  <a href="https://github.com/sponsors/ValeLang" class="donate-button">
+    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-heart icon-sponsor mr-1 color-fg-sponsors">
+      <path fill-rule="evenodd" d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25zm0 0l.345.666a.752.752 0 01-.69 0L8 14.25z"></path>
+    </svg>
+    Sponsor us on GitHub!
+  </a>
+</center>
+
+
+*Thank you to our sponsors!*
+
+ * [Joseph Jaoudi](https://github.com/linkmonitor) ($25/mo)
+ * [Ivo Balbaert](https://github.com/Ivo-Balbaert/) ($5/mo)
+ * [Kevin Navero](https://github.com/solstice333/) ($5/mo)
+ * Ilya Seletsky ($5/mo)
+ * Jean Juang ($100)
+ * Kim Shook ($20)
+
 
 
 >>>>

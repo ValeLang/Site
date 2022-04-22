@@ -97,6 +97,33 @@ exported func main() {
 </slice>
 
 
+## Downcasting
+
+We can downcast an interface to a struct using the `as` function:
+
+```vale
+interface Ship { }
+
+struct FireflyShip {
+  name str;
+}
+impl Ship for FireflyShip;
+
+exported func main() {
+  // Implicitly upcast to Ship
+  ship Ship = FireflyShip("Serenity");
+
+  // Can downcast with as:
+  fireflyShip = ship.as<FireflyShip>().expect();
+  println(fireflyShip.name);
+}
+```stdout
+Serenity
+```
+
+Note that `as<FireflyShip>()` returns a `Result<FireflyShip, Ship>`, which will be either an `Ok` containing a `FireflyShip`, or an `Err` containing a `Ship`. In the above code, we're calling `.expect()` because we assume it is indeed a `FireflyShip`.
+
+
 ## Open Interface Constructors
 
 (Also known as "Anonymous Substructs")

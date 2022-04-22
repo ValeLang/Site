@@ -50,9 +50,9 @@ Corrupting memory doesn't just cause bugs, it also means your program becomes *n
 Also note that these features are *completely ignored* in any dependencies by default, for security reasons. You'll need to explicitly whitelist every single module that the compiler should allow unsafe operations and FFI for, using the `--unsafe_whitelist` flag like `--unsafe_whitelist that_module`
 
 
-# The Unsafe Operator
+# Check Override
 
-The unsafe operator `!!` can be used to skip any run-time overhead.
+The check override operator `!!` can be used to skip any run-time overhead.
 
  * `myObject.aField` might perform a generation check on `myObject` but `myObject!!.aField` won't.
  * `myObject[someIndex]` will assert `someIndex < myObject.len()` but `myObject!![someIndex]` won't.
@@ -61,7 +61,7 @@ The unsafe operator `!!` can be used to skip any run-time overhead.
 Any function that uses `!!` must be annotated with the `unsafe` keyword.
 
 
-# Unsafe Override
+# Module Check Override
 
 We'll be able to turn off all generation checks for a certain module with the `--unsafe_force` flag, like `--unsafe_force my_module`.
 

@@ -124,7 +124,7 @@ Vale is 100% memory-safe and data-race-safe, like Javascript, and safer than Rus
 
 Vale plans to have a [memory-safe unsafe block](https://vale.dev/guide/unsafe#the-unsafe-block), as odd as that sounds; it will use the region borrow checker to keep the safe region's data separate from the unsafe region's data, and allowing safe communication between them.
 
-Vale's generation check override operator `!!` is disabled by default, and can be enabled on a per-module basis.
+Vale's "check override" operator `!!` is disabled by default, and can be enabled on a per-module basis.
 
 <slice/>
 
@@ -192,7 +192,7 @@ If you're as excited about Vale as we are, please consider sponsoring us!
 
 # About the Vale Language Project
 
-The Vale Language Project is not just about making Vale, it's about *exploring, discovering, and publishing* new programming language mechanisms that enable *speed*, *safety*, and *ease of use.*
+The Vale Language Project is not just about making Vale, it's also about *exploring, discovering, and publishing* new programming language mechanisms that enable *speed*, *safety*, and *ease of use.*
 
 
 *The world needs more exploration here!* Currently, most programming language research is is in:

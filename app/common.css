@@ -73,10 +73,10 @@ p:last-child {
 
 
 .c-snippet.root {
-  margin: 8px 0;
+  /*margin: 8px 0;*/
 }
 .c-snippet.root + .c-snippet.root {
-  margin-top: -8px;
+  /*margin-top: -8px;*/
 }
 
 .c-snippet.language-stdin > .code {
@@ -179,7 +179,7 @@ h3 {
   margin-top: 4px;
   margin-bottom: 16px;
   margin-right: 16px;
-  font-size: 14pt;
+  font-size: 15pt;
   font-weight: 500;
 }
 
