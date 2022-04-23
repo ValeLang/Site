@@ -1,0 +1,9 @@
+{
+  "include": [
+    ".eslintrc.js"
+  ],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "noImplicitAny": false
+  }
+}
