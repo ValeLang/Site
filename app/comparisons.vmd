@@ -133,13 +133,15 @@ Vale's "check override" operator `!!` is disabled by default, and can be enabled
 
 ! Note: Generational References are complete and stable, but the rest of this section is talking about Vale's final design. We hope to have all of these completed and benchmarked by mid-2023. We're grateful for your interest and support as we create all this!
 
-Vale aims to be as fast as Rust and C++, and much faster than Javascript.
+Vale aims to be as fast as Rust and C++ in the average case, and much faster than Javascript.
 
  * Javascript uses dynamic typing and garbage collection, which both cause some overhead.
  * Rust is very fast. The borrow checker indirectly incurs only a little run-time overhead. [# The borrow checker influences our programs to put more objects into centralized `Vec`s and `HashMap`s, which incur more bounds checking and hashing costs than other languages would in the same situation.]
  * C++ is the fastest. It lets you do anything you want, with zero overhead.
 
-We think we've found a way to get Rust and C++'s speed, while still remaining easy.
+
+It is of course impossible to match C++'s speed in theory. However, for the majority of programs, Vale could approach it, and sometimes even surpass it.
+
 
 Basically, we start with [Generational References](https://verdagon.dev/blog/generational-references), and then remove the vast majority of the generation checks by using:
 
@@ -149,7 +151,19 @@ Basically, we start with [Generational References](https://verdagon.dev/blog/gen
 
 By our estimation, a surprisingly high percentage of functions drop to zero memory-safety overhead when we use these three techniques together [as in this snippet](https://verdagon.dev/blog/yak-shave-language-engine-game#the-good-parts), and we estimate the remaining generation checks are only about as common as the extra bounds checking that Rust does compared to other languages.
 
-Vale also aims to enable memory-safe allocators and make them easy to use. It's quite possible that the average Vale program might be faster than the average C++ program.
+
+Additionally, Vale aims to make fast patterns much more accessible than C++ does, by:
+
+ * Enabling memory-safe allocators and make them easy to use.
+ * Making concurrency and parallelism easier than ever before, with [Seamless concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency).
+
+If we can make it easier to use these performance techniques, then people will use them more, and their programs will be faster in practice.
+
+
+In summary, while no language can be faster than C++'s speed in theory, the average Vale program might be much faster in practice.
+
+
+On top of all that, if there's still a generation check in critical code and someone needs an extra sliver of speed, they can use the [check override operator](https://vale.dev/guide/unsafe#check-override) to elide that check in release mode.
 
 
 # Intended Use Cases
