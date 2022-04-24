@@ -22,20 +22,21 @@ This page describes Vale's design, but it's still a work in progress. See the an
 
 All of today's native languages require some unsafe user code to function. For example, in C, you can bring in a library that causes mysterious crashes in other parts of your program, because there are no protections in C.
 
-Rust does especially well here, though its guarantees are violated by its `unsafe` keyword. Most think that memory unsafety can only happen inside `unsafe` blocks, but unfortunately, it can cause memory unsafety outside, in safe Rust as well.
+Rust does especially well here, though its guarantees are somewhat weakened by its `unsafe` keyword. Most think that memory unsafety can only happen inside `unsafe` blocks, but unfortunately, unsafe blocks can cause safe Rust code to trigger undefined behavior as well.
 
 Vale uses [hybrid-generational memory](https://verdagon.dev/blog/hybrid-generational-memory), which doesn't require any unsafe, even in its standard library.
 
-Vale goes even further, by not allowing *any* unsafe code. Even if we call into C, there's no way for bugs there to accidentally trigger memory unsafety in Vale.
+Vale goes even further, by isolating all unsafe memory from safe memory. Even if we call into C, there's no way for accidental bugs there to trigger memory unsafety in Vale. [# This is talking about accidental bugs because this is not a security feature. It's only meant as a debugging tool, because these protections can be worked around with some effort.]
 
 
 # Safe Concurrency [# Safe concurrency is in the design, but not implemented yet. Stay tuned!]
 
 Vale's design has [seamless, fearless, structured concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency) to allow us to safely read existing data while doing fork-join parallelism.
 
-When doing manual parallelism, Vale conceptually destroys and recreates any object that we send to another thread. [# This isn't as expensive as one might think. We use a combination of assertions and generation increments to guarantee no further accesses from the source thread.]
+When doing manual parallelism, one can either:
 
-When the programmer doesn't want to conceptually destroy and recreate an object, they can use a mutex, and have the [region borrow checker](https://verdagon.dev/blog/zero-cost-refs-regions) to guarantee safe handling.
+ * Use an `iso` object to send an object to another thread with zero cost.
+ * "Transmigrate" an object, conceptually destroying and recreating it in the other thread. [# This isn't as expensive as one might think. We use a combination of assertions and generation increments to guarantee no further accesses from the source thread, and even those are often elided.]
 
 
 # Safe Externs [# Safe externs are nearing completion. Everything in this section is done, except the handle scrambling and sandboxing option. Stay tuned!]
