@@ -26,7 +26,7 @@ Rust does especially well here, though its guarantees are violated by its `unsaf
 
 Vale uses [hybrid-generational memory](https://verdagon.dev/blog/hybrid-generational-memory), which doesn't require any unsafe, even in its standard library.
 
-Vale goes even further, by not allowing *any* unsafe code. Even if we call into C, there's no way for bugs there to accidentally trigger memory unsafety in Vale.
+Vale goes even further, by not allowing any unsafe code. Even if we call into C, there's no way for bugs there to accidentally trigger memory unsafety in Vale. (Though, this might be solved soon [# There are some promising region-isolation techniques that we might use to enable unsafe blocks, mentioned in [The Unsafe Block](https://vale.dev/guide/unsafe#the-unsafe-block).])
 
 
 # Safe Concurrency [# Safe concurrency is in the design, but not implemented yet. Stay tuned!]
