@@ -6,16 +6,165 @@ css: roadmap.css
 namespace: roadmap
 ---
 
-<<<<
-Vale is currently version 0.1.4: it's now a usable experimental compiler!
 
-We're currently 90% of the way to version 0.2.
+Vale is currently version 0.1.4, which means it's a usable experimental compiler!
+
+We're currently beta testing version 0.2, which also makes it pleasant to use!
+
+
+<<<<
+Vale's medium-term plan is to prototype the more advanced features and reduce compile times:
+
+ * *0.1, done 2021:* Foundational features (see below) and Generational References
+ * *0.2, in beta:* FFI, Higher RAII, Modules, Reduced compile times
+ * *0.3, Summer 2022:* Fearless FFI, Perfect Replayability
+ * *0.4, Fall 2022:* Basic region borrow checking, Pure calls, immutable regions, Seamless Structured Concurrency
+ * *0.5, Early 2022:* Templates -> Generics, Incremental compilation, Parallel compilation, C++-equivalent Unsafe Mode
+ * *0.6, Mid 2023:* Hybrid-Generational Memory, and final benchmarks
+
 ////
- . <span class="icon done"></span> Done
- . <span class="icon todo"></span> Planned for v0.3
- . <span class="icon later"></span> Planned for Later
+
+We'll also be publishing articles biweekly during all this, as part of the [Vale Language Project](https://vale.dev/project). There will be some main themes:
+
+The *Language Simplicity Manifesto* series will talk about how to reduce or rearrange a language's inherent complexity. We hope that this will open the door to simpler languages.
+
+The *Perfect Replayability* series will talk about how languages can help solve the problem of reproducing bugs.
+
+The *Memory Safety Grimoire* series will talk about various memory safety building blocks that languages might incorporate.
+
+The *Thoughts on an Automatic Rust* series will talk about Rust's innovations, and how other languages might incorporate them seamlessly.
+
 >>>>
 
+
+
+# Status Map
+
+
+<<<<
+<span class="icon done"></span> Done
+////
+<span class="icon todo"></span> Planned for v0.3/v0.4
+////
+<span class="icon later"></span> Planned for Later
+>>>>
+
+
+## Advanced Features
+
+(See further below for more basic features)
+
+
+<<<<
+*Externs*
+
+ . <span class="icon done"></span> Primitives
+ . <span class="icon done"></span> Copying structs
+ . <span class="icon done"></span> Copying interfaces
+ . <span class="icon done"></span> Struct handles
+ . <span class="icon done"></span> Interface handles
+ . <span class="icon done"></span> Generate headers
+ . <span class="icon done"></span> Module prefixing
+ . <span class="icon later"></span> Extern interfaces
+ . <span class="icon todo"></span> Fearless FFI
+ . <span class="icon todo"></span> Perfect Replayability
+
+*Inlines*
+
+ . <span class="icon later"></span> Final structs
+ . <span class="icon later"></span> Vary structs
+ . <span class="icon later"></span> Final interfaces
+ . <span class="icon later"></span> Vary interfaces
+
+*Regions*
+
+ . <span class="icon todo"></span> Basics
+ . <span class="icon todo"></span> Read-only Regions
+ . <span class="icon todo"></span> Seceding
+ . <span class="icon todo"></span> Seamless Concurrency
+
+////
+
+*Structs*
+
+ . <span class="icon done"></span> Derive drop
+ . <span class="icon later"></span> Explicit auto-drop
+ . <span class="icon later"></span> constructor&lt;T&gt;
+ . <span class="icon done"></span> Destructor Parameters
+ . <span class="icon later"></span> Shortcalling
+
+*Interfaces*
+
+ . <span class="icon later"></span> Open Shortcalling
+ . <span class="icon later"></span> Sealed Constructors
+ . <span class="icon later"></span> Sealed Shortcalling
+ . <span class="icon later"></span> Variants
+ . <span class="icon later"></span> Variant Indexing
+
+*Generics*
+
+ . <span class="icon later"></span> Concepts
+ . <span class="icon later"></span> Static Eaching
+ . <span class="icon later"></span> Metaprogramming
+
+*Misc*
+
+ . <span class="icon later"></span> Must-use
+ . <span class="icon later"></span> Private, public
+
+////
+
+*Patterns*
+
+ . <span class="icon later"></span> Equating
+ . <span class="icon later"></span> Extractors
+ . <span class="icon later"></span> Mutating
+
+*Operators*
+
+ . <span class="icon later"></span> Bail
+ . <span class="icon later"></span> Map, FlatMap
+
+*Allocators*
+
+ . <span class="icon later"></span> Arena
+ . <span class="icon later"></span> Single Pool
+ . <span class="icon later"></span> Shared Pool
+ . <span class="icon later"></span> Multi Pool
+
+*LLVM Codegen*
+
+ . <span class="icon later"></span> Continue on panic
+ . <span class="icon later"></span> Threading
+ . <span class="icon later"></span> Replayability
+
+////
+
+*Concurrency*
+
+ . <span class="icon later"></span> Coroutines
+ . <span class="icon todo"></span> Structured Concurrency
+ . <span class="icon later"></span> Threads
+ . <span class="icon later"></span> Mutexes
+
+*Optimization*
+
+ . <span class="icon done"></span> Generational Memory
+ . <span class="icon later"></span> Gen-check Elimination
+ . <span class="icon later"></span> Hybrid-Generational Memory
+
+*Possibilities*
+
+ . <span class="icon later"></span> Self-Hosting
+ . <span class="icon later"></span> JVM/CLR Backend
+ . <span class="icon later"></span> VS/IDEA Plugins
+
+>>>>
+
+
+
+
+## Foundational Features
 
 <<<<
 *Functions*
@@ -118,111 +267,3 @@ We're currently 90% of the way to version 0.2.
  . <span class="icon done"></span> Const Generics
 
 >>>>
-
-
-<<<<
-*Externs*
-
- . <span class="icon done"></span> Primitives
- . <span class="icon done"></span> Copying structs
- . <span class="icon done"></span> Copying interfaces
- . <span class="icon done"></span> Struct handles
- . <span class="icon done"></span> Interface handles
- . <span class="icon done"></span> Generate headers
- . <span class="icon done"></span> Module prefixing
- . <span class="icon later"></span> Extern interfaces
- . <span class="icon later"></span> Encrypted handles
-
-*Inlines*
-
- . <span class="icon later"></span> Final structs
- . <span class="icon later"></span> Vary structs
- . <span class="icon later"></span> Final interfaces
- . <span class="icon later"></span> Vary interfaces
-
-*Regions*
-
- . <span class="icon todo"></span> Basics
- . <span class="icon todo"></span> Read-only Regions
- . <span class="icon todo"></span> Transmigrating
- . <span class="icon todo"></span> Seceding
- . <span class="icon todo"></span> Seamless Concurrency
-
-////
-
-*Structs*
-
- . <span class="icon done"></span> Derive drop
- . <span class="icon later"></span> Explicit auto-drop
- . <span class="icon later"></span> constructor&lt;T&gt;
- . <span class="icon done"></span> Destructor Parameters
- . <span class="icon later"></span> Shortcalling
-
-*Interfaces*
-
- . <span class="icon later"></span> Open Shortcalling
- . <span class="icon later"></span> Sealed Constructors
- . <span class="icon later"></span> Sealed Shortcalling
- . <span class="icon later"></span> Variants
- . <span class="icon later"></span> Variant Indexing
-
-*Generics*
-
- . <span class="icon later"></span> Concepts
- . <span class="icon later"></span> Static Eaching
- . <span class="icon later"></span> Metaprogramming
-
-*Misc*
-
- . <span class="icon later"></span> Must-use
- . <span class="icon later"></span> Private, public
-
-////
-
-*Patterns*
-
- . <span class="icon later"></span> Equating
- . <span class="icon later"></span> Extractors
- . <span class="icon later"></span> Mutating
-
-*Operators*
-
- . <span class="icon later"></span> Bail
- . <span class="icon later"></span> Map, FlatMap
-
-*Allocators*
-
- . <span class="icon later"></span> Arena
- . <span class="icon later"></span> Single Pool
- . <span class="icon later"></span> Shared Pool
- . <span class="icon later"></span> Multi Pool
-
-*LLVM Codegen*
-
- . <span class="icon later"></span> Continue on panic
- . <span class="icon later"></span> Threading
- . <span class="icon later"></span> Replayability
-
-////
-
-*Concurrency*
-
- . <span class="icon later"></span> Coroutines
- . <span class="icon todo"></span> Structured Concurrency
- . <span class="icon later"></span> Threads
- . <span class="icon later"></span> Mutexes
-
-*Optimization*
-
- . <span class="icon done"></span> Generational Memory
- . <span class="icon later"></span> Gen-check Elimination
- . <span class="icon later"></span> Hybrid-Generational Memory
-
-*Possibilities*
-
- . <span class="icon later"></span> Self-Hosting
- . <span class="icon later"></span> JVM/CLR Backend
- . <span class="icon later"></span> VS/IDEA Plugins
-
->>>>
-
