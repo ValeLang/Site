@@ -16,13 +16,13 @@
 
 .roadmap .item.done {
   background-image: url(/images/done.png);
-  color: #008000;
+  color: #007000;
 }
 
 .roadmap .item.inprogress {
   background-image: url(/images/inprogress.png);
   background-size: 16px 16px;
-  color: #C06000;
+  color: #0060E0;
 }
 
 .roadmap .item.later {
