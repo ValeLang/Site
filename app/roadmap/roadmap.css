@@ -1,25 +1,33 @@
 
-.roadmap .icon {
-  background-image: url("components/Sphere144-128-Red.png");
+.roadmap .blank {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+.roadmap .item {
+  /*background-image: url("components/Sphere144-128-Red.png");
+  background-size: 14px 14px;*/
+  padding-left: 18px;
+
+  background-repeat: no-repeat;
+  background-position: 0 2px;
   background-size: 14px 14px;
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  margin-right: 4px;
-  margin-top: -1px;
-  margin-bottom: -1px;
 }
 
-.roadmap .icon.done {
-  filter: hue-rotate(120deg) saturate(150%);
+.roadmap .item.done {
+  background-image: url(/images/done.png);
+  color: #008000;
 }
 
-.roadmap .icon.todo {
-  filter: hue-rotate(50deg) saturate(300%);  
+.roadmap .item.inprogress {
+  background-image: url(/images/inprogress.png);
+  background-size: 16px 16px;
+  color: #C06000;
 }
 
-.roadmap .icon.later {
-  filter: saturate(0%) brightness(120%);
+.roadmap .item.later {
+  background-image: url(/images/later.png);
+  color: #404040;
 }
 
   /*
