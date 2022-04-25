@@ -6,223 +6,260 @@ css: roadmap.css
 namespace: roadmap
 ---
 
-<<<<
-Vale is currently version 0.1.4: it's now a usable experimental compiler!
 
-We're currently 90% of the way to version 0.2.
-////
- . <span class="icon done"></span> Done
- . <span class="icon todo"></span> Planned for v0.3
- . <span class="icon later"></span> Planned for Later
->>>>
+Vale is currently version 0.1.4, which means it's a usable experimental compiler!
+
+We're currently beta testing version 0.2, which also makes it pleasant to use!
 
 
 <<<<
-*Functions*
+Vale's medium-term goal is to prototype the more advanced performance features, and finally benchmark.
 
- . <span class="icon done"></span> UFCS
- . <span class="icon done"></span> Infix Calling
- . <span class="icon done"></span> Lambdas
- . <span class="icon done"></span> Magic Params
- . <span class="icon done"></span> Abstract Functions
- . <span class="icon done"></span> Virtual Functions
- . <span class="icon done"></span> Extern Calls
- . <span class="icon done"></span> Overloads
- . <span class="icon todo"></span> Pure Functions
 
-*Structs*
-
- . <span class="icon done"></span> Mutability
- . <span class="icon done"></span> Auto-drop
- . <span class="icon done"></span> Constructors
-
-*Interfaces*
-
- . <span class="icon done"></span> Mutability
- . <span class="icon done"></span> Open Constructors
+ * *0.1, done 2021:* Foundational features (see below) and Generational References
+ * *0.2, in beta:* FFI, Higher RAII, Modules, Reduced compile times
+ * *0.3, Summer 2022:* Fearless FFI, Perfect Replayability
+ * *0.4, Fall 2022:* Basic region borrow checking, Pure calls, immutable regions, Seamless Structured Concurrency
+ * *0.5, Early 2022:* Templates -> Generics, Incremental compilation, Parallel compilation, C++-equivalent Unsafe Mode
+ * *0.6, Mid 2023:* Hybrid-Generational Memory, and final benchmarks
 
 ////
 
-*References*
+We'll also be publishing articles biweekly during all this, as part of the [Vale Language Project](https://vale.dev/project). There will be some main themes:
 
- . <span class="icon done"></span> Shared Refs
- . <span class="icon done"></span> Owning Refs
- . <span class="icon done"></span> Moving
- . <span class="icon done"></span> Constraint Refs
- . <span class="icon done"></span> Weak Refs
- . <span class="icon done"></span> Varying/Final
+The *Language Simplicity Manifesto* series will talk about how to reduce or rearrange a language's inherent complexity. We hope that this will open the door to simpler languages.
 
-*Modules*
+The *Perfect Replayability* series will talk about how languages can help solve the problem of reproducing bugs.
 
- . <span class="icon done"></span> Modules
- . <span class="icon done"></span> Import statements
- . <span class="icon done"></span> Test-only Modules
- . <span class="icon done"></span> Standard Library
+The *Memory Safety Grimoire* series will talk about various memory safety building blocks that languages might incorporate.
 
-*Arrays*
-
- . <span class="icon done"></span> Mutability
- . <span class="icon done"></span> Statically-sized
- . <span class="icon done"></span> Runtime-sized
- . <span class="icon done"></span> Make via Lambda
-
-////
-
-*Constructs*
-
- . <span class="icon done"></span> Set
- . <span class="icon done"></span> If
- . <span class="icon done"></span> While
- . <span class="icon done"></span> Each
- . <span class="icon todo"></span> Match
- . <span class="icon done"></span> EachI
- . <span class="icon todo"></span> If Let
- . <span class="icon todo"></span> If Let Else
- . <span class="icon later"></span> Break, Continue
-
-*Patterns*
-
- . <span class="icon done"></span> Locals
- . <span class="icon done"></span> Destructuring
-
-*ADTs*
-
- . <span class="icon done"></span> Tuples
- . <span class="icon done"></span> Opt
- . <span class="icon done"></span> Result
-
-////
-
-*LLVM Codegen*
-
- . <span class="icon done"></span> Native Executables
- . <span class="icon done"></span> Resilient Mod
- . <span class="icon done"></span> Constraint Mode
- . <span class="icon done"></span> Unsafe Mode
-
-*Operators*
-
- . <span class="icon done"></span> Short-circuiting
- . <span class="icon done"></span> Owning methods
- . <span class="icon later"></span> Expect
-
-*Ergonomics*
-
- . <span class="icon done"></span> Compile Errors
- . <span class="icon later"></span> Syntax Highlighting
-
-*Generics*
-
- . <span class="icon done"></span> Functions
- . <span class="icon done"></span> Structs/Interfaces
- . <span class="icon done"></span> Const Generics
+The *Thoughts on an Automatic Rust* series will talk about Rust's innovations, and how other languages might incorporate them seamlessly.
 
 >>>>
+
+
+
+# Status Map
+
+ . <div class="roadmap item done">Done</div>
+ . <div class="roadmap item inprogress">Planned for v0.3/v0.4</div>
+ . <div class="roadmap item later">Planned for Later</div>
+
+
+## Advanced Features
+
+(See further below for more basic features)
 
 
 <<<<
 *Externs*
 
- . <span class="icon done"></span> Primitives
- . <span class="icon done"></span> Copying structs
- . <span class="icon done"></span> Copying interfaces
- . <span class="icon done"></span> Struct handles
- . <span class="icon done"></span> Interface handles
- . <span class="icon done"></span> Generate headers
- . <span class="icon done"></span> Module prefixing
- . <span class="icon later"></span> Extern interfaces
- . <span class="icon later"></span> Encrypted handles
+ . <div class="roadmap item done">Primitives</div>
+ . <div class="roadmap item done">Copying structs</div>
+ . <div class="roadmap item done">Copying interfaces</div>
+ . <div class="roadmap item done">Struct handles</div>
+ . <div class="roadmap item done">Interface handles</div>
+ . <div class="roadmap item done">Generate headers</div>
+ . <div class="roadmap item done">Module prefixing</div>
+ . <div class="roadmap item later">Extern interfaces</div>
+ . <div class="roadmap item inprogress">Fearless FFI</div>
+ . <div class="roadmap item inprogress">Perfect Replayability</div>
 
 *Inlines*
 
- . <span class="icon later"></span> Final structs
- . <span class="icon later"></span> Vary structs
- . <span class="icon later"></span> Final interfaces
- . <span class="icon later"></span> Vary interfaces
+ . <div class="roadmap item later">Final structs</div>
+ . <div class="roadmap item later">Vary structs</div>
+ . <div class="roadmap item later">Final interfaces</div>
+ . <div class="roadmap item later">Vary interfaces</div>
 
 *Regions*
 
- . <span class="icon todo"></span> Basics
- . <span class="icon todo"></span> Read-only Regions
- . <span class="icon todo"></span> Transmigrating
- . <span class="icon todo"></span> Seceding
- . <span class="icon todo"></span> Seamless Concurrency
+ . <div class="roadmap item inprogress">Basics</div>
+ . <div class="roadmap item inprogress">Read-only Regions</div>
+ . <div class="roadmap item inprogress">Seceding</div>
+ . <div class="roadmap item inprogress">Seamless Concurrency</div>
 
 ////
 
 *Structs*
 
- . <span class="icon done"></span> Derive drop
- . <span class="icon later"></span> Explicit auto-drop
- . <span class="icon later"></span> constructor&lt;T&gt;
- . <span class="icon done"></span> Destructor Parameters
- . <span class="icon later"></span> Shortcalling
+ . <div class="roadmap item done">Derive drop</div>
+ . <div class="roadmap item later">Explicit auto-drop</div>
+ . <div class="roadmap item later">constructor&lt;T&gt;</div>
+ . <div class="roadmap item done">Destructor Parameters</div>
+ . <div class="roadmap item later">Shortcalling</div>
 
 *Interfaces*
 
- . <span class="icon later"></span> Open Shortcalling
- . <span class="icon later"></span> Sealed Constructors
- . <span class="icon later"></span> Sealed Shortcalling
- . <span class="icon later"></span> Variants
- . <span class="icon later"></span> Variant Indexing
+ . <div class="roadmap item later">Open Shortcalling</div>
+ . <div class="roadmap item later">Sealed Constructors</div>
+ . <div class="roadmap item later">Sealed Shortcalling</div>
+ . <div class="roadmap item later">Variants</div>
+ . <div class="roadmap item later">Variant Indexing</div>
 
 *Generics*
 
- . <span class="icon later"></span> Concepts
- . <span class="icon later"></span> Static Eaching
- . <span class="icon later"></span> Metaprogramming
+ . <div class="roadmap item later">Concepts</div>
+ . <div class="roadmap item later">Static Eaching</div>
+ . <div class="roadmap item later">Metaprogramming</div>
 
 *Misc*
 
- . <span class="icon later"></span> Must-use
- . <span class="icon later"></span> Private, public
+ . <div class="roadmap item later">Must-use</div>
+ . <div class="roadmap item later">Private, public</div>
 
 ////
 
 *Patterns*
 
- . <span class="icon later"></span> Equating
- . <span class="icon later"></span> Extractors
- . <span class="icon later"></span> Mutating
+ . <div class="roadmap item later">Equating</div>
+ . <div class="roadmap item later">Extractors</div>
+ . <div class="roadmap item later">Mutating</div>
 
 *Operators*
 
- . <span class="icon later"></span> Bail
- . <span class="icon later"></span> Map, FlatMap
+ . <div class="roadmap item later">Bail</div>
+ . <div class="roadmap item later">Map, FlatMap</div>
 
 *Allocators*
 
- . <span class="icon later"></span> Arena
- . <span class="icon later"></span> Single Pool
- . <span class="icon later"></span> Shared Pool
- . <span class="icon later"></span> Multi Pool
+ . <div class="roadmap item later">Arena</div>
+ . <div class="roadmap item later">Single Pool</div>
+ . <div class="roadmap item later">Shared Pool</div>
+ . <div class="roadmap item later">Multi Pool</div>
 
 *LLVM Codegen*
 
- . <span class="icon later"></span> Continue on panic
- . <span class="icon later"></span> Threading
- . <span class="icon later"></span> Replayability
+ . <div class="roadmap item later">Continue on panic</div>
+ . <div class="roadmap item later">Threading</div>
+ . <div class="roadmap item later">Replayability</div>
 
 ////
 
 *Concurrency*
 
- . <span class="icon later"></span> Coroutines
- . <span class="icon todo"></span> Structured Concurrency
- . <span class="icon later"></span> Threads
- . <span class="icon later"></span> Mutexes
+ . <div class="roadmap item later">Coroutines</div>
+ . <div class="roadmap item inprogress">Structured Concurrency</div>
+ . <div class="roadmap item later">Threads</div>
+ . <div class="roadmap item later">Mutexes</div>
 
 *Optimization*
 
- . <span class="icon done"></span> Generational Memory
- . <span class="icon later"></span> Gen-check Elimination
- . <span class="icon later"></span> Hybrid-Generational Memory
+ . <div class="roadmap item done">Generational Memory</div>
+ . <div class="roadmap item later">Gen-check Elimination</div>
+ . <div class="roadmap item later">Hybrid-Generational Memory</div>
 
 *Possibilities*
 
- . <span class="icon later"></span> Self-Hosting
- . <span class="icon later"></span> JVM/CLR Backend
- . <span class="icon later"></span> VS/IDEA Plugins
+ . <div class="roadmap item later">Self-Hosting</div>
+ . <div class="roadmap item later">JVM/CLR Backend</div>
+ . <div class="roadmap item later">VS/IDEA Plugins</div>
 
 >>>>
 
+
+
+
+## Foundational Features
+
+<<<<
+*Functions*
+
+ . <div class="roadmap item done">UFCS</div>
+ . <div class="roadmap item done">Infix Calling</div>
+ . <div class="roadmap item done">Lambdas</div>
+ . <div class="roadmap item done">Magic Params</div>
+ . <div class="roadmap item done">Abstract Functions</div>
+ . <div class="roadmap item done">Virtual Functions</div>
+ . <div class="roadmap item done">Extern Calls</div>
+ . <div class="roadmap item done">Overloads</div>
+ . <div class="roadmap item inprogress">Pure Functions</div>
+
+*Structs*
+
+ . <div class="roadmap item done">Mutability</div>
+ . <div class="roadmap item done">Auto-drop</div>
+ . <div class="roadmap item done">Constructors</div>
+
+*Interfaces*
+
+ . <div class="roadmap item done">Mutability</div>
+ . <div class="roadmap item done">Open Constructors</div>
+
+////
+
+*References*
+
+ . <div class="roadmap item done">Shared Refs</div>
+ . <div class="roadmap item done">Owning Refs</div>
+ . <div class="roadmap item done">Moving</div>
+ . <div class="roadmap item done">Constraint Refs</div>
+ . <div class="roadmap item done">Weak Refs</div>
+ . <div class="roadmap item done">Varying/Final</div>
+
+*Modules*
+
+ . <div class="roadmap item done">Modules</div>
+ . <div class="roadmap item done">Import statements</div>
+ . <div class="roadmap item done">Test-only Modules</div>
+ . <div class="roadmap item done">Standard Library</div>
+
+*Arrays*
+
+ . <div class="roadmap item done">Mutability</div>
+ . <div class="roadmap item done">Statically-sized</div>
+ . <div class="roadmap item done">Runtime-sized</div>
+ . <div class="roadmap item done">Make via Lambda</div>
+
+////
+
+*Constructs*
+
+ . <div class="roadmap item done">Set</div>
+ . <div class="roadmap item done">If</div>
+ . <div class="roadmap item done">While</div>
+ . <div class="roadmap item done">Each</div>
+ . <div class="roadmap item inprogress">Match</div>
+ . <div class="roadmap item done">EachI</div>
+ . <div class="roadmap item inprogress">If Let</div>
+ . <div class="roadmap item inprogress">If Let Else</div>
+ . <div class="roadmap item later">Break, Continue</div>
+
+*Patterns*
+
+ . <div class="roadmap item done">Locals</div>
+ . <div class="roadmap item done">Destructuring</div>
+
+*ADTs*
+
+ . <div class="roadmap item done">Tuples</div>
+ . <div class="roadmap item done">Opt</div>
+ . <div class="roadmap item done">Result</div>
+
+////
+
+*LLVM Codegen*
+
+ . <div class="roadmap item done">Native Executables</div>
+ . <div class="roadmap item done">Resilient Mod</div>
+ . <div class="roadmap item done">Constraint Mode</div>
+ . <div class="roadmap item done">Unsafe Mode</div>
+
+*Operators*
+
+ . <div class="roadmap item done">Short-circuiting</div>
+ . <div class="roadmap item done">Owning methods</div>
+ . <div class="roadmap item later">Expect</div>
+
+*Ergonomics*
+
+ . <div class="roadmap item done">Compile Errors</div>
+ . <div class="roadmap item later">Syntax Highlighting</div>
+
+*Generics*
+
+ . <div class="roadmap item done">Functions</div>
+ . <div class="roadmap item done">Structs/Interfaces</div>
+ . <div class="roadmap item done">Const Generics</div>
+
+>>>>

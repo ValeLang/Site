@@ -136,8 +136,8 @@ Vale's "check override" operator `!!` is disabled by default, and can be enabled
 Vale aims to be as fast as Rust and C++ in the average case, and much faster than Javascript.
 
  * Javascript uses dynamic typing and garbage collection, which both cause some overhead.
- * Rust is very fast. The borrow checker indirectly incurs only a little run-time overhead. [# The borrow checker influences our programs to put more objects into centralized `Vec`s and `HashMap`s, which incur more bounds checking and hashing costs than other languages would in the same situation.]
- * C++ is the fastest. It lets you do anything you want, with zero overhead.
+ * Rust is very fast. The borrow checker indirectly incurs only a little run-time overhead, often negligible. [# The borrow checker influences our programs to put more objects into centralized `Vec`s and `HashMap`s, which incur more bounds checking and hashing costs than other languages would in the same situation.]
+ * C++ is the fastest; it lets you do anything you want, with zero overhead.
 
 
 It is of course impossible to match C++'s speed in theory. However, for the majority of programs, Vale could approach it, and sometimes even surpass it.
@@ -155,7 +155,7 @@ By our estimation, a surprisingly high percentage of functions drop to zero memo
 Additionally, Vale aims to make fast patterns much more accessible than C++ does, by:
 
  * Enabling memory-safe allocators and make them easy to use.
- * Making concurrency and parallelism easier than ever before, with [Seamless concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency).
+ * Making concurrency and parallelism easier than ever before, with [Seamless Concurrency](https://verdagon.dev/blog/seamless-fearless-structured-concurrency).
 
 If we can make it easier to use these performance techniques, then people will use them more, and their programs will be faster in practice.
 
