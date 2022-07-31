@@ -20,7 +20,7 @@ Vale's medium-term goal is to prototype the more advanced performance features, 
  * *0.2, in beta:* FFI, Higher RAII, Modules, Reduced compile times
  * *0.3, Summer 2022:* Fearless FFI, Perfect Replayability
  * *0.4, Fall 2022:* Basic region borrow checking, Pure calls, immutable regions, Seamless Structured Concurrency
- * *0.5, Early 2022:* Templates -> Generics, Incremental compilation, Parallel compilation, C++-equivalent Unsafe Mode
+ * *0.5, Early 2023:* Templates -> Generics, Incremental compilation, Parallel compilation, C++-equivalent Unsafe Mode
  * *0.6, Mid 2023:* Hybrid-Generational Memory, and final benchmarks
 
 ////
